@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgbModal } from '../../../node_modules/@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, Validators, FormControl } from '../../../node_modules/@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 declare var $: any;
 import 'datatables.net';
 import 'datatables.net-bs4';
-import { MenuItem } from '../../../node_modules/primeng/api';
+import { MenuItem } from 'primeng/api';
 import { StockService } from './stock.service';
 import swal from 'sweetalert2';
 
