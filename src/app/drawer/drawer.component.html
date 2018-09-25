@@ -1,0 +1,20 @@
+<div class="container-fluid">
+  <mat-button-toggle-group #group="matButtonToggleGroup" (change)="onValChange(group.value)"  style="width:100%" value="mobileDrawer">
+    <mat-button-toggle  routerLink="mobileDrawer" value="mobileDrawer" class="drawerBtns" mat-raised-button color="primary"><i
+        class="material-icons">network_cell</i>
+      Mobile Credit Drawer
+    </mat-button-toggle>
+
+    <mat-button-toggle routerLink="accDrawer" value="accDrawer" class="drawerBtns" mat-raised-button color="primary"><i class="material-icons">apps</i>
+      Central And Items Drawer
+    </mat-button-toggle>
+
+    <mat-button-toggle routerLink="internet" value="internet" class="drawerBtns" mat-raised-button color="primary"><i class="material-icons">wifi</i>
+      Internet Drawer
+    </mat-button-toggle>
+
+   </mat-button-toggle-group>
+  <!-- <hr> -->
+
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,17 @@
+<div class="container-fluid">
+    <p-contextMenu [target]="contextScope" [model]="items" oncontextmenu="return false;"></p-contextMenu>
+
+    <table class="table table-striped table-bordered table-hover table-sm noselect " id="subscribersRprtDT">
+      <thead>
+      </thead>
+      <tbody #contextScope>
+      </tbody>
+    </table>
+</div>
+
+
+
+<div hidden>
+  <button id="togglePaymentBtn" (click)="togglePayment()"></button>
+  <button id="deleteSubscriberBtn" (click)="deleteSubscription()"></button>
+</div>
