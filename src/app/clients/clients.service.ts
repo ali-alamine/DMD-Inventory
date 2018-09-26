@@ -5,7 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
   providedIn: 'root'
 })
 export class ClientsService {
-  private url = "http://localhost/MoussaNet/src/assets/api/clients/";
+  private url = "http://localhost/DMD-Inventory/src/assets/api/clients/";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -15,10 +15,6 @@ export class ClientsService {
 
   editClient(clientData): Observable<any> {
     return this.httpClient.put(this.url + "client", clientData);
-  }
-
-  totalDebit(): Observable<any> {
-    return this.httpClient.get(this.url + "totalDebit");
   }
 
 }

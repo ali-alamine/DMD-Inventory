@@ -93,8 +93,7 @@ export class ClientsComponent implements OnInit {
     $('#clientsDT').on('key-blur.dt', function (e, datatable, cell) {
       $(subscriberDataTable.row(cell.index().row).node()).removeClass('selected');
     });
-
-    // this.getTotalDebit();
+    
   }
 
   openClientModal(clientModal) {
@@ -164,17 +163,6 @@ export class ClientsComponent implements OnInit {
     this.modalReference.close();
   }
 
-  // getTotalDebit() {
-  //   this.clientsService.totalDebit().subscribe(Response => {
-  //     this.totalDebit = Response[0].debit;
-  //   }, error => {
-  //     Swal({
-  //       type: 'error',
-  //       title: error.statusText,
-  //       text: error.message
-  //     });
-  //   });
-  // }
 
   get name() {
     return this.clientForm.get('name');
