@@ -113,7 +113,6 @@ export class FactureComponent implements OnInit {
 
   openMultiSelect(mutliSelectModal) {
 
-    debugger;
 
     this.modalReference = this.modalService.open(mutliSelectModal, { centered: true, size: 'lg', ariaLabelledBy: 'modal-basic-title' });
 
@@ -147,32 +146,34 @@ export class FactureComponent implements OnInit {
         { data: "item_packing_list", title: "Colisage" }
 
       ],
-      rowId: 'ID'
+      rowId: 'ID',
+      "createdRow": function ( row, data, index ) {
+        if (FactureComponent.selectedItems.indexOf(data['ID']) > -1) {
+          multiSelectDT.row(row).select();
+        }
+    }
+
     });
 
 
     multiSelectDT.on('select', function (e, dt, type, indexes) {
-      var rowData = multiSelectDT.rows(indexes).data().toArray();
-
-
-      rowData.forEach(element => {
-        FactureComponent.selectedItems.push(element['ID']);
+      var rows = multiSelectDT.rows('.selected').indexes().toArray();
+      rows.forEach(element => {
+        var ID = multiSelectDT.row(element).data()['ID'];
+        if (FactureComponent.selectedItems.indexOf(ID) == -1)
+          FactureComponent.selectedItems.push(ID);
       });
       console.log(FactureComponent.selectedItems);
     });
 
     multiSelectDT.on('deselect', function (e, dt, type, indexes) {
-      var rowData = multiSelectDT.rows(indexes).data().toArray();
-
-      console.log(indexes)
-      rowData.forEach(element => {
-        var index =FactureComponent.selectedItems.indexOf(element['ID']);
-        FactureComponent.selectedItems.slice(index,1);
+      var rows = multiSelectDT.rows('.selected').indexes().toArray();
+      FactureComponent.selectedItems = [];
+      rows.forEach(element => {
+        var ID = multiSelectDT.row(element).data()['ID'];
+        FactureComponent.selectedItems.push(ID);
       });
-
-      console.log('selected:',FactureComponent.selectedItems);
-
-      
+      console.log(FactureComponent.selectedItems);
     });
 
 
