@@ -1,7 +1,4 @@
 <div class="container-fluid">
-    <div class="summary">
-        <h2 class="totalDebit">Total Debit: {{totalDebit | currency:'LL ':'symbol':'1.0-0' }}</h2>
-    </div>
   <button mat-raised-button color="primary" (click)="editFlag=false;openClientModal(clientModal)">
     <i class="material-icons">add</i> Add Client
   </button>
@@ -21,7 +18,6 @@
 
 <div hidden>
   <button id="editClientBtn" (click)="editFlag=true;openClientModal(clientModal)"></button>
-  <button id="newPaymentBtn" (click)="openNewPaymentModal(paymentModal)"></button>
 </div>
 
 
@@ -38,7 +34,7 @@
       <div class="input-row" fxLayout="row">
         <mat-form-field class="inputField" fxFlex>
           <input matInput placeholder="Name" formControlName="name" type="text" name="nameInput" autofocus>
-          <mat-error> client name is required</mat-error>
+          <mat-error> client name is required with minimum 3 letters</mat-error>
         </mat-form-field>
       </div>
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
@@ -58,27 +54,5 @@
   </div>
   <div class="modal-footer">
     <button mat-raised-button name="addButton" color="primary" (click)="addEditClient()" [disabled]="!clientForm.valid">{{clientModalTitle}}</button>
-  </div>
-</ng-template>
-
-<ng-template #paymentModal let-c="close" let-d="dismiss">
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">{{paymentModalTitle}}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <form fxLayout="column" [formGroup]="paymentForm" autocomplete="off">
-      <div class="input-row" fxLayout="row">
-        <mat-form-field class="inputField" fxFlex>
-          <input matInput placeholder="Amount" formControlName="amount" type="number" name="nameInput" autofocus>
-          <mat-error> Amount is required and must be less than debit</mat-error>
-        </mat-form-field>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button mat-raised-button name="addButton" color="primary" (click)="addNewPayment()" [disabled]="!paymentForm.valid">{{paymentModalTitle}}</button>
   </div>
 </ng-template>

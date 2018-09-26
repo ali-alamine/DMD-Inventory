@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ClientsService } from './clients.service';
 import { MenuItem } from 'primeng/api';
 import Swal from 'sweetalert2';
@@ -13,11 +13,8 @@ declare var $: any;
 export class ClientsComponent implements OnInit {
   modalReference: any;
   private clientForm;
-  private paymentForm;
-  paymentModalTitle;
   clientModalTitle;
-  editFlag=false;
-  subscriberModalTitle;
+  editFlag = false;
   private static selectedRowData;
   private static selectedClientID;
   editedClientData = {};
@@ -25,7 +22,7 @@ export class ClientsComponent implements OnInit {
   private globalClientsDT;
   totalDebit;
 
-  constructor(private modalService: NgbModal, private fb: FormBuilder,private clientsService:ClientsService) { }
+  constructor(private modalService: NgbModal, private fb: FormBuilder, private clientsService: ClientsService) { }
 
   ngOnInit() {
     var subscriberDataTable = $('#clientsDT').DataTable({
@@ -51,11 +48,10 @@ export class ClientsComponent implements OnInit {
       },
       order: [[0, 'asc']],
       columns: [
-        { data: "ID", title: "ID" },
         { data: "name", title: "Name" },
         { data: "phone", title: "Phone" },
         { data: "address", title: "Address" },
-        { data: "debit", title: "Debit" , render: $.fn.dataTable.render.number(',', '.', 0, 'LL ') }
+        { data: "code", title: "Code", render: $.fn.dataTable.render.number(',', '.', 0, 'LL ') }
 
       ]
     });
@@ -69,20 +65,11 @@ export class ClientsComponent implements OnInit {
           element.click();
         }
 
-      }, {
-        label: 'New Payment',
-        icon: 'pi pi-fw pi-plus',
-        command: (event) => {
-          let element: HTMLElement = document.getElementById('newPaymentBtn') as HTMLElement;
-          element.click();
-        }
-
       }
     ];
     this.globalClientsDT = subscriberDataTable;
 
     subscriberDataTable.on('select', function (e, dt, type, indexes) {
-
       if (type === 'row') {
         ClientsComponent.selectedRowData = subscriberDataTable.row(indexes).data();
         var data = subscriberDataTable.row(indexes).data()['ID'];
@@ -107,10 +94,10 @@ export class ClientsComponent implements OnInit {
       $(subscriberDataTable.row(cell.index().row).node()).removeClass('selected');
     });
 
-    this.getTotalDebit();
+    // this.getTotalDebit();
   }
 
-  openClientModal(clientModal){
+  openClientModal(clientModal) {
     this.modalReference = this.modalService.open(clientModal, { centered: true, ariaLabelledBy: 'modal-basic-title' });
     var name = '';
     var phone = '';
@@ -118,25 +105,24 @@ export class ClientsComponent implements OnInit {
     this.clientModalTitle = "Add Client";
 
     if (this.editFlag == true) {
+      this.clientModalTitle = "Edit Client";
       name = ClientsComponent.selectedRowData['name'];
       phone = ClientsComponent.selectedRowData['phone'];
       address = ClientsComponent.selectedRowData['address'];
-      this.subscriberModalTitle = "Update Client";
     }
     this.clientForm = this.fb.group({
-      name: [name, Validators.required],
+      name: [name, [Validators.required,Validators.minLength(3)]],
       phone: [phone, Validators.required],
       address: [address, Validators.required]
     });
-
   }
 
   addEditClient() {
     if (this.editFlag == true) {
       this.editedClientData['name'] = this.name.value;
-      this.editedClientData['address'] = this.address.value;
-      this.editedClientData['phone'] = this.phoneNumber.value;
-      this.editedClientData['id'] = ClientsComponent.selectedClientID;
+      this.editedClientData['phone'] = this.address.value;
+      this.editedClientData['address'] = this.phoneNumber.value;
+      this.editedClientData['code'] = ClientsComponent.selectedClientID;
 
       console.log(this.editedClientData)
       this.clientsService.editClient(this.editedClientData).subscribe(Response => {
@@ -178,51 +164,17 @@ export class ClientsComponent implements OnInit {
     this.modalReference.close();
   }
 
-  openNewPaymentModal(paymentModal){
-    this.modalReference = this.modalService.open(paymentModal, { centered: true, ariaLabelledBy: 'modal-basic-title' });
-    var amount = '';
-    this.paymentModalTitle = "New Payment";
-
-    
-    this.paymentForm = this.fb.group({
-      amount: [amount, [Validators.required,Validators.max(ClientsComponent.selectedRowData['debit'])]],
-      clientID:[ClientsComponent.selectedClientID]
-    });
-
-  }
-
-  addNewPayment(){
-    this.clientsService.newPayment(this.paymentForm.value).subscribe(Response => {
-      this.globalClientsDT.ajax.reload(null, false);
-      Swal({
-        type: 'success',
-        title: 'Success',
-        text: 'Payment Submited Successfully',
-        showConfirmButton: false,
-        timer: 1000
-      });
-      this.getTotalDebit();
-    }, error => {
-      Swal({
-        type: 'error',
-        title: error.statusText,
-        text: error.message
-      });
-    });
-    this.modalReference.close();
-  }
-
-  getTotalDebit(){
-    this.clientsService.totalDebit().subscribe(Response => {
-      this.totalDebit=Response[0].debit;
-    }, error => {
-      Swal({
-        type: 'error',
-        title: error.statusText,
-        text: error.message
-      });
-    });
-  }
+  // getTotalDebit() {
+  //   this.clientsService.totalDebit().subscribe(Response => {
+  //     this.totalDebit = Response[0].debit;
+  //   }, error => {
+  //     Swal({
+  //       type: 'error',
+  //       title: error.statusText,
+  //       text: error.message
+  //     });
+  //   });
+  // }
 
   get name() {
     return this.clientForm.get('name');
@@ -232,11 +184,6 @@ export class ClientsComponent implements OnInit {
   }
   get address() {
     return this.clientForm.get('address');
-
-  }
-  get amount() {
-    return this.paymentForm.get('amount');
-
   }
 
 }

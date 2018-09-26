@@ -17,10 +17,6 @@ export class ClientsService {
     return this.httpClient.put(this.url + "client", clientData);
   }
 
-  newPayment(paymentData): Observable<any> {
-    return this.httpClient.put(this.url + "payment", paymentData);
-  }
-
   totalDebit(): Observable<any> {
     return this.httpClient.get(this.url + "totalDebit");
   }
