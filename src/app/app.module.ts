@@ -30,6 +30,9 @@ import { SupplyInvoicesComponent } from './supply-invoices/supply-invoices.compo
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { FocusDirectiveDirective } from './focus-directive.directive';
+import { HistoryFactureComponent } from './history-facture/history-facture.component';
+import { HistoryItemsComponent } from './history-items/history-items.component';
+import { HistoryComponent } from './history/history.component';
 
 
 @NgModule({
@@ -43,6 +46,9 @@ import { FocusDirectiveDirective } from './focus-directive.directive';
     SupplyInvoicesComponent,
     PageNotFoundComponent,
     FocusDirectiveDirective,
+    HistoryComponent,
+    HistoryFactureComponent,
+    HistoryItemsComponent,
   ],
   imports: [
     BrowserModule,

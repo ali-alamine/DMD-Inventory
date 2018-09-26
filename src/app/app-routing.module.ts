@@ -7,6 +7,9 @@ import { SupplyComponent } from './supply/supply.component';
 import { SupplyInvoicesComponent } from './supply-invoices/supply-invoices.component';
 
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { HistoryComponent } from './history/history.component';
+import { HistoryItemsComponent } from './history-items/history-items.component';
+import { HistoryFactureComponent } from './history-facture/history-facture.component';
 
 const routes: Routes = [
   {
@@ -25,13 +28,12 @@ const routes: Routes = [
   {
     path:"supply",component:SupplyComponent
   },
-  // {
-  //   path:"drawer",component:DrawerComponent,  children: [
-  //     { path: 'internet',component:  InternetDrawerComponent},
-  //     { path : 'accDrawer',component: AccessoriesDrawerComponent }, 
-  //     { path : 'mobileDrawer',component: MobileDrawerComponent } 
-  //   ]
-  // },
+  {
+    path:"history",component:HistoryComponent,  children: [
+      { path: 'facture',component:  HistoryFactureComponent},
+      { path : 'items',component: HistoryItemsComponent } 
+    ]
+  },
   {
     path:"supplyInvoices",component:SupplyInvoicesComponent
   },
