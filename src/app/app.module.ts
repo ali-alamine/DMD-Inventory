@@ -31,6 +31,9 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { FocusDirectiveDirective } from './focus-directive.directive';
 import { FactureComponent } from './facture/facture.component';
+import { HistoryFactureComponent } from './history-facture/history-facture.component';
+import { HistoryItemsComponent } from './history-items/history-items.component';
+import { HistoryComponent } from './history/history.component';
 
 
 @NgModule({
@@ -45,6 +48,9 @@ import { FactureComponent } from './facture/facture.component';
     PageNotFoundComponent,
     FocusDirectiveDirective,
     FactureComponent,
+    HistoryComponent,
+    HistoryFactureComponent,
+    HistoryItemsComponent,
   ],
   imports: [
     BrowserModule,
