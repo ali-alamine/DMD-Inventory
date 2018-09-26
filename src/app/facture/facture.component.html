@@ -1,0 +1,92 @@
+<div class="container">
+  <form [formGroup]="supplyForm" autocomplete="off">
+    <div>
+      <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+        <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <mat-form-field class="searchInput" fxFlex>
+            <input matInput placeholder="Search Client Name" formControlName="searchSupplier" type="text" name="nameInput"
+              [matAutocomplete]="auto" autofocus>
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option (onSelectionChange)="test(option.PID,option.name)" *ngFor="let option of options" [value]="option.name">{{option.name}}
+                || {{option.address}}</mat-option>
+            </mat-autocomplete>
+            <mat-error> Supplier name is required</mat-error>
+          </mat-form-field>
+        </div>
+        <mat-form-field class="inputField" fxFlex>
+          <input matInput placeholder="Name" formControlName="supplierName" type="text" name="nameInput" [readonly]="true">
+          <mat-error> Supplier name is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="inputField">
+          <input matInput [matDatepicker]="expDateStart" formControlName="supplyDate" placeholder="Facture Date">
+          <mat-datepicker-toggle matSuffix [for]="expDateStart" tabIndex="-1"></mat-datepicker-toggle>
+          <mat-datepicker touchUi #expDateStart></mat-datepicker>
+          <mat-error> Date is required</mat-error>
+        </mat-form-field>
+
+
+       
+
+
+        <button class="addBtns" mat-raised-button color="primary" (click)="openMultiSelect(mutliSelectModal)" style="float:right">
+          <i class="material-icons">subdirectory_arrow_left</i> MultiSelect
+        </button>
+        
+      </div>
+    </div>
+    <hr>
+    <div formArrayName="items">
+      <div *ngFor="let item of itemsForm.controls; let i=index" [formGroupName]="i">
+        <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <mat-form-field fxFlex class="searchInput" style="text-align: center;">
+            <input matInput placeholder="Search Item" formControlName="searchItem" type="text" name="nameInput"
+              [matAutocomplete]="auto" autofocus (ngModelChange)="onItemNameChange(i)">
+            <mat-autocomplete #auto="matAutocomplete" id="itemName{{i}}" #itemName>
+              <mat-option (onSelectionChange)="addItem(i,item.IID,item.name)" *ngFor="let item of items" [value]="item.name">{{item.name}}</mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field fxFlex class="itemInputs">
+            <input matInput placeholder="Quantity" formControlName="quantity" (keydown.Tab)="tabKey(i)" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
+          </mat-form-field>
+
+
+          <button mat-icon-button (click)="deleteItem(i,true)" color="warn" tabindex="-1">
+            <mat-icon aria-label="Delete Item" title="Delete Item">close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <button class="addBtns" mat-raised-button color="primary" (click)="addRow()" style="float:right">
+      <i class="material-icons">subdirectory_arrow_left</i> Add Row
+    </button>
+    <hr>
+    
+
+
+    <button mat-raised-button name="addButton" class="addBtns" color="primary" (click)="addSupplyInvoice()" [disabled]="!supplyForm.valid">Submit</button>
+  </form>
+</div>
+
+
+
+<ng-template #mutliSelectModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Items</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-striped table-bordered table-hover table-sm noselect " id="stockDT">
+      <thead>
+  
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button mat-raised-button name="addButton" color="primary">Add</button>
+  </div>
+</ng-template>

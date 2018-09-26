@@ -30,6 +30,7 @@ import { SupplyInvoicesComponent } from './supply-invoices/supply-invoices.compo
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { FocusDirectiveDirective } from './focus-directive.directive';
+import { FactureComponent } from './facture/facture.component';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { FocusDirectiveDirective } from './focus-directive.directive';
     SupplyInvoicesComponent,
     PageNotFoundComponent,
     FocusDirectiveDirective,
+    FactureComponent,
   ],
   imports: [
     BrowserModule,

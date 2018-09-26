@@ -7,6 +7,7 @@ import { SupplyComponent } from './supply/supply.component';
 import { SupplyInvoicesComponent } from './supply-invoices/supply-invoices.component';
 
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { FactureComponent } from './facture/facture.component';
 
 const routes: Routes = [
   {
@@ -16,8 +17,9 @@ const routes: Routes = [
   {
     path:"stock",component:StockComponent
   },
-  
-  
+  {
+    path:"facture",component:FactureComponent
+  },
   {
     path:"clients",component:ClientsComponent
   },
