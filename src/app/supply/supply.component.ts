@@ -184,12 +184,6 @@ export class SupplyComponent implements OnInit {
     this.modalReference.close();
   }
   addSupplyInvoice() {
-    // console.log(this.supplyForm.value)
-    // for(var i=0;i<this.itemsForm.length;i++){
-    //   if(this.itemsForm.controls[i].get('itemID').value==null || this.itemsForm.controls[i].get('itemID').value==''){
-    //     this.deleteItem(i,true);
-    //   }
-    // }
     this.supplyService.addSupply(this.supplyForm.value).subscribe(Response => {
       swal({
         type: 'success',
@@ -204,9 +198,7 @@ export class SupplyComponent implements OnInit {
         title: error.statusText,
         text:error.message
       });
-    });
-    // console.log(this.supplyForm.value)
-    
+    });    
     this.supplyForm.reset();
       this.supplyForm.get('totalPrice').setValue(0); 
       this.supplyForm.get('type').setValue('RC'); 

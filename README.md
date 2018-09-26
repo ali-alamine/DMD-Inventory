@@ -1,6 +1,6 @@
-# DMD - Inventory
+# MoussaNet
 
-“In order to succeed, we must first believe that we can.”
+“Challenge yourself with something you know you could never do,and what you'll find is that you can overcome anything.”
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.2.
 

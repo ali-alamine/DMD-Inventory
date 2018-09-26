@@ -209,7 +209,7 @@
                       <input matInput placeholder="Accessories Name" formControlName="name" type="text" [readonly]="true">
                   </mat-form-field>
                   <mat-form-field fxFlex class="inputField">
-                      <input matInput placeholder="Quantity" formControlName="quantity" type="number" min="0" (ngModelChange)="updatePriceAccessories()"
+                      <input matInput placeholder="Quantity" formControlName="quantity" type="number" min="0" (ngModelChange)="updateRowPriceAccessories()"
                       onkeydown="javascript: return event.keyCode == 69 ? false : true">
                   </mat-form-field>
                   <mat-form-field fxFlex class="inputField">
@@ -217,7 +217,7 @@
                       onkeydown="javascript: return event.keyCode == 69 ? false : true" [readonly]="true">
                   </mat-form-field>
                   <mat-form-field fxFlex class="inputField">
-                    <input matInput placeholder="Total Price" formControlName="rowTotalPrice" type="number" min="0"  (ngModelChange)="updatePriceAccessories()"
+                    <input matInput placeholder="Total Price" formControlName="rowTotalPrice" type="number" min="0"  (ngModelChange)="updateTotalPriceAccessories()"
                     onkeydown="javascript: return event.keyCode == 69 ? false : true">
                 </mat-form-field>
                   <button mat-icon-button (click)="deleteItem(i)" color="warn" tabindex="-1">

@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, Validators, FormControl } from '@angular/forms';
+import { NgbModal } from '../../../node_modules/@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, Validators, FormControl } from '../../../node_modules/@angular/forms';
 declare var $: any;
 import 'datatables.net';
 import 'datatables.net-bs4';
-import { MenuItem } from 'primeng/api';
+import { MenuItem } from '../../../node_modules/primeng/api';
 import { StockService } from './stock.service';
 import swal from 'sweetalert2';
 
@@ -95,19 +95,15 @@ export class StockComponent implements OnInit {
   }
   tabChanged = (tabChangeEvent): void => {
     if(tabChangeEvent==0){
-      //stockMRCDT
       this.viewStockMRCDT();
     }
     if(tabChangeEvent==1){
-      //stockAccDT
       this.viewStockAccDT();
     }
     if(tabChangeEvent==2){
-      //stockMCDT
       this.viewStockOFDT();
     }
     if(tabChangeEvent==3){
-      //stockMCDT
       this.viewStockMCDT();
     }
   }

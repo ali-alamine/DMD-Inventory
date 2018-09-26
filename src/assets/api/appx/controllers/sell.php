@@ -53,12 +53,12 @@ class sell extends REST_Controller
         if($IID=='')
             $IID=1;//id fixe offers no insert
         if($company=="ALFA"){
-            $RCIID=3;//id fixe
-            $CTIID=1;//id fixe
-        }
-        else{
             $RCIID=2;//id fixe
             $CTIID=4;//id fixe
+        }
+        else{
+            $RCIID=3;//id fixe
+            $CTIID=5;//id fixe
         }
         $resultUpdate = $this->sell_model->updateItem($RCIID,'recharge_card',$mounth);
         $credits=$mounth*20-$credits;
@@ -94,9 +94,9 @@ class sell extends REST_Controller
         date_default_timezone_set("Asia/Beirut");
         $date=date("Y-m-d H:i:s");
         if($company=="ALFA")
-            $IID=1;//id fixe
+            $IID=4;//id fixe
         else
-            $IID=2;//id fixe
+            $IID=5;//id fixe
         $resultUpdate = $this->sell_model->updateCredits($IID,$credits,'-');
         if($CID!=null){
             $resultAdd = $this->sell_model->add('invoice',array("PID" => $CID, "IID" => $IID,

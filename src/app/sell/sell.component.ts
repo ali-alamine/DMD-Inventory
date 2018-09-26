@@ -136,17 +136,18 @@ export class SellComponent implements OnInit {
       })
     });
   }
-  public updatePriceAccessories(){
-    var total=0;
-    var profit=0;
+  public updatePriceAccessories() {
+    var profit = 0;
+    var total = 0;
     for (var i = 0; i < this.itemsForm.controls.length; i++) {
       var price = this.itemsForm.controls[i].get('price').value;
       var cost = this.itemsForm.controls[i].get('cost').value;
+      var rowTotalPrice = this.itemsForm.controls[i].get('rowTotalPrice').value;
       var itemTotalPrice=(this.itemsForm.controls[i].get('price').value)*(this.itemsForm.controls[i].get('quantity').value);
       profit=itemTotalPrice - ((this.itemsForm.controls[i].get('cost').value) * (this.itemsForm.controls[i].get('quantity').value));
       this.itemsForm.controls[i].get('profit').setValue(profit);
       this.itemsForm.controls[i].get('rowTotalPrice').setValue(itemTotalPrice);
-      total = total + itemTotalPrice;
+      total = total  + itemTotalPrice;
     }
     this.accessoriesForm.get('totalPrice').setValue(total);
   }
@@ -200,9 +201,9 @@ export class SellComponent implements OnInit {
     for (var i = 0; i < this.credits.length; i++) {
       if (this.credits[i].company == company && this.credits[i].num_of_credit == credits) {
         this.creditTransfersForm.get('price').setValue(this.credits[i].price);
+        break;
       }
     }
-
   }
   changePriceFullCard(edit){
     if(edit==false){
@@ -255,6 +256,7 @@ export class SellComponent implements OnInit {
   }
   deleteItem(i) {
     this.itemsForm.removeAt(i);
+    this.updatePriceAccessories();
   }
   addItem(id, name,price,cost) {
     this.accessoriesForm.get('searchAccessories').setValue('');
@@ -262,11 +264,11 @@ export class SellComponent implements OnInit {
     const item = this.fb.group({
       name: [name],
       itemID: [id],
-      quantity: [1, Validators.required],
+      quantity: [1, [Validators.required, Validators.min(1)]],
       cost:cost,
       profit:profit,
-      price: [price, Validators.required],
-      rowTotalPrice:price
+      price: [price, [Validators.required, Validators.min(1)]],
+      rowTotalPrice:[price,[Validators.required, Validators.min(1)]]
     });
     this.itemsForm.push(item);
     this.updatePriceAccessories();

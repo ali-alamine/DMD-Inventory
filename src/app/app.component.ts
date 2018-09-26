@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
+import { DrawerService } from './drawer/drawer.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ export class AppComponent {
   modalReference: any;
   objDate;
   drawerForm;
-  constructor(private modalService: NgbModal, private fb: FormBuilder) { }
+  constructor(private modalService: NgbModal, private fb: FormBuilder,private drawerService:DrawerService) { }
   ngOnInit() {
     var date = formatDate(new Date(), 'yyyy/MM/dd', 'en');
     if (localStorage.getItem("date") !== date) {
@@ -39,7 +40,9 @@ export class AppComponent {
   }
 
   setDrawer() {
-    
+    this.drawerService.setDrawer(this.drawerForm.value).subscribe(response=>{
+      console.log(Response);
+    })
     
     var date = formatDate(new Date(), 'yyyy/MM/dd', 'en')    
     localStorage.setItem("date", date);

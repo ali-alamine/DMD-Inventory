@@ -22,7 +22,7 @@ if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     if($type=="RC")
         $getAllFactureQuery = "SELECT * FROM recharge_card as rc INNER JOIN item on item.IID = rc.IID where item.type='".$type."' and ( item.name like '%" . $search . "%' ) ". $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     if($type=="OF")
-        $getAllFactureQuery = "SELECT * FROM offers as of INNER JOIN item on item.IID = of.IID where item.type='".$type."' and ( item.name like '%" . $search . "%' ) ". $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+        $getAllFactureQuery = "SELECT * FROM offers as of INNER JOIN item on item.IID = of.IID where ( item.type='".$type."' OR item.type='CT') and ( item.name like '%" . $search . "%' ) ". $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     if($type=="CT")
         $getAllFactureQuery = "SELECT * FROM credit as cr INNER JOIN item on item.IID = cr.IID where item.type='".$type."' and ( item.name like '%" . $search . "%' ) ". $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
@@ -32,7 +32,7 @@ if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     if($type=="RC")
         $getAllFactureQuery = " SELECT * FROM recharge_card as rc INNER JOIN item on item.IID = rc.IID where item.type='".$type."' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     if($type=="OF")
-        $getAllFactureQuery = " SELECT * FROM offers as of INNER JOIN item on item.IID = of.IID where item.type='".$type."' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+        $getAllFactureQuery = " SELECT * FROM offers as of INNER JOIN item on item.IID = of.IID where  ( item.type='".$type."' OR item.type='CT') " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     if($type=="CT")
         $getAllFactureQuery = " SELECT * FROM credit as cr INNER JOIN item on item.IID = cr.IID where item.type='".$type."' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
