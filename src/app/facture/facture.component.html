@@ -15,12 +15,18 @@
         </div>
         <mat-form-field class="inputField" fxFlex>
           <input matInput placeholder="Name" formControlName="supplierName" type="text" name="nameInput" [readonly]="true">
-          <mat-error> Supplier name is required</mat-error>
         </mat-form-field>
         <mat-form-field class="inputField">
           <input matInput [matDatepicker]="expDateStart" formControlName="supplyDate" placeholder="Facture Date">
           <mat-datepicker-toggle matSuffix [for]="expDateStart" tabIndex="-1"></mat-datepicker-toggle>
           <mat-datepicker touchUi #expDateStart></mat-datepicker>
+          <mat-error> Date is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="inputField">
+          <input matInput [matDatepicker]="deliveryDate" formControlName="delDate" placeholder="Delivery Date">
+          <mat-datepicker-toggle matSuffix [for]="deliveryDate" tabIndex="-1"></mat-datepicker-toggle>
+          <mat-datepicker touchUi #deliveryDate></mat-datepicker>
           <mat-error> Date is required</mat-error>
         </mat-form-field>
 
@@ -46,21 +52,21 @@
             </mat-autocomplete>
           </mat-form-field>
           <mat-form-field fxFlex class="itemInputs">
-            <input matInput placeholder="Quantity" formControlName="quantity" (keydown.Tab)="tabKey(i)" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
+            <input matInput placeholder="Quantity" formControlName="quantity"  (keydown.Tab)="tabKey(i)" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
           </mat-form-field>
 
 
-          <button mat-icon-button (click)="deleteItem(i,true)" color="warn" tabindex="-1">
+          <button mat-icon-button (click)="deleteItem(i,quantity)" color="warn" tabindex="-1">
             <mat-icon aria-label="Delete Item" title="Delete Item">close</mat-icon>
           </button>
         </div>
       </div>
     </div>
     
-    <button class="addBtns" mat-raised-button color="primary" (click)="addRow()" style="float:right">
+    <!-- <button class="addBtns" mat-raised-button color="primary" (click)="addRow()" style="float:right">
       <i class="material-icons">subdirectory_arrow_left</i> Add Row
     </button>
-    <hr>
+    <hr> -->
     
 
 
@@ -87,6 +93,6 @@
     </table>
   </div>
   <div class="modal-footer">
-    <button mat-raised-button name="addButton" color="primary">Add</button>
+    <button mat-raised-button (click)="addItemsToFacture()" color="primary">Add Items</button>
   </div>
 </ng-template>

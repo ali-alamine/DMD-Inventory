@@ -18,32 +18,24 @@ export class FactureComponent implements OnInit {
   newItemForm: FormGroup;
   rechargeCardForm: FormGroup;
   static selectedItems: number[] = new Array();
+  static globalMultiSelectDT;
   constructor(private fb: FormBuilder, private supplyService: SupplyService, private modalService: NgbModal, private stockService: StockService) {
   }
 
   ngOnInit() {
     this.supplyForm = this.fb.group({
       supplyDate: ['', Validators.required],
+      delDate: ['', Validators.required],
       supplierName: ['', Validators.required],
       searchSupplier: '',
       supplierID: '',
       items: this.fb.array([])
     });
     this.onSupplierNameChange();
-    this.addRow();
   }
 
 
-  onItemNameChange(index) {
-    var data = this.itemsForm.controls[index].get('searchItem').value;
-    if (data == "") {
-      this.items = [];
-      return;
-    }
-    this.supplyService.searchItem(data, 1).subscribe(Response => {
-      this.items = Response;
-    })
-  }
+ 
 
   onSupplierNameChange(): void {
     this.supplyForm.get('searchSupplier').valueChanges.subscribe(val => {
@@ -58,13 +50,11 @@ export class FactureComponent implements OnInit {
     });
   }
 
-  addRow() {
+  addRow(id) {
     const item = this.fb.group({
       searchItem: [],
-      itemID: ['', Validators.required],
-      price: [0, Validators.min(1)],
-      quantity: [0, Validators.min(1)],
-      itemTotalPrice: [0, Validators.min(1)]
+      itemID: [id, Validators.required],
+      quantity: [id, Validators.min(1)]
     });
     this.itemsForm.push(item);
   }
@@ -76,8 +66,15 @@ export class FactureComponent implements OnInit {
     this.items = [];
   }
 
-  deleteItem(i, editPrice) {
+  deleteItem(i,id) {
     this.itemsForm.removeAt(i);
+    
+    debugger
+    var index = FactureComponent.selectedItems.indexOf(id);
+    console.log(index)
+    FactureComponent.selectedItems=FactureComponent.selectedItems.slice(index,1); 
+    console.log(FactureComponent.selectedItems) 
+    
   }
 
   test(id, name) {
@@ -111,6 +108,15 @@ export class FactureComponent implements OnInit {
     this.supplyForm.get('paid').setValue(0);
   }
 
+  addItemsToFacture(){
+    FactureComponent.globalMultiSelectDT.destroy();
+    this.modalReference.close();
+    FactureComponent.selectedItems.forEach(element => {
+      this.addRow(element);
+    });
+
+  }
+
   openMultiSelect(mutliSelectModal) {
 
 
@@ -128,7 +134,7 @@ export class FactureComponent implements OnInit {
       fixedHeader: true,
       select: true,
       searching: true,
-      lengthMenu: [[5, 10, 25, 50, 100, 150, 200, 300], [5, 10, 25, 50, 100, 150, 200, 300]],
+      lengthMenu: [[25, 50, 100], [25, 50, 100]],
       ajax: {
         type: "get",
         url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/stockDataTable.php",
@@ -147,11 +153,11 @@ export class FactureComponent implements OnInit {
 
       ],
       rowId: 'ID',
-      "createdRow": function ( row, data, index ) {
+      "createdRow": function (row, data, index) {
         if (FactureComponent.selectedItems.indexOf(data['ID']) > -1) {
           multiSelectDT.row(row).select();
         }
-    }
+      }
 
     });
 
@@ -188,15 +194,15 @@ export class FactureComponent implements OnInit {
     });
 
 
-
+    FactureComponent.globalMultiSelectDT = multiSelectDT;
   }
 
 
 
-  tabKey(data) {
-    if (data == this.itemsForm.length - 1)
-      this.addRow();
-  }
+  // tabKey(data) {
+  //   if (data == this.itemsForm.length - 1)
+  //     this.addRow(0);
+  // }
 
   get itemsForm() {
     return this.supplyForm.get('items') as FormArray
