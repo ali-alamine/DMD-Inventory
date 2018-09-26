@@ -20,9 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {ChartModule} from 'primeng/chart';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatExpansionModule} from '@angular/material/expansion';
-
 import { NgxSpinnerModule } from 'ngx-spinner';
-
 import { StockComponent } from './stock/stock.component';
 import { ClientsComponent } from './clients/clients.component';
 import { SupplyComponent } from './supply/supply.component';
@@ -30,9 +28,6 @@ import { SellComponent } from './sell/sell.component';
 import {MatIconModule} from '@angular/material/icon';
 import { SupplyInvoicesComponent } from './supply-invoices/supply-invoices.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-
-
-import {  APP_INITIALIZER } from '@angular/core';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { FocusDirectiveDirective } from './focus-directive.directive';
 
