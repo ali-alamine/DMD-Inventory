@@ -10,6 +10,7 @@ declare var $: any;
   templateUrl: './facture.component.html',
   styleUrls: ['./facture.component.css']
 })
+
 export class FactureComponent implements OnInit {
   modalReference: any;
   supplyForm: FormGroup;
@@ -17,7 +18,7 @@ export class FactureComponent implements OnInit {
   items: any;
   newItemForm: FormGroup;
   rechargeCardForm: FormGroup;
-  static selectedItems: number[] = new Array();
+  static selectedItems: item[] = new Array();
   static globalMultiSelectDT;
   constructor(private fb: FormBuilder, private supplyService: SupplyService, private modalService: NgbModal, private stockService: StockService) {
   }
@@ -50,21 +51,18 @@ export class FactureComponent implements OnInit {
     });
   }
 
-  addRow(id) {
+  addRow(element) {
     const item = this.fb.group({
-      searchItem: [],
-      itemID: [id, Validators.required],
-      quantity: [id, Validators.min(1)]
+      itemID: [element['id'], Validators.required],
+      itemName: [element['name']],
+      crt: [0],
+      piece:[0],
+      comment:['']
+
     });
     this.itemsForm.push(item);
   }
 
-  addItem(i, id, name) {
-    this.itemsForm.controls[i].get('searchItem').setValue(name);
-    this.itemsForm.controls[i].get('searchItem').disable();
-    this.itemsForm.controls[i].get('itemID').setValue(id);
-    this.items = [];
-  }
 
   deleteItem(i,id) {
     this.itemsForm.removeAt(i);
@@ -86,26 +84,23 @@ export class FactureComponent implements OnInit {
 
 
   addSupplyInvoice() {
-    this.supplyService.addSupply(this.supplyForm.value).subscribe(Response => {
-      swal({
-        type: 'success',
-        title: 'Success',
-        text: 'Supply Successfully',
-        showConfirmButton: false,
-        timer: 1000
-      });
-    }, error => {
-      swal({
-        type: 'error',
-        title: error.statusText,
-        text: error.message
-      });
-    });
+    // this.supplyService.addSupply(this.supplyForm.value).subscribe(Response => {
+    //   swal({
+    //     type: 'success',
+    //     title: 'Success',
+    //     text: 'Supply Successfully',
+    //     showConfirmButton: false,
+    //     timer: 1000
+    //   });
+    // }, error => {
+    //   swal({
+    //     type: 'error',
+    //     title: error.statusText,
+    //     text: error.message
+    //   });
+    // });
+    console.log(this.supplyForm.value);
     this.supplyForm.reset();
-    this.supplyForm.get('totalPrice').setValue(0);
-    this.supplyForm.get('type').setValue('RC');
-    this.supplyForm.get('drawer').setValue('M');
-    this.supplyForm.get('paid').setValue(0);
   }
 
   addItemsToFacture(){
@@ -125,7 +120,7 @@ export class FactureComponent implements OnInit {
     var multiSelectDT = $('#stockDT').DataTable({
       responsive: false,
       paging: true,
-      pagingType: "full_numbers",
+      pagingType: "numbers",
       serverSide: true,
       processing: true,
       deferRender: true,
@@ -134,7 +129,7 @@ export class FactureComponent implements OnInit {
       fixedHeader: true,
       select: true,
       searching: true,
-      lengthMenu: [[25, 50, 100], [25, 50, 100]],
+      lengthMenu: [[10,25, 50, 100], [10,25, 50, 100]],
       ajax: {
         type: "get",
         url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/stockDataTable.php",
@@ -166,8 +161,10 @@ export class FactureComponent implements OnInit {
       var rows = multiSelectDT.rows('.selected').indexes().toArray();
       rows.forEach(element => {
         var ID = multiSelectDT.row(element).data()['ID'];
-        if (FactureComponent.selectedItems.indexOf(ID) == -1)
-          FactureComponent.selectedItems.push(ID);
+        var name = multiSelectDT.row(element).data()['item_name'];
+
+        if (FactureComponent.findWithAttr(FactureComponent.selectedItems,'id',ID) == -1)
+          FactureComponent.selectedItems.push({id:ID,name:name});
       });
       console.log(FactureComponent.selectedItems);
     });
@@ -177,7 +174,8 @@ export class FactureComponent implements OnInit {
       FactureComponent.selectedItems = [];
       rows.forEach(element => {
         var ID = multiSelectDT.row(element).data()['ID'];
-        FactureComponent.selectedItems.push(ID);
+        var name = multiSelectDT.row(element).data()['item_name'];
+        FactureComponent.selectedItems.push({id:ID,name:name});
       });
       console.log(FactureComponent.selectedItems);
     });
@@ -216,6 +214,19 @@ export class FactureComponent implements OnInit {
     return this.supplyForm.get('totalPrice');
   }
 
+  static findWithAttr(array, attr, value) {
+    for(var i = 0; i < array.length; i += 1) {
+        if(array[i][attr] === value) {
+            return i;
+        }
+    }
+    return -1;
 }
 
+}
+
+export interface item{
+  id:number;
+  name:string;
+}
 
