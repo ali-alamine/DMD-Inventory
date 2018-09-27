@@ -7,27 +7,15 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 })
 export class StockService {
 
-  private url="http://localhost/MoussaNet/src/assets/api/stock/";
+  private url="http://localhost/DMD-Inventory/src/assets/api/stock/";
   constructor(private httpClient: HttpClient) { }
-  addNewAcc(accData): Observable<any>{
-    return this.httpClient.post(this.url+"stockAcc", accData);
+
+  addStockItem(itemData): Observable<any>{
+    return this.httpClient.post(this.url+"stockAcc", itemData);
   }
-  addNewMRC(MRCData): Observable<any>{
-    return this.httpClient.post(this.url+"stockMRC", MRCData);
+
+  editStockItem(itemData): Observable<any>{
+    return this.httpClient.post(this.url+"stockAcc", itemData);
   }
-  addNewOF(OFData): Observable<any>{
-    return this.httpClient.post(this.url+"stockOF", OFData);
-  }
-  editAcc(data): Observable<any> {
-    return this.httpClient.put(this.url+"stockAcc", data);
-  }
-  editMRC(data): Observable<any> {
-    return this.httpClient.put(this.url+"stockMRC", data);
-  }
-  editOF(data): Observable<any> {
-    return this.httpClient.put(this.url+"stockOF", data);
-  }
-  editCT(data): Observable<any> {
-    return this.httpClient.put(this.url+"stockCT", data);
-  }
+  
 }

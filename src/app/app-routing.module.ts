@@ -7,13 +7,10 @@ import { SupplyComponent } from './supply/supply.component';
 import { SupplyInvoicesComponent } from './supply-invoices/supply-invoices.component';
 
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-<<<<<<< HEAD
 import { FactureComponent } from './facture/facture.component';
-=======
 import { HistoryComponent } from './history/history.component';
 import { HistoryItemsComponent } from './history-items/history-items.component';
 import { HistoryFactureComponent } from './history-facture/history-facture.component';
->>>>>>> d17f5207b93802f8fe58574e55e4aae4f3a3f39c
 
 const routes: Routes = [
   {

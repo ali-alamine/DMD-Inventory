@@ -20,7 +20,6 @@ export class ClientsComponent implements OnInit {
   editedClientData = {};
   items: MenuItem[];
   private globalClientsDT;
-  totalDebit;
 
   constructor(private modalService: NgbModal, private fb: FormBuilder, private clientsService: ClientsService) { }
 
