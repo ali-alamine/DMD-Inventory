@@ -11,6 +11,12 @@
     margin-right: 5px;
     width: 30%;
 }
+
+.searchClient{
+    margin-left: 5px;
+    margin-right: 5px;
+    width: 70%;
+}
 .addBtns{
     margin: 15px;
 }

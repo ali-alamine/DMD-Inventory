@@ -191,14 +191,6 @@ export class FactureComponent implements OnInit {
     return this.supplyForm.get('items') as FormArray
   }
 
-  get itemPrice() {
-    return this.itemsForm.controls[0].get('itemPrice');
-  }
-
-  get tt() {
-    return this.supplyForm.get('totalPrice');
-  }
-
   get itemID() {
     return this.supplyForm.get('itemID');
   }

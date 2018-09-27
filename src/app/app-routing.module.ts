@@ -14,7 +14,11 @@ import { HistoryFactureComponent } from './history-facture/history-facture.compo
 
 const routes: Routes = [
   {
-    path:"sell",component:SellComponent
+    path:"sell",component:SellComponent, children:[
+      { path: 'supply',component:  SupplyComponent},
+      { path: 'return',component:  PageNotFoundComponent},
+      { path : 'facture',component: FactureComponent } 
+    ]
   },
  
   {
