@@ -11,12 +11,12 @@ class history extends REST_Controller
     public function getFactureDetails_get()
     {
         $ID = $this->get('ID');
-        echo $ID;
-        // $result = $this->history_model->getFactureDetails($ID);
-        // if ($result) {
-        //     $this->response($result, 200);
-        //     exit;
-        // }
+        // echo $ID;
+        $result = $this->history_model->getFactureDetails($ID);
+        if ($result) {
+            $this->response($result, 200);
+            exit;
+        }
     }
 
     // public function setDrawer_post()

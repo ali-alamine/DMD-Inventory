@@ -7,6 +7,8 @@ import { MenuItem } from '../../../node_modules/primeng/api';
 declare var $: any;
 import swal from 'sweetalert2';
 import { HistoryComponent } from '../history/history.component';
+import { FactureComponent } from '../facture/facture.component';
+import { Router } from '../../../node_modules/@angular/router';
 @Component({
   selector: 'app-history-facture',
   templateUrl: './history-facture.component.html',
@@ -17,21 +19,24 @@ export class HistoryFactureComponent implements OnInit {
   private factureDetails;
   private showDetailsCode;
   modalReference: any;
-  private static selectedFactureRowData;
-  private static selectedFactureID;
-  private static selectedFactureType;
-  private static selectedFactureDetailsRowData;
-  private static selectedFactureDetailsID;
+  private selectedFactureRowData;
+  static selectedFactureID;
+  static selectedFactureType;
+  static selectedFactureCode;
+  static selectedFactureClientName;
   rightClick: MenuItem[];
   private globalHistoryFactureDT;
-  private globalHistoryFactureDetailsDT;
   private itemsForm;
   // historyComponent: any;
+  static selectedFacture = new Array();
 
-  constructor(private HistoryComponent:HistoryComponent,
-    private historyService: HistoryService,private historyFactureService: HistoryFactureService,
-    private modalService: NgbModal, 
-    private fb: FormBuilder) { }
+  constructor(private historyComponent : HistoryComponent,
+    // private factureComponent : FactureComponent,
+    private historyService: HistoryService,
+    private historyFactureService : HistoryFactureService,
+    private modalService : NgbModal, 
+    private fb : FormBuilder,
+    private router: Router) { }
 
   ngOnInit() {
     this.getHistoryFactureDT();
@@ -42,6 +47,14 @@ export class HistoryFactureComponent implements OnInit {
         icon: 'pi pi-fw pi-bars',
         command: (event) => {
           let element: HTMLElement = document.getElementById('showDetailsBtn') as HTMLElement;
+          element.click();
+        }
+      },
+      {
+        label: 'Modifier',
+        icon: 'pi pi-fw pi-pencil',
+        command: (event) => {
+          let element: HTMLElement = document.getElementById('editBtn') as HTMLElement;
           element.click();
         }
       },
@@ -75,33 +88,59 @@ export class HistoryFactureComponent implements OnInit {
         lengthMenu: [[25, 50, 100, 150, 200, 300], [25, 50, 100, 150, 200, 300]],
         ajax: {
           type: "get",
-          // url: "http://localhost/MoussaNet/src/assets/api/dataTables/stockDataTable.php",
+          url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/history.php",
           // data:{"type":"OF"},
           cache: false,
           async: true
         },
         order: [[0, 'asc']],
         columns: [
-          { data: "clientName", title: "CLIENTS" },
-          { data: "date", title: "DATE" },
-          { data: "code", title: "CODE"}
-          // { data: "num_of_credit", title: "NB. OF CREDITS $","searchable": false,"sortable": false },
-          // { data: "price", title: "PRICE","searchable": false,"sortable": false , render: $.fn.dataTable.render.number(',', '.', 0, 'LL ') }
-        ]
+          { data: "client_name", title: "CLIENTS" },
+          { data: "ord_det_date_req", title: "DATE" },
+          { data: "ord_det_code", title: "CODE"}
+        ],
+        "columnDefs": [ {
+          "targets": 2,
+          "createdCell": function (td, data, rowData, row, col) {
+            if ( rowData['ord_det_type'] == "FC") {           
+              $(td).html(" <span style='color: 	#008000;' >"+data+"</span> ")
+            }
+            if ( rowData['ord_det_type'] == "FR") {           
+              $(td).html(" <span style='color: #FF0000;' >"+data+"</span> ")
+            }
+            if ( rowData['ord_det_type'] == "FD") {          
+              $(td).html(" <span style='color: #0000FF;' >"+data+"</span> ")
+            } 
+          }
+        } ]
       });
       this.globalHistoryFactureDT = historyFactureDT;
       historyFactureDT.on('select', function (e, dt, type, indexes) {
+        HistoryFactureComponent.selectedFacture = [];
         if (type === 'row') {
-          HistoryFactureComponent.selectedFactureRowData = historyFactureDT.row(indexes).data();
+          this.selectedFactureRowData = historyFactureDT.row(indexes).data();
           var ID = historyFactureDT.row(indexes).data()['ID'];
-          var type = historyFactureDT.row(indexes).data()['type'];
-          HistoryFactureComponent.selectedFactureID = ID;
-          HistoryFactureComponent.selectedFactureType = type;
+          var type = historyFactureDT.row(indexes).data()['ord_det_type'];
+          var clientName = historyFactureDT.row(indexes).data()['client_name'];
+          var phone = historyFactureDT.row(indexes).data()['client_phone'];
+          var address = historyFactureDT.row(indexes).data()['client_location'];
+          var date_req = historyFactureDT.row(indexes).data()['ord_det_date_req'];
+          var date_del = historyFactureDT.row(indexes).data()['ord_det_date_del'];
+          HistoryFactureComponent.selectedFacture.push({
+            ID:ID,
+            type:type,
+            clientName:clientName,
+            phone:phone,
+            address:address,
+            date_req:date_req,
+            date_del:date_del
+          });
+          // console.log(HistoryFactureComponent.selectedFacture)
         }
-        else if (type === 'column') {
-          HistoryFactureComponent.selectedFactureID = -1;
-          HistoryFactureComponent.selectedFactureType = -1;
-        }
+        // else if (type === 'column') {
+        //   HistoryFactureComponent.selectedFactureID = -1;
+        //   HistoryFactureComponent.selectedFactureType = -1;
+        // }
       });
       $('#historyFactureDT tbody').on('mousedown', 'tr', function (event) {
         if (event.which == 3) {
@@ -118,107 +157,15 @@ export class HistoryFactureComponent implements OnInit {
       this.globalHistoryFactureDT.ajax.reload(null, false);
     }
   }
-  openShowDetails(showDetails) {
-    this.HistoryComponent.showFactureDetails(1,showDetails);
-    // this.historyFactureService.getFactureDetails(HistoryFactureComponent.selectedFactureID).subscribe(Response => {
-      // this.factureDetails = Response;
-    //   var detailFactureDT = $('#detailFactureDT').DataTable({
-    //     responsive: true,
-    //     paging: true,
-    //     pagingType: "full_numbers",
-    //     serverSide: false,
-    //     processing: true,
-    //     select: {
-    //       "style": "single"
-    //     },
-    //     ordering: true,
-    //     stateSave: false,
-    //     fixedHeader: false,
-    //     searching: true,
-    //     lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
-    //     data: this.factureDetails,
-    //     order: [[0, 'desc']],
-    //     columns: [
+  openShowDetails() {
+    // console.log(HistoryFactureComponent.selectedFactureID)
 
-    //       { data: "itemsName", title: "ARTICLE" },
-    //       { data: "crt", title: "CRT" ,"searchable": false,"sortable": false},
-    //       { data: "piece", title: "PIECE","searchable": false,"sortable": false },
-    //       // { data: "piece", title: "PIECE","searchable": false,"sortable": false },
-    //       { data: "note", title: "NOTE" ,"searchable": false,"sortable": false},
-
-    //     ],
-    //     "columnDefs": [
-    //       {
-    //         "targets": 2,
-    //         "data": "type",
-    //         "render": function (data, type, row, meta) {
-    //           if (data == null) {
-    //             return 'Payment';
-    //           }
-    //           else if (data == 'a') {
-    //             return 'Add';
-    //           }
-    //           else if(data == 'w') {
-    //             return 'Withdraw';
-    //           }
-    //         }
-    //       }
-    //     ]
-    //   });
-    //   $('#detailFactureDT tbody').on('mousedown', 'tr', function (event) {
-    //     if (event.which == 3) {
-    //       detailFactureDT.row(this).select();
-    //     }
-    //   });
-
-    //   $('#detailFactureDT').on('key-focus.dt', function (e, datatable, cell) {
-    //     $(detailFactureDT.row(cell.index().row).node()).addClass('selected');
-
-    //   });
-    //   $('#detailFactureDT').on('key-blur.dt', function (e, datatable, cell) {
-    //     $(detailFactureDT.row(cell.index().row).node()).removeClass('selected');
-    //   });
-
-    // // }, error => {
-    // //   alert(error)
-    // // });
-    // this.modalReference = this.modalService.open(showDetails, { centered: true, ariaLabelledBy: 'modal-basic-title', size: 'lg' });
-    // // this.showDetailsCode="Show Details " + AccessoriesDrawerComponent.selectedDay;
+    this.historyComponent.showFactureDetails(HistoryFactureComponent.selectedFacture);
   }
-  // openOperationModal(openModal,type){
-  //   this.modalReference = this.modalService.open(openModal, { centered: true, ariaLabelledBy: 'modal-basic-title' });
-  //   if(type=='a')
-  //     this.operationModalTitle = 'ADD'; 
-  //   else if(type=='w')
-  //     this.operationModalTitle = 'WITHDRAW';
-  //   this.operationForm = this.fb.group({
-  //     op_type: [type],
-  //     drawer: ['a'],
-  //     amount: [ 0,Validators.min(1)],
-  //     comment: ['']
-  //   });
+  editFacture(){
+    this.router.navigate(["facture"], { queryParams: { factureID: HistoryFactureComponent.selectedFactureID }});
 
-  // }
-  // addNewOperation(){
-  //   this.drawerService.newOperation(this.operationForm.value).subscribe(Response => {
-  //     this.accDrawer='';
-  //     $('#accDrawerDT').DataTable().destroy();
-  //     $('#accDrawerDT').empty();
-  //     this.getAccDrawerDT();
-  //     swal({
-  //       type: 'success',
-  //       title: 'Success',
-  //       text:'Operation Successfully',
-  //       showConfirmButton: false,
-  //       timer: 1000
-  //     });
-  //   }, error => {
-  //     swal({
-  //       type: 'error',
-  //       title: error.statusText,
-  //       text:error.message
-  //     });
-  //   });
-  //   this.modalReference.close();
-  // }
+    // this.factureComponent.ngOnInit();
+  }
+   
 }

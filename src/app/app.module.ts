@@ -35,7 +35,6 @@ import { HistoryFactureComponent } from './history-facture/history-facture.compo
 import { HistoryItemsComponent } from './history-items/history-items.component';
 import { HistoryComponent } from './history/history.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,

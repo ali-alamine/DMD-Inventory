@@ -102,16 +102,13 @@ class history_model extends CI_Model
     // }
     public function getFactureDetails($ID)
     {
-        // $query = $this->db->query("( SELECT time(payment_date) as  dayTime,amount,comment as note,NULL as type FROM payment WHERE  date(payment_date)='".$day."' AND drawer_type='".$type."' )
-        // UNION ALL ( 
-        //     SELECT time(date) as dayTime,amount,note as note,op_type as type FROM operation WHERE date(date)='".$day."' AND dra_type='".$type."' 
-        // )");
-        // if ($query->num_rows() > 0) {
-        //     return $query->result_array();
-        // } else {
-        //     return 0;
-        // }
-        return $ID;
+        $query = $this->db->query("SELECT * FROM order_item as o INNER JOIN item as i ON i.IID = o.ord_IID where o.ord_ODID = '".$ID."' ");
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return 0;
+        }
+        // return $ID;
 
     }
 }
