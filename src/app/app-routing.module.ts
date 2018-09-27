@@ -20,19 +20,11 @@ const routes: Routes = [
       { path : 'facture',component: FactureComponent } 
     ]
   },
- 
   {
     path:"stock",component:StockComponent
   },
   {
-    path:"facture",component:FactureComponent
-  },
-  {
     path:"clients",component:ClientsComponent
-  },
-  
-  {
-    path:"supply",component:SupplyComponent
   },
   {
     path:"history",component:HistoryComponent,  children: [
@@ -41,10 +33,7 @@ const routes: Routes = [
     ]
   },
   {
-    path:"supplyInvoices",component:SupplyInvoicesComponent
-  },
-  {
-    path:"",component:StockComponent
+    path:"",component:SellComponent
   },
   {
     path:"**",component:PageNotFoundComponent

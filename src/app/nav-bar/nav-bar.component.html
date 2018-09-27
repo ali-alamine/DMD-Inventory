@@ -13,9 +13,6 @@
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark noselect">
-  <!-- <a class="navbar-brand" style="color: white; padding-right: 10px;">
-    <img src="../../assets/png/logo.PNG" width="75" height="40" class="d-inline-block align-top" alt=""> K-Libra
-  </a> -->
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
     aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -31,17 +28,9 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="/clients" routerLinkActive="active">Clients</a>
       </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-          [class.active]="currentUrl == '/subscribersReport'">
-          History
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" routerLink="/subscribersReport" routerLinkActive="active">Factures</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" routerLink="/subscribersReport" routerLinkActive="active">Articles</a>          
-        </div>
-      </li>
+      <li class="nav-item">
+          <a class="nav-link" routerLink="/history" routerLinkActive="active">History</a>
+        </li>
     </ul>
   </div>
 </nav>
