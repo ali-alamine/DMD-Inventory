@@ -40,7 +40,7 @@
       <div *ngFor="let item of itemsForm.controls; let i=index" [formGroupName]="i">
         <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field fxFlex class="itemInputs">
-            <input matInput placeholder="Item ID" formControlName="itemID" type="number">
+            <input matInput placeholder="Item ID" formControlName="itemID" #itemID type="number">
           </mat-form-field>
           <mat-form-field fxFlex class="searchInput" style="text-align: center;">
             <input matInput placeholder="Name" formControlName="itemName" type="text" name="nameInput">
@@ -55,7 +55,7 @@
             <input matInput placeholder="Comment" formControlName="comment" (keydown.Tab)="tabKey(i)" type="text">
           </mat-form-field>
 
-          <button mat-icon-button (click)="deleteItem(i,quantity)" color="warn" tabindex="-1">
+          <button mat-icon-button (click)="deleteItem(i,itemID)" color="warn" tabindex="-1">
             <mat-icon aria-label="Delete Item" title="Delete Item">close</mat-icon>
           </button>
         </div>

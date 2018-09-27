@@ -35,9 +35,6 @@ export class FactureComponent implements OnInit {
     this.onSupplierNameChange();
   }
 
-
- 
-
   onSupplierNameChange(): void {
     this.supplyForm.get('searchSupplier').valueChanges.subscribe(val => {
       var data = this.supplyForm.get('searchSupplier').value;
@@ -65,12 +62,14 @@ export class FactureComponent implements OnInit {
 
 
   deleteItem(i,id) {
+    debugger;
     this.itemsForm.removeAt(i);
     
-    debugger
-    var index = FactureComponent.selectedItems.indexOf(id);
+    var index = FactureComponent.findWithAttr(FactureComponent.selectedItems,'id', id.value);
+
     console.log(index)
-    FactureComponent.selectedItems=FactureComponent.selectedItems.slice(index,1); 
+
+    FactureComponent.selectedItems.splice(index,1); 
     console.log(FactureComponent.selectedItems) 
     
   }
@@ -106,6 +105,9 @@ export class FactureComponent implements OnInit {
   addItemsToFacture(){
     FactureComponent.globalMultiSelectDT.destroy();
     this.modalReference.close();
+    while (this.itemsForm.length !== 0) {
+      this.itemsForm.removeAt(0)
+    }
     FactureComponent.selectedItems.forEach(element => {
       this.addRow(element);
     });
@@ -149,9 +151,11 @@ export class FactureComponent implements OnInit {
       ],
       rowId: 'ID',
       "createdRow": function (row, data, index) {
-        if (FactureComponent.selectedItems.indexOf(data['ID']) > -1) {
+
+        if(FactureComponent.findWithAttr(FactureComponent.selectedItems,'id',data['ID']) > -1 ){
           multiSelectDT.row(row).select();
         }
+       
       }
 
     });
@@ -212,6 +216,10 @@ export class FactureComponent implements OnInit {
 
   get tt() {
     return this.supplyForm.get('totalPrice');
+  }
+
+  get itemID() {
+    return this.supplyForm.get('itemID');
   }
 
   static findWithAttr(array, attr, value) {
