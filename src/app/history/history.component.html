@@ -14,7 +14,8 @@
 
   <router-outlet></router-outlet>
 </div>
-<ng-template #showDetails let-c="close" let-d="dismiss">
+<ng-template #showDetails  let-c="close" let-d="dismiss" class="showTemplate">
+  <p-contextMenu [target]="contextScopeDetails" [model]="rightClick" oncontextmenu="return false;"></p-contextMenu>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">{{showDetailsCode}}</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
@@ -22,7 +23,9 @@
       </button>
     </div>
     <div class="modal-body">
-      <p-contextMenu [target]="contextScopeDetails" [model]="rightClick2" oncontextmenu="return false;"></p-contextMenu>
+      <!-- <div>
+        {{clientName}}</div>hr>{{phone}}<hr>
+      </div> -->
       <table class="table table-striped table-bordered table-hover table-sm noselect " id="detailFactureDT">
         <thead>
         </thead>

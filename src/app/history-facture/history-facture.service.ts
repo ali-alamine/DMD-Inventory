@@ -7,7 +7,7 @@ import { Observable } from '../../../node_modules/rxjs';
 })
 export class HistoryFactureService {
 
-  private url="http://localhost/MoussaNet/src/assets/api/history/";
+  // private url="http://localhost/MoussaNet/src/assets/api/history/";
   constructor(private httpClient: HttpClient) { }
 
   // getAccDrawer():Observable<any>{
