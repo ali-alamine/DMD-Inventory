@@ -3,17 +3,18 @@
     <div>
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-          <mat-form-field class="searchInput" fxFlex>
+          <mat-form-field class="itemName" fxFlex>
             <input matInput placeholder="Search Client Name" formControlName="searchSupplier" type="text" name="nameInput"
               [matAutocomplete]="auto" autofocus>
             <mat-autocomplete #auto="matAutocomplete">
-              <mat-option (onSelectionChange)="test(option.PID,option.name)" *ngFor="let option of options" [value]="option.name">{{option.name}} || {{option.address}}</mat-option>
+              <mat-option (onSelectionChange)="test(option.PID,option.name)" *ngFor="let option of options" [value]="option.name">{{option.name}}
+                || {{option.address}}</mat-option>
             </mat-autocomplete>
             <mat-error> Client name is required</mat-error>
           </mat-form-field>
         </div>
-        <mat-form-field class="inputField" fxFlex>
-          <input matInput placeholder="Name" formControlName="supplierName" type="text" name="nameInput" [readonly]="true">
+        <mat-form-field class="itemName" fxFlex>
+          <input matInput placeholder="Name" formControlName="supplierName" type="text"  name="nameInput" [readonly]="true">
         </mat-form-field>
         <mat-form-field class="inputField">
           <input matInput [matDatepicker]="expDateStart" formControlName="supplyDate" placeholder="Facture Date">
@@ -39,11 +40,12 @@
     <div formArrayName="items">
       <div *ngFor="let item of itemsForm.controls; let i=index" [formGroupName]="i">
         <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-          <mat-form-field fxFlex class="itemInputs">
+          <mat-form-field fxFlex hidden>
             <input matInput placeholder="Item ID" formControlName="itemID" #itemID type="number">
           </mat-form-field>
-          <mat-form-field fxFlex class="searchInput" style="text-align: center;">
-            <input matInput placeholder="Name" formControlName="itemName" type="text" name="nameInput">
+          <mat-form-field fxFlex class="itemName" style="text-align: center;">
+            <input matInput placeholder="Name" formControlName="itemName" type="text" name="nameInput" tabIndex="-1"
+              [readonly]="true">
           </mat-form-field>
           <mat-form-field fxFlex class="itemInputs">
             <input matInput placeholder="CRT" formControlName="crt" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
@@ -51,8 +53,8 @@
           <mat-form-field fxFlex class="itemInputs">
             <input matInput placeholder="Piece" formControlName="piece" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
           </mat-form-field>
-          <mat-form-field fxFlex class="itemInputs">
-            <input matInput placeholder="Comment" formControlName="comment" (keydown.Tab)="tabKey(i)" type="text">
+          <mat-form-field fxFlex class="itemName">
+            <input matInput placeholder="Comment" formControlName="comment" type="text">
           </mat-form-field>
 
           <button mat-icon-button (click)="deleteItem(i,itemID)" color="warn" tabindex="-1">
@@ -61,11 +63,10 @@
         </div>
       </div>
     </div>
-   
+
     <button mat-raised-button name="addButton" class="addBtns" color="primary" (click)="addSupplyInvoice()" [disabled]="!supplyForm.valid">Submit</button>
   </form>
 </div>
-
 
 
 <ng-template #mutliSelectModal let-c="close" let-d="dismiss">

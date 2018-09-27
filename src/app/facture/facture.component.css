@@ -3,14 +3,13 @@
     margin-right: 5px;
 }
 .itemInputs{
-    width: 15%;
-    text-align: center;
+    width: 10%;
 }
 
-.searchInput{
+.itemName{
     margin-left: 5px;
     margin-right: 5px;
-    width: 20%;
+    width: 30%;
 }
 .addBtns{
     margin: 15px;

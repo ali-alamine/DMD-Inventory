@@ -53,25 +53,19 @@ export class FactureComponent implements OnInit {
       itemID: [element['id'], Validators.required],
       itemName: [element['name']],
       crt: [0],
-      piece:[0],
-      comment:['']
+      piece: [0],
+      comment: ['']
 
     });
     this.itemsForm.push(item);
   }
 
 
-  deleteItem(i,id) {
+  deleteItem(i, id) {
     debugger;
     this.itemsForm.removeAt(i);
-    
-    var index = FactureComponent.findWithAttr(FactureComponent.selectedItems,'id', id.value);
-
-    console.log(index)
-
-    FactureComponent.selectedItems.splice(index,1); 
-    console.log(FactureComponent.selectedItems) 
-    
+    var index = FactureComponent.findWithAttr(FactureComponent.selectedItems, 'id', id.value);
+    FactureComponent.selectedItems.splice(index, 1);
   }
 
   test(id, name) {
@@ -102,7 +96,7 @@ export class FactureComponent implements OnInit {
     this.supplyForm.reset();
   }
 
-  addItemsToFacture(){
+  addItemsToFacture() {
     FactureComponent.globalMultiSelectDT.destroy();
     this.modalReference.close();
     while (this.itemsForm.length !== 0) {
@@ -131,7 +125,7 @@ export class FactureComponent implements OnInit {
       fixedHeader: true,
       select: true,
       searching: true,
-      lengthMenu: [[10,25, 50, 100], [10,25, 50, 100]],
+      lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
       ajax: {
         type: "get",
         url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/stockDataTable.php",
@@ -151,13 +145,10 @@ export class FactureComponent implements OnInit {
       ],
       rowId: 'ID',
       "createdRow": function (row, data, index) {
-
-        if(FactureComponent.findWithAttr(FactureComponent.selectedItems,'id',data['ID']) > -1 ){
+        if (FactureComponent.findWithAttr(FactureComponent.selectedItems, 'id', data['ID']) > -1) {
           multiSelectDT.row(row).select();
         }
-       
       }
-
     });
 
 
@@ -167,10 +158,9 @@ export class FactureComponent implements OnInit {
         var ID = multiSelectDT.row(element).data()['ID'];
         var name = multiSelectDT.row(element).data()['item_name'];
 
-        if (FactureComponent.findWithAttr(FactureComponent.selectedItems,'id',ID) == -1)
-          FactureComponent.selectedItems.push({id:ID,name:name});
+        if (FactureComponent.findWithAttr(FactureComponent.selectedItems, 'id', ID) == -1)
+          FactureComponent.selectedItems.push({ id: ID, name: name });
       });
-      console.log(FactureComponent.selectedItems);
     });
 
     multiSelectDT.on('deselect', function (e, dt, type, indexes) {
@@ -179,9 +169,8 @@ export class FactureComponent implements OnInit {
       rows.forEach(element => {
         var ID = multiSelectDT.row(element).data()['ID'];
         var name = multiSelectDT.row(element).data()['item_name'];
-        FactureComponent.selectedItems.push({id:ID,name:name});
+        FactureComponent.selectedItems.push({ id: ID, name: name });
       });
-      console.log(FactureComponent.selectedItems);
     });
 
 
@@ -195,16 +184,8 @@ export class FactureComponent implements OnInit {
       $(multiSelectDT.row(cell.index().row).node()).removeClass('selected');
     });
 
-
     FactureComponent.globalMultiSelectDT = multiSelectDT;
   }
-
-
-
-  // tabKey(data) {
-  //   if (data == this.itemsForm.length - 1)
-  //     this.addRow(0);
-  // }
 
   get itemsForm() {
     return this.supplyForm.get('items') as FormArray
@@ -223,18 +204,18 @@ export class FactureComponent implements OnInit {
   }
 
   static findWithAttr(array, attr, value) {
-    for(var i = 0; i < array.length; i += 1) {
-        if(array[i][attr] === value) {
-            return i;
-        }
+    for (var i = 0; i < array.length; i += 1) {
+      if (array[i][attr] === value) {
+        return i;
+      }
     }
     return -1;
-}
+  }
 
 }
 
-export interface item{
-  id:number;
-  name:string;
+export interface item {
+  id: number;
+  name: string;
 }
 
