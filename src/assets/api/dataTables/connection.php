@@ -5,7 +5,7 @@ function openConn(){
 	$servername = "localhost";
 	$username = "root";
 	$password = "";
-	$db = "dmdafrica";
+	$db = "dmd-inventory";
 	$conn = mysqli_connect($servername, $username, $password, $db);
 	return $conn;
 }

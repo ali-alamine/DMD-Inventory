@@ -40,10 +40,10 @@ export class StockComponent implements OnInit {
         "style": "single"
       },
       searching: true,
-      lengthMenu: [[5, 10, 25, 50, 100, 150, 200, 300], [5, 10, 25, 50, 100, 150, 200, 300]],
+      lengthMenu: [[25, 50, 100, 150, 200, 300], [25, 50, 100, 150, 200, 300]],
       ajax: {
         type: "get",
-        url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/stockDataTable.php",
+        url: "http://localhost:8080/DMD-Inventory/src/assets/api/dataTables/stockDataTable.php",
         data: {},
         cache: true,
         async: true
@@ -109,12 +109,10 @@ export class StockComponent implements OnInit {
       this.stockModalTitle = "Edit Stock";
       name = StockComponent.selectedRowData['name'];
       quantity = StockComponent.selectedRowData['quantity'];
-      address = StockComponent.selectedRowData['address'];
     }
     this.stockForm = this.fb.group({
       name: [name, [Validators.required, Validators.minLength(3)]],
-      quantity: [quantity, [Validators.required, Validators.min(1)]],
-      address: [address, Validators.required]
+      quantity: [quantity, [Validators.required, Validators.numberValidator]]
     });
   }
 
