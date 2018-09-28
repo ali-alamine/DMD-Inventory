@@ -5,7 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
   providedIn: 'root'
 })
 export class ClientsService {
-  private url = "http://localhost/DMD-Inventory/src/assets/api/clients/";
+  private url = "http://localhost:8080/DMD-Inventory/src/assets/api/clients/";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -14,6 +14,7 @@ export class ClientsService {
   }
 
   editClient(clientData): Observable<any> {
+    console.log(clientData)
     return this.httpClient.put(this.url + "client", clientData);
   }
 

@@ -37,10 +37,10 @@ export class ClientsComponent implements OnInit {
         "style": "single"
       },
       searching: true,
-      lengthMenu: [[5, 10, 25, 50, 100, 150, 200, 300], [5, 10, 25, 50, 100, 150, 200, 300]],
+      lengthMenu: [[25, 50, 100, 150, 200, 300], [25, 50, 100, 150, 200, 300]],
       ajax: {
         type: "get",
-        url: "http://localhost/MoussaNet/src/assets/api/dataTables/clientsDataTable.php",
+        url: "http://localhost:8080/DMD-Inventory/src/assets/api/dataTables/clientsDataTable.php",
         data: {},
         cache: true,
         async: true
@@ -120,8 +120,8 @@ export class ClientsComponent implements OnInit {
       this.editedClientData['name'] = this.name.value;
       this.editedClientData['phone'] = this.address.value;
       this.editedClientData['address'] = this.phoneNumber.value;
-      this.editedClientData['code'] = ClientsComponent.selectedClientID;
-
+      this.editedClientData['ID'] = ClientsComponent.selectedClientID;
+      
       console.log(this.editedClientData)
       this.clientsService.editClient(this.editedClientData).subscribe(Response => {
         this.globalClientsDT.ajax.reload(null, false);

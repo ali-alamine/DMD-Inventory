@@ -7,7 +7,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 })
 export class StockService {
 
-  private url="http://localhost/DMD-Inventory/src/assets/api/stock/";
+  private url="http://localhost:8080/DMD-Inventory/src/assets/api/stock/";
   constructor(private httpClient: HttpClient) { }
 
   addStockItem(itemData): Observable<any>{

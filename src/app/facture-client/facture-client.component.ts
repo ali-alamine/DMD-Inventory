@@ -1,37 +1,52 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StockService } from '../stock/stock.service';
-import { SupplyService } from '../supply/supply.service';
+import { SupplyService } from '../facture-supply/facture-supply.service';
 import swal from 'sweetalert2';
 declare var $: any;
-
 @Component({
-  selector: 'app-supply',
-  templateUrl: './supply.component.html',
-  styleUrls: ['./supply.component.css']
+  selector: 'app-facture',
+  templateUrl: './facture-client.component.html',
+  styleUrls: ['./facture-client.component.css']
 })
 
-
-export class SupplyComponent implements OnInit {
-
-  @ViewChild('f') myNgForm;
-
+export class FactureClientComponent implements OnInit {
   modalReference: any;
   supplyForm: FormGroup;
+  options;
   items: any;
+  newItemForm: FormGroup;
+  rechargeCardForm: FormGroup;
   static selectedItems: item[] = new Array();
   static globalMultiSelectDT;
-
-  constructor(private fb: FormBuilder, private supplyService: SupplyService, private modalService: NgbModal, private stockService: StockService) { }
+  constructor(private fb: FormBuilder, private supplyService: SupplyService, private modalService: NgbModal, private stockService: StockService) {
+  }
 
   ngOnInit() {
     this.supplyForm = this.fb.group({
       supplyDate: ['', Validators.required],
+      delDate: ['', Validators.required],
+      supplierName: ['', Validators.required],
+      searchSupplier: '',
+      supplierID: '',
       items: this.fb.array([])
     });
+    this.onSupplierNameChange();
   }
- 
+
+  onSupplierNameChange(): void {
+    this.supplyForm.get('searchSupplier').valueChanges.subscribe(val => {
+      var data = this.supplyForm.get('searchSupplier').value;
+      if (data == "") {
+        this.options = [];
+        return;
+      }
+      this.supplyService.searchSupplier(data).subscribe(Response => {
+        this.options = Response;
+      })
+    });
+  }
 
   addRow(element) {
     const item = this.fb.group({
@@ -47,12 +62,18 @@ export class SupplyComponent implements OnInit {
 
 
   deleteItem(i, id) {
+    debugger;
     this.itemsForm.removeAt(i);
-    var index = SupplyComponent.findWithAttr(SupplyComponent.selectedItems, 'id', id.value);
-    SupplyComponent.selectedItems.splice(index, 1);
+    var index = FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', id.value);
+    FactureClientComponent.selectedItems.splice(index, 1);
   }
 
- 
+  test(id, name) {
+    this.supplyForm.get('searchSupplier').setValue('');
+    this.supplyForm.get('supplierName').setValue(name);
+    this.supplyForm.get('supplierID').setValue(id);
+  }
+
 
 
   addSupplyInvoice() {
@@ -72,20 +93,16 @@ export class SupplyComponent implements OnInit {
     //   });
     // });
     console.log(this.supplyForm.value);
-    while (this.itemsForm.length !== 0) {
-      this.itemsForm.removeAt(0)
-    }
     this.supplyForm.reset();
-    this.myNgForm.resetForm();
   }
 
   addItemsToFacture() {
-    SupplyComponent.globalMultiSelectDT.destroy();
+    FactureClientComponent.globalMultiSelectDT.destroy();
     this.modalReference.close();
     while (this.itemsForm.length !== 0) {
       this.itemsForm.removeAt(0)
     }
-    SupplyComponent.selectedItems.forEach(element => {
+    FactureClientComponent.selectedItems.forEach(element => {
       this.addRow(element);
     });
 
@@ -128,7 +145,7 @@ export class SupplyComponent implements OnInit {
       ],
       rowId: 'ID',
       "createdRow": function (row, data, index) {
-        if (SupplyComponent.findWithAttr(SupplyComponent.selectedItems, 'id', data['ID']) > -1) {
+        if (FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', data['ID']) > -1) {
           multiSelectDT.row(row).select();
         }
       }
@@ -141,18 +158,18 @@ export class SupplyComponent implements OnInit {
         var ID = multiSelectDT.row(element).data()['ID'];
         var name = multiSelectDT.row(element).data()['item_name'];
 
-        if (SupplyComponent.findWithAttr(SupplyComponent.selectedItems, 'id', ID) == -1)
-          SupplyComponent.selectedItems.push({ id: ID, name: name });
+        if (FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', ID) == -1)
+          FactureClientComponent.selectedItems.push({ id: ID, name: name });
       });
     });
 
     multiSelectDT.on('deselect', function (e, dt, type, indexes) {
       var rows = multiSelectDT.rows('.selected').indexes().toArray();
-      SupplyComponent.selectedItems = [];
+      FactureClientComponent.selectedItems = [];
       rows.forEach(element => {
         var ID = multiSelectDT.row(element).data()['ID'];
         var name = multiSelectDT.row(element).data()['item_name'];
-        SupplyComponent.selectedItems.push({ id: ID, name: name });
+        FactureClientComponent.selectedItems.push({ id: ID, name: name });
       });
     });
 
@@ -167,7 +184,7 @@ export class SupplyComponent implements OnInit {
       $(multiSelectDT.row(cell.index().row).node()).removeClass('selected');
     });
 
-    SupplyComponent.globalMultiSelectDT = multiSelectDT;
+    FactureClientComponent.globalMultiSelectDT = multiSelectDT;
   }
 
   get itemsForm() {
@@ -186,9 +203,11 @@ export class SupplyComponent implements OnInit {
     }
     return -1;
   }
+
 }
 
 export interface item {
   id: number;
   name: string;
 }
+
