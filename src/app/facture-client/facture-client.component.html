@@ -4,8 +4,10 @@
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field class="searchClient" fxFlex>
+
             <input matInput placeholder="Search Client Name" formControlName="searchSupplier" type="text" name="nameInput"
               [matAutocomplete]="auto" autofocus>
+
             <mat-autocomplete #auto="matAutocomplete">
               <mat-option (onSelectionChange)="test(option.PID,option.name)" *ngFor="let option of options" [value]="option.name">{{option.name}}
                 || {{option.address}}</mat-option>
@@ -13,6 +15,7 @@
             <mat-error> Client name is required</mat-error>
           </mat-form-field>
         </div>
+        
         <mat-form-field class="itemName" fxFlex>
           <input matInput placeholder="Name" formControlName="supplierName" type="text"  name="nameInput" [readonly]="true">
         </mat-form-field>

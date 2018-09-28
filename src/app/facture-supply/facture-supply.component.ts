@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StockService } from '../stock/stock.service';
 import { SupplyService } from './facture-supply.service';
 import swal from 'sweetalert2';
+import { SupplyInvoicesComponent } from '../supply-invoices/supply-invoices.component';
 declare var $: any;
 
 @Component({
@@ -56,25 +57,26 @@ export class SupplyComponent implements OnInit {
 
 
   addSupplyInvoice() {
-    // this.supplyService.addSupply(this.supplyForm.value).subscribe(Response => {
-    //   swal({
-    //     type: 'success',
-    //     title: 'Success',
-    //     text: 'Supply Successfully',
-    //     showConfirmButton: false,
-    //     timer: 1000
-    //   });
-    // }, error => {
-    //   swal({
-    //     type: 'error',
-    //     title: error.statusText,
-    //     text: error.message
-    //   });
-    // });
+    this.supplyService.newSupplyInvoice(this.supplyForm.value).subscribe(Response => {
+      swal({
+        type: 'success',
+        title: 'Success',
+        text: 'Supply Successfully',
+        showConfirmButton: false,
+        timer: 1000
+      });
+    }, error => {
+      swal({
+        type: 'error',
+        title: error.statusText,
+        text: error.message
+      });
+    });
     console.log(this.supplyForm.value);
     while (this.itemsForm.length !== 0) {
       this.itemsForm.removeAt(0)
     }
+    SupplyComponent.selectedItems=[];
     this.supplyForm.reset();
     this.myNgForm.resetForm();
   }

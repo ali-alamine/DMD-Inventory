@@ -5,17 +5,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
   providedIn: 'root'
 })
 export class SupplyService {
-  private url="http://localhost/MoussaNet/src/assets/api/supply/";
+  private url="http://localhost/DMD-Inventory/src/assets/api/facture/";
   constructor(private httpClient: HttpClient) {}
 
-  searchSupplier(data):Observable<any>{
-    return this.httpClient.get(this.url+"searchSupplier", {params:{keyword:data}});
-  }  
-  searchItem(data,type):Observable<any>{
-    return this.httpClient.get(this.url+"searchItem", {params:{keyword:data,type:type}});
-  } 
-  addSupply(supplyData): Observable<any>{
-    console.log(supplyData)
-    return this.httpClient.post(this.url+"addSupply", supplyData);
+  newSupplyInvoice(supplyData): Observable<any>{
+    return this.httpClient.post(this.url+"newSupplyInvoice", supplyData);
   }
 }
