@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { NgbModal } from '../../../node_modules/@ng-bootstrap/ng-bootstrap';
-import { FormBuilder } from '../../../node_modules/@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder } from '@angular/forms';
 import { HistoryService } from './history.service';
-import { MenuItem } from '../../../node_modules/primeng/api';
+import { MenuItem } from 'primeng/api';
 declare var $: any;
 
 @Component({

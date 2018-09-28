@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { HistoryService } from '../history/history.service';
 import { HistoryItemsService } from './history-items.service';
-import { NgbModal } from '../../../node_modules/@ng-bootstrap/ng-bootstrap';
-import { FormBuilder } from '../../../node_modules/@angular/forms';
-import { MenuItem } from '../../../node_modules/primeng/api';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder } from '@angular/forms';
+import { MenuItem } from 'primeng/api';
 declare var $: any;
 import swal from 'sweetalert2';
 import { HistoryComponent } from '../history/history.component';
-import { Router } from '../../../node_modules/@angular/router';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-history-items',
   templateUrl: './history-items.component.html',

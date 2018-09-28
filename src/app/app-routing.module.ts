@@ -11,12 +11,13 @@ import { HistoryComponent } from './history/history.component';
 import { HistoryItemsComponent } from './history-items/history-items.component';
 import { HistoryFactureComponent } from './history-facture/history-facture.component';
 import { FactureClientComponent } from './facture-client/facture-client.component';
+import { FactureReturnComponent } from './facture-return/facture-return.component';
 
 const routes: Routes = [
   {
     path:"facture",component:FactureComponent, children:[
       { path: 'supply',component:  SupplyComponent},
-      { path: 'return',component:  PageNotFoundComponent},
+      { path: 'return',component:  FactureReturnComponent},
       { path : 'client',component: FactureClientComponent } 
     ]
   },

@@ -34,6 +34,7 @@ import { HistoryFactureComponent } from './history-facture/history-facture.compo
 import { HistoryItemsComponent } from './history-items/history-items.component';
 import { HistoryComponent } from './history/history.component';
 import { FactureClientComponent } from './facture-client/facture-client.component';
+import { FactureReturnComponent } from './facture-return/facture-return.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { FactureClientComponent } from './facture-client/facture-client.componen
     HistoryComponent,
     HistoryFactureComponent,
     HistoryItemsComponent,
-    FactureClientComponent
+    FactureClientComponent,
+    FactureReturnComponent
   ],
   imports: [
     BrowserModule,
