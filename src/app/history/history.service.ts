@@ -13,8 +13,15 @@ export class HistoryService {
   //   return this.httpClient.get(this.url+"accDrawer");
   // }
   getFactureDetails(data):Observable<any>{
-    // debugger
-    console.log(data);
+    // console.log(data);
     return this.httpClient.get(this.url+"getFactureDetails", {params:{ID:data}});
+  }
+  deleteFacture(data): Observable<any>{
+    console.log(data);
+    return this.httpClient.get(this.url+"deleteFacture", {params:{ID:data}});
+  }
+  deleteItem(data): Observable<any>{
+    // console.log(data);
+    return this.httpClient.get(this.url+"deleteItem", {params:{ID:data}});
   }
 }

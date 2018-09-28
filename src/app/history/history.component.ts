@@ -5,7 +5,6 @@ import { FormBuilder } from '../../../node_modules/@angular/forms';
 import { HistoryService } from './history.service';
 import { MenuItem } from '../../../node_modules/primeng/api';
 declare var $: any;
-import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-history',
@@ -18,6 +17,8 @@ export class HistoryComponent implements OnInit {
   rightClick: MenuItem[];
   factureDetails;
   showDetailsCode;
+  name; phone;address;date_del;date_req;code;
+  info_client;info_code_date;
   // showDetails:any;
   private selectedFactureDetailsRowData;
   private selectedFactureDetailsID;
@@ -32,7 +33,14 @@ export class HistoryComponent implements OnInit {
     private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.router.navigate(["history/facture"]);
+    var router = localStorage.getItem('routerHistory');
+    if (router !== null){
+      this.router.navigate([router]);
+      localStorage.removeItem('routerHistory');
+    }
+    else{
+      this.router.navigate(["history/facture"]);
+    }
     this.rightClick = [
       {
         label: 'Modifier',
@@ -121,12 +129,29 @@ export class HistoryComponent implements OnInit {
       alert(error)
     });
     this.modalReference = this.modalService.open(this.showDetailsTPL, { centered: true, ariaLabelledBy: 'modal-basic-title', size: 'lg' });
-    if(facture['type']=="FD")
+    if(facture[0].type=="FD"){
       this.showDetailsCode="Show Details Facture Déchargement" ;
-    if(facture['type']=="FR")
+      this.info_client="";
+      this.info_code_date="Date de Commande: " + facture[0].date_req + "<br> Code: "+facture[0].code;
+    }
+    if(facture[0].type=="FR"){
       this.showDetailsCode="Show Details Facture Retour" ;
-    if(facture['type']=="FC")
+      this.info_client="Client: " + facture[0].clientName + "<br> Phone: " + facture[0].phone + "<br> Address: "+facture[0].address;
+      this.info_code_date="Code: "+facture[0].code;
+    }
+    if(facture[0].type=="FC"){
       this.showDetailsCode="Show Details Facture Client" ;
+      this.info_client="Client: " + facture[0].clientName + "<br> Phone: " + facture[0].phone + "<br> Address: "+facture[0].address;
+      this.info_code_date="Date de Commande: " + facture[0].date_req + "<br>Date de Livraison: " + facture[0].date_del + "<br> Code: "+facture[0].code;
+      // Client: {{clientName}}<br>Phone: {{phone}}<br>Address: {{address}}
+      // Date de Commande: {{date_req}}<br>Date de Livraison: {{date_del}}<br>Code: {{code}}
+    }
+    // this.name=facture[0].clientName; 
+    // this.phone=facture[0].phone;
+    // this.address=facture[0].address;
+    // this.date_req=facture[0].date_req;
+    // this.date_del=facture[0].date_del;
+    // this.code=facture[0].code;
   }
 
 }

@@ -18,7 +18,31 @@ class history extends REST_Controller
             exit;
         }
     }
-
+    public function deleteFacture_get()
+    {
+        $ID = $this->get('ID');
+        // echo $ID;
+        $selectItem = $this->history_model->getFactureDetails($ID);
+        if($selectItem == 0 ){
+            $result = $this->history_model->deleteFacture($ID);
+            if ($result) {
+                $this->response($result, 200);
+                exit;
+            }
+        }else{
+            $this->response('0', 200);
+        }
+    }
+    public function deleteItem_get()
+    {
+        $ID = $this->get('ID');
+        // echo $ID;
+        $result = $this->history_model->deleteItem($ID);
+        if ($result) {
+            $this->response($result, 200);
+            exit;
+        }
+    }
     // public function setDrawer_post()
     // {
     //     $accessories = $this->post('accessories');
