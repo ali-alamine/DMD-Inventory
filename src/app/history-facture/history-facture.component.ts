@@ -9,6 +9,7 @@ import swal from 'sweetalert2';
 import { HistoryComponent } from '../history/history.component';
 import { FactureComponent } from '../facture/facture.component';
 import { Router } from '../../../node_modules/@angular/router';
+
 @Component({
   selector: 'app-history-facture',
   templateUrl: './history-facture.component.html',
@@ -21,26 +22,19 @@ export class HistoryFactureComponent implements OnInit {
   modalReference: any;
   private selectedFactureRowData;
   static selectedFactureID;
-  static selectedFactureType;
-  static selectedFactureCode;
-  static selectedFactureClientName;
   rightClick: MenuItem[];
   private globalHistoryFactureDT;
   private itemsForm;
-  // historyComponent: any;
   static selectedFacture = new Array();
 
   constructor(private historyComponent : HistoryComponent,
-    // private factureComponent : FactureComponent,
     private historyService: HistoryService,
-    private historyFactureService : HistoryFactureService,
     private modalService : NgbModal, 
     private fb : FormBuilder,
     private router: Router) { }
 
   ngOnInit() {
     this.getHistoryFactureDT();
-
     this.rightClick = [
       {
         label: 'Afficher',
@@ -60,7 +54,7 @@ export class HistoryFactureComponent implements OnInit {
       },
       {
         label: 'Supprimé',
-        icon: 'pi pi-fw pi-del',
+        icon: 'pi pi-fw pi-times',
         command: (event) => {
           let element: HTMLElement = document.getElementById('deletedBtn') as HTMLElement;
           element.click();
@@ -85,47 +79,66 @@ export class HistoryFactureComponent implements OnInit {
           "style": "single"
         },
         searching: true,
-        lengthMenu: [[25, 50, 100, 150, 200, 300], [25, 50, 100, 150, 200, 300]],
+        lengthMenu: [[50, 100, 150, 200, 300], [50, 100, 150, 200, 300]],
         ajax: {
           type: "get",
-          url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/history.php",
-          // data:{"type":"OF"},
+          url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/historyDT.php",
+          data:{"show":"facture"},
           cache: false,
           async: true
         },
         order: [[0, 'asc']],
         columns: [
-          { data: "client_name", title: "CLIENTS" },
-          { data: "ord_det_date_req", title: "DATE" },
-          { data: "ord_det_code", title: "CODE"}
+          { data: "per_name", title: "CLIENTS" },
+          { data: "inv_date_req", title: "DATE" },
+          { data: "inv_code", title: "CODE"}
         ],
         "columnDefs": [ {
           "targets": 2,
           "createdCell": function (td, data, rowData, row, col) {
-            if ( rowData['ord_det_type'] == "FC") {           
+            if ( rowData['inv_type'] == "FC") {           
               $(td).html(" <span style='color: 	#008000;' >"+data+"</span> ")
             }
-            if ( rowData['ord_det_type'] == "FR") {           
+            if ( rowData['inv_type'] == "FR") {           
               $(td).html(" <span style='color: #FF0000;' >"+data+"</span> ")
             }
-            if ( rowData['ord_det_type'] == "FD") {          
+            if ( rowData['inv_type'] == "FD") {          
               $(td).html(" <span style='color: #0000FF;' >"+data+"</span> ")
             } 
           }
         } ]
       });
+      var selectedRowLS = localStorage.getItem('selectedRow');
+      // console.log(selectedRowLS)
+      var x = localStorage.getItem('XOffset');
+      var y = localStorage.getItem('YOffset');
+      if (selectedRowLS !== null){
+        // debugger
+        historyFactureDT.row(selectedRowLS).select();
+        localStorage.removeItem('selectedRow');
+      }
+  
+      if (x !== null && y !== null){
+        window.scroll(+x,+y);
+        localStorage.removeItem('XOffset');
+        localStorage.removeItem('YOffset');
+      }
       this.globalHistoryFactureDT = historyFactureDT;
       historyFactureDT.on('select', function (e, dt, type, indexes) {
         HistoryFactureComponent.selectedFacture = [];
         if (type === 'row') {
+          localStorage.setItem('selectedRow', indexes);
+          // console.log(localStorage.getItem('selectedRow'))
           this.selectedFactureRowData = historyFactureDT.row(indexes).data();
-          var ID = historyFactureDT.row(indexes).data()['ID'];
-          var type = historyFactureDT.row(indexes).data()['ord_det_type'];
-          var clientName = historyFactureDT.row(indexes).data()['client_name'];
-          var phone = historyFactureDT.row(indexes).data()['client_phone'];
-          var address = historyFactureDT.row(indexes).data()['client_location'];
-          var date_req = historyFactureDT.row(indexes).data()['ord_det_date_req'];
-          var date_del = historyFactureDT.row(indexes).data()['ord_det_date_del'];
+          HistoryFactureComponent.selectedFactureID = historyFactureDT.row(indexes).data()['invID'];
+          var ID = historyFactureDT.row(indexes).data()['invID'];
+          var type = historyFactureDT.row(indexes).data()['inv_type'];
+          var clientName = historyFactureDT.row(indexes).data()['per_name'];
+          var phone = historyFactureDT.row(indexes).data()['per_phone'];
+          var address = historyFactureDT.row(indexes).data()['per_address'];
+          var date_req = historyFactureDT.row(indexes).data()['inv_date_req'];
+          var date_del = historyFactureDT.row(indexes).data()['inv_date_del'];
+          var code = historyFactureDT.row(indexes).data()['inv_code'];
           HistoryFactureComponent.selectedFacture.push({
             ID:ID,
             type:type,
@@ -133,14 +146,11 @@ export class HistoryFactureComponent implements OnInit {
             phone:phone,
             address:address,
             date_req:date_req,
-            date_del:date_del
+            date_del:date_del,
+            code:code
           });
-          // console.log(HistoryFactureComponent.selectedFacture)
+
         }
-        // else if (type === 'column') {
-        //   HistoryFactureComponent.selectedFactureID = -1;
-        //   HistoryFactureComponent.selectedFactureType = -1;
-        // }
       });
       $('#historyFactureDT tbody').on('mousedown', 'tr', function (event) {
         if (event.which == 3) {
@@ -153,19 +163,73 @@ export class HistoryFactureComponent implements OnInit {
       $('#historyFactureDT').on('key-blur.dt', function (e, datatable, cell) {
         $(historyFactureDT.row(cell.index().row).node()).removeClass('selected');
       });
+    
     } else{
       this.globalHistoryFactureDT.ajax.reload(null, false);
     }
   }
   openShowDetails() {
-    // console.log(HistoryFactureComponent.selectedFactureID)
-
     this.historyComponent.showFactureDetails(HistoryFactureComponent.selectedFacture);
   }
   editFacture(){
-    this.router.navigate(["facture"], { queryParams: { factureID: HistoryFactureComponent.selectedFactureID }});
+    localStorage.setItem('XOffset', window.pageXOffset.toString());
+    localStorage.setItem('YOffset', window.pageYOffset.toString());
+    localStorage.setItem('routerHistory',"history/facture");
+    if(HistoryFactureComponent.selectedFacture[0].type=="FR"){
+      // localStorage.setItem('routerFacture',"sell/return");
+      this.router.navigate(["sell/return"], { queryParams: { factureID: HistoryFactureComponent.selectedFactureID }});
+    }
+    if(HistoryFactureComponent.selectedFacture[0].type=="FD"){
+      this.router.navigate(["sell/supply"], { queryParams: { factureID: HistoryFactureComponent.selectedFactureID }});
 
-    // this.factureComponent.ngOnInit();
+    }
+    if(HistoryFactureComponent.selectedFacture[0].type=="FC"){
+      this.router.navigate(["sell/facture"], { queryParams: { factureID: HistoryFactureComponent.selectedFactureID }});
+
+    }
+  }
+  deleteFacture(){
+    swal({
+      title: "Supprimer Facture",
+      html: "Vous voulez vraiment supprimer cette Facture!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.value) {
+        this.historyService.deleteFacture(HistoryFactureComponent.selectedFactureID).subscribe(Response => {
+          // console.log(Response)
+          if(Response!=0){
+            this.globalHistoryFactureDT.ajax.reload(null, false);
+            swal({
+              type: 'success',
+              title: 'Succès',
+              text: "Facture est supprimer..",
+              showConfirmButton: false,
+              timer: 1000
+            });
+          }
+          else if(Response==0){
+            swal({
+              type: 'error',
+              title: 'Attention',
+              text: "Il faut supprimer tous les articles avant de supprimer la facture.",
+              showConfirmButton: false,
+              timer: 4000
+            });
+          }
+        }, error => {
+          swal({
+            type: 'error',
+            title: error.statusText,
+            text: error.message
+          });
+        });
+      }
+    });
   }
    
 }
