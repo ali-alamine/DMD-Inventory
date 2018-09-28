@@ -121,8 +121,8 @@ export class StockComponent implements OnInit {
   addEditStock() {
     if (this.editFlag == true) {
       this.editedStockData['name'] = this.name.value;
-      this.editedStockData['phone'] = this.address.value;
-      this.editedStockData['address'] = this.phoneNumber.value;
+      // this.editedStockData['phone'] = this.address.value;
+      // this.editedStockData['address'] = this.phoneNumber.value;
       this.editedStockData['code'] = StockComponent.selectedStockID;
 
       console.log(this.editedStockData)

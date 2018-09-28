@@ -23,8 +23,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { StockComponent } from './stock/stock.component';
 import { ClientsComponent } from './clients/clients.component';
-import { SupplyComponent } from './supply/supply.component';
-import { SellComponent } from './sell/sell.component';
+import { SupplyComponent } from './facture-supply/facture-supply.component';
 import {MatIconModule} from '@angular/material/icon';
 import { SupplyInvoicesComponent } from './supply-invoices/supply-invoices.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
@@ -34,6 +33,7 @@ import { FactureComponent } from './facture/facture.component';
 import { HistoryFactureComponent } from './history-facture/history-facture.component';
 import { HistoryItemsComponent } from './history-items/history-items.component';
 import { HistoryComponent } from './history/history.component';
+import { FactureClientComponent } from './facture-client/facture-client.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +42,6 @@ import { HistoryComponent } from './history/history.component';
     StockComponent,
     ClientsComponent,
     SupplyComponent,
-    SellComponent,
     SupplyInvoicesComponent,
     PageNotFoundComponent,
     FocusDirectiveDirective,
@@ -50,6 +49,7 @@ import { HistoryComponent } from './history/history.component';
     HistoryComponent,
     HistoryFactureComponent,
     HistoryItemsComponent,
+    FactureClientComponent
   ],
   imports: [
     BrowserModule,
