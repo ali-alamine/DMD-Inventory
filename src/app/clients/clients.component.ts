@@ -40,7 +40,7 @@ export class ClientsComponent implements OnInit {
       lengthMenu: [[25, 50, 100, 150, 200, 300], [25, 50, 100, 150, 200, 300]],
       ajax: {
         type: "get",
-        url: "http://localhost:8080/DMD-Inventory/src/assets/api/dataTables/clientsDataTable.php",
+        url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/clientsDataTable.php",
         data: {},
         cache: true,
         async: true

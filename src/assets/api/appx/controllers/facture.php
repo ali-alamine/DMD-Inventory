@@ -6,6 +6,7 @@ class facture extends REST_Controller
     {
         parent::__construct();
         $this->load->model('facture_model');
+        $this->load->helper('string');
     }
 
     
@@ -18,9 +19,10 @@ class facture extends REST_Controller
         $correctDate = new DateTime($supplyDate);
         $correctDate->setTimezone(new DateTimeZone('Asia/Beirut'));
 
+        $invoiceCode = $this->generateFactureCode('FD');
         $this->db->trans_begin();
 
-        $invoiceID = $this->facture_model->addSupplyInvoice(array("inv_perID" => 1, "inv_code" => 12, "inv_type" => 'FD', "inv_date_req" => $correctDate->format('Y-m-d H:i:s'), "inv_status" => 0));
+        $invoiceID = $this->facture_model->addSupplyInvoice(array("inv_perID" => 1, "inv_code" => $invoiceCode, "inv_type" => 'FD', "inv_date_req" => $correctDate->format('Y-m-d H:i:s'), "inv_status" => 0));
 
         foreach ($invoiceItems as $row) {
             $itemData = array(
@@ -57,9 +59,11 @@ class facture extends REST_Controller
         $deliveryCorrectDate = new DateTime($deliveryDate);
         $deliveryCorrectDate->setTimezone(new DateTimeZone('Asia/Beirut'));
 
+        $invoiceCode = $this->generateFactureCode('FC');
+
         $this->db->trans_begin();
 
-        $invoiceID = $this->facture_model->addClientInvoice(array("inv_perID" =>  $clientID, "inv_code" => 12, "inv_type" => 'FC', "inv_date_req" => $invoiceCorrectDate->format('Y-m-d H:i:s'), "inv_date_del" => $deliveryCorrectDate->format('Y-m-d'), "inv_status" => 0));
+        $invoiceID = $this->facture_model->addClientInvoice(array("inv_perID" =>  $clientID, "inv_code" => $invoiceCode, "inv_type" => 'FC', "inv_date_req" => $invoiceCorrectDate->format('Y-m-d H:i:s'), "inv_date_del" => $deliveryCorrectDate->format('Y-m-d'), "inv_status" => 0));
 
         foreach ($invoiceItems as $row) {
             $itemData = array(
@@ -90,6 +94,17 @@ class facture extends REST_Controller
             $this->response($result, 200);
             exit;
         }
+    }
+
+    public function generateFactureCode($factureType){
+        $factureType=strtoupper($factureType);
+        $suffix='00001';
+        $repeatedCount = $this->facture_model->getRepeatedCodeCount($factureType);    
+        $code=$factureType.$suffix;
+        for($i=0;$i<$repeatedCount;$i++){
+            $code=increment_string($code,'');
+        }
+        return $code;
     }
 
 }

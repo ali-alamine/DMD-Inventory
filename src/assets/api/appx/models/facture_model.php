@@ -49,4 +49,12 @@ class facture_model extends CI_Model
         }
     }
 
+    public function getRepeatedCodeCount($prefix){
+        $this->db->count_all_results('invoice');
+        $this->db->like('inv_type',$prefix,'after');
+        $this->db->from('invoice');
+        return $this->db->count_all_results();
+        
+      }
+
 }

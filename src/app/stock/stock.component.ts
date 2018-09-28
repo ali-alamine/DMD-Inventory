@@ -112,7 +112,7 @@ export class StockComponent implements OnInit {
     }
     this.stockForm = this.fb.group({
       name: [name, [Validators.required, Validators.minLength(3)]],
-      quantity: [quantity, [Validators.required, Validators.numberValidator]]
+      quantity: [quantity, [Validators.required]]
     });
   }
 

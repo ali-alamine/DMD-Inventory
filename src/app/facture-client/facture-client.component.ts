@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StockService } from '../stock/stock.service';
@@ -13,15 +13,14 @@ declare var $: any;
 })
 
 export class FactureClientComponent implements OnInit {
+  @ViewChild('f') myNgForm;
   modalReference: any;
   invoiceForm: FormGroup;
   options;
   items: any;
-  newItemForm: FormGroup;
-  rechargeCardForm: FormGroup;
   static selectedItems: item[] = new Array();
   static globalMultiSelectDT;
-  constructor(private fb: FormBuilder, private factureClientService: FactureClientService, private modalService: NgbModal, private stockService: StockService) {
+  constructor(private fb: FormBuilder, private factureClientService: FactureClientService, private modalService: NgbModal ) {
   }
 
   ngOnInit() {
@@ -95,7 +94,12 @@ export class FactureClientComponent implements OnInit {
       });
     });
     console.log(this.invoiceForm.value);
+    while (this.itemsForm.length !== 0) {
+      this.itemsForm.removeAt(0)
+    }
+    FactureClientComponent.selectedItems=[];
     this.invoiceForm.reset();
+    this.myNgForm.resetForm();
   }
 
   addItemsToFacture() {
