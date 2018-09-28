@@ -7,10 +7,14 @@ import { Observable } from 'rxjs';
 })
 export class FactureClientService {
 
-  private url="http://localhost/dmd-inventory/src/assets/api/factureClient/";
+  private url="http://localhost/DMD-Inventory/src/assets/api/facture/";
   constructor(private httpClient: HttpClient) {}
 
   searchClient(data):Observable<any>{
     return this.httpClient.get(this.url+"searchClient", {params:{keyword:data}});
-  }  
+  }
+
+  newClientInvoice(invoiceData): Observable<any>{
+    return this.httpClient.post(this.url+"newClientInvoice", invoiceData);
+  }
 }

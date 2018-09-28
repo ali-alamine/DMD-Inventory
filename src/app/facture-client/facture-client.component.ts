@@ -14,7 +14,7 @@ declare var $: any;
 
 export class FactureClientComponent implements OnInit {
   modalReference: any;
-  supplyForm: FormGroup;
+  invoiceForm: FormGroup;
   options;
   items: any;
   newItemForm: FormGroup;
@@ -25,20 +25,20 @@ export class FactureClientComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.supplyForm = this.fb.group({
-      supplyDate: ['', Validators.required],
+    this.invoiceForm = this.fb.group({
+      invoiceDate: ['', Validators.required],
       delDate: ['', Validators.required],
-      supplierName: ['', Validators.required],
-      searchSupplier: '',
-      supplierID: '',
+      clientName: ['', Validators.required],
+      searchClient: '',
+      clientID: '',
       items: this.fb.array([])
     });
-    this.onSupplierNameChange();
+    this.onClientNameChange();
   }
 
-  onSupplierNameChange(): void {
-    this.supplyForm.get('searchSupplier').valueChanges.subscribe(val => {
-      var data = this.supplyForm.get('searchSupplier').value;
+  onClientNameChange(): void {
+    this.invoiceForm.get('searchClient').valueChanges.subscribe(val => {
+      var data = this.invoiceForm.get('searchClient').value;
       if (data == "") {
         this.options = [];
         return;
@@ -53,6 +53,7 @@ export class FactureClientComponent implements OnInit {
     const item = this.fb.group({
       itemID: [element['id'], Validators.required],
       itemName: [element['name']],
+      isDamaged:[element['gate']],
       crt: [0],
       piece: [0],
       comment: ['']
@@ -62,39 +63,39 @@ export class FactureClientComponent implements OnInit {
   }
 
 
-  deleteItem(i, id) {
+  deleteItem(i, id,itemIsDamaged) {
     debugger;
     this.itemsForm.removeAt(i);
-    var index = FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', id.value);
+    var index = FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id','gate', id.value , itemIsDamaged.value);
     FactureClientComponent.selectedItems.splice(index, 1);
   }
 
-  test(id, name) {
-    this.supplyForm.get('searchSupplier').setValue('');
-    this.supplyForm.get('supplierName').setValue(name);
-    this.supplyForm.get('supplierID').setValue(id);
+  setClientName(id, name) {
+    this.invoiceForm.get('searchClient').setValue('');
+    this.invoiceForm.get('clientName').setValue(name);
+    this.invoiceForm.get('clientID').setValue(id);
   }
 
 
 
-  addSupplyInvoice() {
-    // this.supplyService.addSupply(this.supplyForm.value).subscribe(Response => {
-    //   swal({
-    //     type: 'success',
-    //     title: 'Success',
-    //     text: 'Supply Successfully',
-    //     showConfirmButton: false,
-    //     timer: 1000
-    //   });
-    // }, error => {
-    //   swal({
-    //     type: 'error',
-    //     title: error.statusText,
-    //     text: error.message
-    //   });
-    // });
-    console.log(this.supplyForm.value);
-    this.supplyForm.reset();
+  addClientInvoice() {
+    this.factureClientService.newClientInvoice(this.invoiceForm.value).subscribe(Response => {
+      swal({
+        type: 'success',
+        title: 'Success',
+        text: 'Supply Successfully',
+        showConfirmButton: false,
+        timer: 1000
+      });
+    }, error => {
+      swal({
+        type: 'error',
+        title: error.statusText,
+        text: error.message
+      });
+    });
+    console.log(this.invoiceForm.value);
+    this.invoiceForm.reset();
   }
 
   addItemsToFacture() {
@@ -129,7 +130,7 @@ export class FactureClientComponent implements OnInit {
       lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
       ajax: {
         type: "get",
-        url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/multiselectDT-NoGate.php",
+        url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/multiselectDT-Gate.php",
         data: {},
         cache: true,
         async: true
@@ -146,7 +147,7 @@ export class FactureClientComponent implements OnInit {
       ],
       rowId: 'ID',
       "createdRow": function (row, data, index) {
-        if (FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', data['ID']) > -1) {
+        if (FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id','gate', data['ID'],data['item_is_damaged']) > -1) {
           multiSelectDT.row(row).select();
         }
       }
@@ -158,9 +159,10 @@ export class FactureClientComponent implements OnInit {
       rows.forEach(element => {
         var ID = multiSelectDT.row(element).data()['ID'];
         var name = multiSelectDT.row(element).data()['item_name'];
+        var gate = multiSelectDT.row(element).data()['item_is_damaged'];
 
-        if (FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', ID) == -1)
-          FactureClientComponent.selectedItems.push({ id: ID, name: name });
+        if (FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id','gate', ID,gate) == -1)
+        FactureClientComponent.selectedItems.push({ id: ID, name: name ,gate:gate});
       });
     });
 
@@ -170,35 +172,30 @@ export class FactureClientComponent implements OnInit {
       rows.forEach(element => {
         var ID = multiSelectDT.row(element).data()['ID'];
         var name = multiSelectDT.row(element).data()['item_name'];
-        FactureClientComponent.selectedItems.push({ id: ID, name: name });
+        var gate = multiSelectDT.row(element).data()['item_is_damaged'];
+        FactureClientComponent.selectedItems.push({ id: ID, name: name ,gate:gate});
       });
     });
 
-
-
-    $('#subsMonths').on('key-focus.dt', function (e, datatable, cell) {
-      $(multiSelectDT.row(cell.index().row).node()).addClass('selected');
-
-
-    });
-    $('#subsMonths').on('key-blur.dt', function (e, datatable, cell) {
-      $(multiSelectDT.row(cell.index().row).node()).removeClass('selected');
-    });
 
     FactureClientComponent.globalMultiSelectDT = multiSelectDT;
   }
 
   get itemsForm() {
-    return this.supplyForm.get('items') as FormArray
+    return this.invoiceForm.get('items') as FormArray
   }
 
   get itemID() {
-    return this.supplyForm.get('itemID');
+    return this.invoiceForm.get('itemID');
   }
 
-  static findWithAttr(array, attr, value) {
+  get itemIsDamaged() {
+    return this.invoiceForm.get('isDamaged');
+  }
+
+  static findWithAttr(array, attr, attr2, value , value2) {
     for (var i = 0; i < array.length; i += 1) {
-      if (array[i][attr] === value) {
+      if (array[i][attr] === value && array[i][attr2] === value2) {
         return i;
       }
     }
@@ -210,5 +207,6 @@ export class FactureClientComponent implements OnInit {
 export interface item {
   id: number;
   name: string;
+  gate: boolean;
 }
 

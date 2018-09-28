@@ -8,6 +8,8 @@ class facture extends REST_Controller
         $this->load->model('facture_model');
     }
 
+    
+
     public function newSupplyInvoice_post()
     {
         $supplyDate = $this->post('supplyDate');
@@ -38,6 +40,55 @@ class facture extends REST_Controller
         } else {
             $this->db->trans_commit();
             $this->response("success", 200);
+        }
+    }
+
+    public function newClientInvoice_post()
+    {
+        $invoiceDate = $this->post('invoiceDate');
+        $deliveryDate = $this->post('delDate');
+        $clientID = $this->post('clientID');
+
+        $invoiceItems = $this->post('items');
+
+        $invoiceCorrectDate = new DateTime($invoiceDate);
+        $invoiceCorrectDate->setTimezone(new DateTimeZone('Asia/Beirut'));
+
+        $deliveryCorrectDate = new DateTime($deliveryDate);
+        $deliveryCorrectDate->setTimezone(new DateTimeZone('Asia/Beirut'));
+
+        $this->db->trans_begin();
+
+        $invoiceID = $this->facture_model->addClientInvoice(array("inv_perID" =>  $clientID, "inv_code" => 12, "inv_type" => 'FC', "inv_date_req" => $invoiceCorrectDate->format('Y-m-d H:i:s'), "inv_date_del" => $deliveryCorrectDate->format('Y-m-d'), "inv_status" => 0));
+
+        foreach ($invoiceItems as $row) {
+            $itemData = array(
+                "ord_itemID" => $row['itemID'],
+                "ord_item_isDamaged" => $row['isDamaged'],
+                "ord_piece" => $row['piece'],
+                "ord_crt" => $row['crt'],
+                "ord_note" => $row['comment'],
+                "ord_invID" => $invoiceID
+            );
+
+            $this->facture_model->addItemToInvoice($itemData);
+        }
+
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            $this->response("Invoice information could not be saved. Try again.", 404);
+        } else {
+            $this->db->trans_commit();
+            $this->response("success", 200);
+        }
+    }
+
+    public function searchClient_get(){
+        $keyword = $this->get('keyword');
+        $result = $this->facture_model->searchForClient($keyword);      
+        if ($result) {
+            $this->response($result, 200);
+            exit;
         }
     }
 
