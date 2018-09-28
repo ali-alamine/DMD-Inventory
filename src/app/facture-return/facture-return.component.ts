@@ -118,41 +118,41 @@ export class FactureReturnComponent implements OnInit {
   
       var multiSelectDT = $('#stockDT').DataTable({
         responsive: false,
-        paging: true,
-        pagingType: "numbers",
-        serverSide: true,
-        processing: true,
-        deferRender: true,
-        ordering: true,
-        stateSave: false,
-        fixedHeader: true,
-        select: true,
-        searching: true,
-        lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
-        ajax: {
-          type: "get",
-          url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/stockDataTable.php",
-          data: {},
-          cache: true,
-          async: true
-        },
-        order: [[0, 'asc']],
-        columns: [
-          { data: "ID", title: "ID" },
-          { data: "item_name", title: "Article" },
-          { data: "item_code", title: "Code" },
-          { data: "item_crt", title: "CRT" },
-          { data: "item_piece", title: "Piece" },
-          { data: "item_packing_list", title: "Colisage" }
-  
-        ],
-        rowId: 'ID',
-        "createdRow": function (row, data, index) {
-          if (FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id', data['ID']) > -1) {
-            multiSelectDT.row(row).select();
-          }
+      paging: true,
+      pagingType: "numbers",
+      serverSide: true,
+      processing: true,
+      deferRender: true,
+      ordering: true,
+      stateSave: false,
+      fixedHeader: true,
+      select: true,
+      searching: true,
+      lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+      ajax: {
+        type: "get",
+        url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/multiselectDT-NoGate.php",
+        data: {},
+        cache: true,
+        async: true
+      },
+      order: [[0, 'asc']],
+      columns: [
+        { data: "ID", title: "ID" },
+        { data: "item_name", title: "Article" },
+        { data: "item_code", title: "Code" },
+        { data: "item_crt", title: "CRT" },
+        { data: "item_piece", title: "Piece" },
+        { data: "item_packing_list", title: "Colisage" }
+
+      ],
+      rowId: 'ID',
+      "createdRow": function (row, data, index) {
+        if (FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id', data['ID']) > -1) {
+          multiSelectDT.row(row).select();
         }
-      });
+      }
+    });
   
   
       multiSelectDT.on('select', function (e, dt, type, indexes) {
