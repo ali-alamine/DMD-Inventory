@@ -120,8 +120,8 @@ export class ClientsComponent implements OnInit {
       this.editedClientData['name'] = this.name.value;
       this.editedClientData['phone'] = this.address.value;
       this.editedClientData['address'] = this.phoneNumber.value;
-      this.editedClientData['code'] = ClientsComponent.selectedClientID;
-      debugger
+      this.editedClientData['ID'] = ClientsComponent.selectedClientID;
+      
       console.log(this.editedClientData)
       this.clientsService.editClient(this.editedClientData).subscribe(Response => {
         this.globalClientsDT.ajax.reload(null, false);

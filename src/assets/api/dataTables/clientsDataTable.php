@@ -2,8 +2,8 @@
 include './connection.php';
 openConn();
 
-$requestData = $_REQUEST;   //all parameters inside an array
-$rowsReq = (isset($_GET['length'])) ? intval($_GET['length']) : 10; //isset is not null
+$requestData = $_REQUEST;
+$rowsReq = (isset($_GET['length'])) ? intval($_GET['length']) : 10;
 $start = (isset($_GET['start'])) ? intval($_GET['start']) : 0;
 $orderString = "";
 
