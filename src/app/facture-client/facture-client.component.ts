@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StockService } from '../stock/stock.service';
 import { SupplyService } from '../facture-supply/facture-supply.service';
 import swal from 'sweetalert2';
+import { FactureClientService } from './facture-client.service';
 declare var $: any;
 @Component({
   selector: 'app-facture',
@@ -20,7 +21,7 @@ export class FactureClientComponent implements OnInit {
   rechargeCardForm: FormGroup;
   static selectedItems: item[] = new Array();
   static globalMultiSelectDT;
-  constructor(private fb: FormBuilder, private supplyService: SupplyService, private modalService: NgbModal, private stockService: StockService) {
+  constructor(private fb: FormBuilder, private factureClientService: FactureClientService, private modalService: NgbModal, private stockService: StockService) {
   }
 
   ngOnInit() {
@@ -42,7 +43,7 @@ export class FactureClientComponent implements OnInit {
         this.options = [];
         return;
       }
-      this.supplyService.searchSupplier(data).subscribe(Response => {
+      this.factureClientService.searchClient(data).subscribe(Response => {
         this.options = Response;
       })
     });
@@ -128,7 +129,7 @@ export class FactureClientComponent implements OnInit {
       lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
       ajax: {
         type: "get",
-        url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/stockDataTable.php",
+        url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/multiselectDT-NoGate.php",
         data: {},
         cache: true,
         async: true

@@ -113,7 +113,7 @@ export class SupplyComponent implements OnInit {
       lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
       ajax: {
         type: "get",
-        url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/stockDataTable.php",
+        url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/multiselectDT-NoGate.php",
         data: {},
         cache: true,
         async: true
@@ -193,4 +193,5 @@ export class SupplyComponent implements OnInit {
 export interface item {
   id: number;
   name: string;
+  
 }

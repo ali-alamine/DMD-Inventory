@@ -18,7 +18,7 @@ class facture extends REST_Controller
 
         $this->db->trans_begin();
 
-        $invoiceID = $this->facture_model->addSupplyInvoice(array("inv_perID" => 1, "inv_code" => 12, "inv_type" => 'FD', "inv_date_req" => $correctDate->format('Y-m-d H:i:s'), "inv_status" => 1));
+        $invoiceID = $this->facture_model->addSupplyInvoice(array("inv_perID" => 1, "inv_code" => 12, "inv_type" => 'FD', "inv_date_req" => $correctDate->format('Y-m-d H:i:s'), "inv_status" => 0));
 
         foreach ($invoiceItems as $row) {
             $itemData = array(

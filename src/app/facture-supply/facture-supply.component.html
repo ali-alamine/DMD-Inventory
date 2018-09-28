@@ -46,7 +46,7 @@
             </div>
           </div>
       
-          <button mat-raised-button name="addButton" class="addBtns" color="primary" (click)="addSupplyInvoice()" [disabled]="!supplyForm.valid">Submit</button>
+          <button mat-raised-button name="addButton" class="addBtns" color="primary" (click)="addSupplyInvoice()" [disabled]="!supplyForm.valid || itemsForm.length == 0">Submit</button>
         </form>
       </div>
       
