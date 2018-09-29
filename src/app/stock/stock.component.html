@@ -18,7 +18,7 @@
 
 <div hidden>
   <button id="editStockBtn" (click)="editFlag=true;openStockModal(stockModal)"></button>
-  <!-- <button id="deleteStockBtn" (click)=""></button> -->
+  <button id="transferBtn" (click)="openTransferModal(transferModal)"></button>
 </div>
 
 
@@ -40,8 +40,8 @@
       </div>
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="inputField" fxFlex>
-          <input matInput placeholder="Packing List" formControlName="quantity" type="text">
-          <mat-error> packing list is required</mat-error>
+          <input matInput placeholder="Colisage" formControlName="colisage" type="number">
+          <mat-error> Colisage is required</mat-error>
         </mat-form-field>
       </div>
       
@@ -49,5 +49,40 @@
   </div>
   <div class="modal-footer">
     <button mat-raised-button name="addButton" color="primary" (click)="addEditStock()" [disabled]="!stockForm.valid">{{stockModalTitle}}</button>
+  </div>
+</ng-template>
+
+<ng-template #transferModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Transfer to Damaged</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form fxLayout="column" [formGroup]="transferForm" autocomplete="off">
+        <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+            <mat-form-field hidden>
+              <input matInput placeholder="itemID" formControlName="itemID" type="number">
+              <mat-error> Colisage is required</mat-error>
+            </mat-form-field>
+          </div>    
+      <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+        <mat-form-field class="inputField" fxFlex>
+          <input matInput placeholder="CRT" formControlName="crt" type="number">
+          <mat-error> Colisage is required</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+        <mat-form-field class="inputField" fxFlex>
+          <input matInput placeholder="Piece" formControlName="piece" type="number">
+          <mat-error> Colisage is required</mat-error>
+        </mat-form-field>
+      </div>
+      
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button mat-raised-button name="addButton" color="primary" (click)="submitTransfer()" [disabled]="!transferForm.valid">Transfer</button>
   </div>
 </ng-template>

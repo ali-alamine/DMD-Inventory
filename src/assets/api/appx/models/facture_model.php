@@ -33,11 +33,12 @@ class facture_model extends CI_Model
         }
     }
 
-    public function updateStock($id,$quantity) // update quantity of item and calculate crt based on item_piece and item_packing_list
+    public function updateStock($id, $quantity) // update quantity of item and calculate crt based on item_piece and item_packing_list
+
     {
         $this->db->where('itemID', $id);
-        $this->db->set('item_piece','item_piece + '. $quantity,FALSE);
-        $this->db->set('item_crt','floor(`item_piece`/`item_packing_list`)',FALSE);
+        $this->db->set('item_piece', 'item_piece + ' . $quantity, false);
+        $this->db->set('item_crt', 'floor(`item_piece`/`item_packing_list`)', false);
         $test = $this->db->last_query();
         if ($this->db->update('item')) {
             return true;
@@ -62,12 +63,13 @@ class facture_model extends CI_Model
         }
     }
 
-    public function getRepeatedCodeCount($prefix){
+    public function getRepeatedCodeCount($prefix)
+    {
         $this->db->count_all_results('invoice');
-        $this->db->like('inv_type',$prefix,'after');
+        $this->db->like('inv_type', $prefix, 'after');
         $this->db->from('invoice');
         return $this->db->count_all_results();
-        
-      }
+
+    }
 
 }

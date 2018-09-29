@@ -15,6 +15,7 @@ declare var $: any;
 export class StockComponent implements OnInit {
   modalReference: any;
   private stockForm;
+  private transferForm;
   stockModalTitle;
   editFlag = false;
   private static selectedRowData;
@@ -82,6 +83,15 @@ export class StockComponent implements OnInit {
           element.click();
         }
 
+      },
+      {
+        label: 'Transfer',
+        icon: 'pi pi-fw pi-clone',
+        command: (event) => {
+          let element: HTMLElement = document.getElementById('transferBtn') as HTMLElement;
+          element.click();
+        }
+
       }
     ];
     this.globalStocksDT = subscriberDataTable;
@@ -89,7 +99,7 @@ export class StockComponent implements OnInit {
     subscriberDataTable.on('select', function (e, dt, type, indexes) {
       if (type === 'row') {
         StockComponent.selectedRowData = subscriberDataTable.row(indexes).data();
-        var data = subscriberDataTable.row(indexes).data()['ID'];
+        var data = subscriberDataTable.row(indexes).data()['id'];
         StockComponent.selectedStockID = data;
       }
       else if (type === 'column') {
@@ -116,27 +126,57 @@ export class StockComponent implements OnInit {
   openStockModal(stockModal) {
     this.modalReference = this.modalService.open(stockModal, { centered: true, ariaLabelledBy: 'modal-basic-title' });
     var name = '';
-    var quantity = '';
-    var address = '';
-    this.stockModalTitle = "Add Stock";
+    var colisage = '';
+    this.stockModalTitle = "Add ";
 
     if (this.editFlag == true) {
-      this.stockModalTitle = "Edit Stock";
+      this.stockModalTitle = "Edit ";
       name = StockComponent.selectedRowData['name'];
-      quantity = StockComponent.selectedRowData['quantity'];
+      colisage = StockComponent.selectedRowData['pck_list'];
     }
     this.stockForm = this.fb.group({
       name: [name, [Validators.required, Validators.minLength(3)]],
-      quantity: [quantity, [Validators.required]]
+      colisage: [colisage, [Validators.required]]
     });
+  }
+
+  openTransferModal(transferModal) {
+    this.modalReference = this.modalService.open(transferModal, { centered: true, ariaLabelledBy: 'modal-basic-title' });
+
+    this.transferForm = this.fb.group({
+      itemID: [StockComponent.selectedStockID,Validators.required],
+      crt: [0,Validators.required],
+      piece: [0,Validators.required]
+    });
+  }
+
+  submitTransfer(){
+    console.log(this.transferForm.value);
+    this.stockService.transfer(this.transferForm.value).subscribe(Response => {
+      this.globalStocksDT.ajax.reload(null, false);
+      Swal({
+        type: 'success',
+        title: 'Success',
+        text: 'damaged items transfered Successfully',
+        showConfirmButton: false,
+        timer: 1000
+      });
+    }, error => {
+      Swal({
+        type: 'error',
+        title: error.statusText,
+        text: error.message
+      });
+    });
+
+    this.modalReference.close();
   }
 
   addEditStock() {
     if (this.editFlag == true) {
       this.editedStockData['name'] = this.name.value;
-      // this.editedStockData['phone'] = this.address.value;
-      // this.editedStockData['address'] = this.phoneNumber.value;
-      this.editedStockData['code'] = StockComponent.selectedStockID;
+      this.editedStockData['pck_list'] =  this.colisage.value;
+      this.editedStockData['ID'] = StockComponent.selectedStockID;
 
       console.log(this.editedStockData)
       this.stockService.editStockItem(this.editedStockData).subscribe(Response => {
@@ -144,7 +184,7 @@ export class StockComponent implements OnInit {
         Swal({
           type: 'success',
           title: 'Success',
-          text: 'Stock Updated Successfully',
+          text: 'Item Updated Successfully',
           showConfirmButton: false,
           timer: 1000
         });
@@ -162,7 +202,7 @@ export class StockComponent implements OnInit {
         Swal({
           type: 'success',
           title: 'Success',
-          text: 'Stock Added Successfully',
+          text: 'Item Added Successfully',
           showConfirmButton: false,
           timer: 1000
         });
@@ -181,8 +221,8 @@ export class StockComponent implements OnInit {
   get name() {
     return this.stockForm.get('name');
   }
-  get quantity() {
-    return this.stockForm.get('quantity');
+  get colisage() {
+    return this.stockForm.get('colisage');
   }
 
 }

@@ -7,15 +7,20 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 })
 export class StockService {
 
-  private url="http://localhost:8080/DMD-Inventory/src/assets/api/stock/";
+  private url="http://localhost/DMD-Inventory/src/assets/api/stock/";
   constructor(private httpClient: HttpClient) { }
 
   addStockItem(itemData): Observable<any>{
-    return this.httpClient.post(this.url+"stockAcc", itemData);
+    return this.httpClient.post(this.url+"item", itemData);
   }
 
   editStockItem(itemData): Observable<any>{
-    return this.httpClient.post(this.url+"stockAcc", itemData);
+    return this.httpClient.put(this.url+"item", itemData);
   }
+
+  transfer(formData): Observable<any>{
+    return this.httpClient.post(this.url+"transfer", formData);
+  }
+
   
 }
