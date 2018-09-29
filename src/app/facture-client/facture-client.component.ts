@@ -53,6 +53,7 @@ export class FactureClientComponent implements OnInit {
       itemID: [element['id'], Validators.required],
       itemName: [element['name']],
       isDamaged:[element['gate']],
+      colisage:[element['colisage']],
       crt: [0],
       piece: [0],
       comment: ['']
@@ -63,7 +64,6 @@ export class FactureClientComponent implements OnInit {
 
 
   deleteItem(i, id,itemIsDamaged) {
-    debugger;
     this.itemsForm.removeAt(i);
     var index = FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id','gate', id.value , itemIsDamaged.value);
     FactureClientComponent.selectedItems.splice(index, 1);
@@ -82,7 +82,7 @@ export class FactureClientComponent implements OnInit {
       swal({
         type: 'success',
         title: 'Success',
-        text: 'Supply Successfully',
+        text: 'Invoice Added Successfully',
         showConfirmButton: false,
         timer: 1000
       });
@@ -128,7 +128,7 @@ export class FactureClientComponent implements OnInit {
       deferRender: true,
       ordering: true,
       stateSave: false,
-      fixedHeader: true,
+      fixedHeader: false,
       select: true,
       searching: true,
       lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
@@ -164,9 +164,10 @@ export class FactureClientComponent implements OnInit {
         var ID = multiSelectDT.row(element).data()['ID'];
         var name = multiSelectDT.row(element).data()['item_name'];
         var gate = multiSelectDT.row(element).data()['item_is_damaged'];
+        var colisage = multiSelectDT.row(element).data()['item_packing_list'];
 
         if (FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id','gate', ID,gate) == -1)
-        FactureClientComponent.selectedItems.push({ id: ID, name: name ,gate:gate});
+        FactureClientComponent.selectedItems.push({ id: ID, name: name ,gate:gate , colisage:colisage});
       });
     });
 
@@ -177,7 +178,8 @@ export class FactureClientComponent implements OnInit {
         var ID = multiSelectDT.row(element).data()['ID'];
         var name = multiSelectDT.row(element).data()['item_name'];
         var gate = multiSelectDT.row(element).data()['item_is_damaged'];
-        FactureClientComponent.selectedItems.push({ id: ID, name: name ,gate:gate});
+        var colisage = multiSelectDT.row(element).data()['item_packing_list'];
+        FactureClientComponent.selectedItems.push({ id: ID, name: name ,gate:gate,colisage:colisage});
       });
     });
 
@@ -212,5 +214,6 @@ export interface fcItem {
   id: number;
   name: string;
   gate: boolean;
+  colisage :number;
 }
 

@@ -103,7 +103,7 @@ export class SupplyComponent implements OnInit {
       deferRender: true,
       ordering: true,
       stateSave: false,
-      fixedHeader: true,
+      fixedHeader: false,
       select: true,
       searching: true,
       lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],

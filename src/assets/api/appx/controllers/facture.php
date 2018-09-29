@@ -76,7 +76,11 @@ class facture extends REST_Controller
                 "ord_invID" => $invoiceID
             );
 
+            $itemID =  $row['itemID'];
+            $quantityToAdd = ($row['colisage'] * $row['crt']) + $row['piece'];
+
             $this->facture_model->addItemToInvoice($itemData);
+            $this->facture_model->updateStock($itemID,-$quantityToAdd);
         }
 
         if ($this->db->trans_status() === false) {

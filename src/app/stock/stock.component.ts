@@ -43,19 +43,34 @@ export class StockComponent implements OnInit {
       lengthMenu: [[25, 50, 100, 150, 200, 300], [25, 50, 100, 150, 200, 300]],
       ajax: {
         type: "get",
-        url: "http://localhost:8080/DMD-Inventory/src/assets/api/dataTables/stockDataTable.php",
+        url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/stockDataTable.php",
         data: {},
         cache: true,
         async: true
       },
-      order: [[0, 'asc']],
+      order: [[4, 'asc']],
       columns: [
-        { data: "colisage", title: "Colisage" },
-        { data: "articles", title: "Articles" },
+        { data: "pck_list", title: "Colisage" },
+        { data: "name", title: "Name" },
+        { data: "crt", title: "CRT" },
         { data: "piece", title: "Piece" },
-        { data: "code", title: "Code", render: $.fn.dataTable.render.number(',', '.', 0, 'LL ') }
+        { data: "code", title: "Code"}
 
-      ]
+      ],"columnDefs": [ {
+        "targets": 1,
+        "createdCell": function (td, cellData, rowData, row, col) {
+          
+          if ( rowData['isDamagedFlag']) {              
+            $(td).html(cellData+" <i style='float:right; color: #FF0000;' md-18 class='material-icons'>new_releases</i> ")
+          }
+        }
+      } ],
+      createdRow: function (row, data, index) {
+        if (data['isDamagedFlag'] == 1) {            
+          $(row).addClass("bg-warning");
+          $(row).attr('title', " CRT: " + data['crtD'] + " || Piece: " + data['pieceD']);    
+        }
+      }
     });
 
     this.items = [

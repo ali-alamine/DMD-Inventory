@@ -47,7 +47,7 @@
   }
 
  
-  #internetInvoicesDT tbody tr.selected , #accessoriesInvoicesDT tbody tr.selected,#subscribersRprtDT tbody tr.selected ,#subscribersDT tbody tr.selected, #suppliersDT tbody tr.selected, #centralInvoicesDT tbody tr.selected, #creditInvoicesDT tbody tr.selected, #supplyInvoicesDT tbody tr.selected, #invoicePaymentsDT tbody tr.selected, #clientsDT tbody tr.selected  {
+  #stocksDT tbody tr.selected , #accessoriesInvoicesDT tbody tr.selected,#subscribersRprtDT tbody tr.selected ,#subscribersDT tbody tr.selected, #suppliersDT tbody tr.selected, #centralInvoicesDT tbody tr.selected, #creditInvoicesDT tbody tr.selected, #supplyInvoicesDT tbody tr.selected, #invoicePaymentsDT tbody tr.selected, #clientsDT tbody tr.selected  {
     color: white !important;
     background-color:#778899 !important;
   }

@@ -25,7 +25,7 @@
 
 <ng-template #stockModal let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">{{stockModalTitle}}</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{stockModalTitle}} Item</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -34,14 +34,14 @@
     <form fxLayout="column" [formGroup]="stockForm" autocomplete="off">
       <div class="input-row" fxLayout="row">
         <mat-form-field class="inputField" fxFlex>
-          <input matInput placeholder="Stock Name" formControlName="name" type="text" name="nameInput" autofocus>
-          <mat-error> stock name is required with minimum 3 letters</mat-error>
+          <input matInput placeholder="Item Name" formControlName="name" type="text" name="nameInput" autofocus>
+          <mat-error> item name is required with minimum 3 letters</mat-error>
         </mat-form-field>
       </div>
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="inputField" fxFlex>
-          <input matInput placeholder="Quantity" formControlName="quantity" type="text">
-          <mat-error> stock number is required</mat-error>
+          <input matInput placeholder="Packing List" formControlName="quantity" type="text">
+          <mat-error> packing list is required</mat-error>
         </mat-form-field>
       </div>
       
