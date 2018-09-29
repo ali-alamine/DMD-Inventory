@@ -4,7 +4,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StockService } from '../stock/stock.service';
 import { SupplyService } from './facture-supply.service';
 import swal from 'sweetalert2';
-import { SupplyInvoicesComponent } from '../supply-invoices/supply-invoices.component';
 declare var $: any;
 
 @Component({
@@ -24,7 +23,7 @@ export class SupplyComponent implements OnInit {
   static selectedItems: item[] = new Array();
   static globalMultiSelectDT;
 
-  constructor(private fb: FormBuilder, private supplyService: SupplyService, private modalService: NgbModal, private stockService: StockService) { }
+  constructor(private fb: FormBuilder, private supplyService: SupplyService, private modalService: NgbModal) { }
 
   ngOnInit() {
     this.supplyForm = this.fb.group({
@@ -38,6 +37,7 @@ export class SupplyComponent implements OnInit {
     const item = this.fb.group({
       itemID: [element['id'], Validators.required],
       itemName: [element['name']],
+      colisage:[element['colisage']],
       crt: [0],
       piece: [0],
       comment: ['']
@@ -46,15 +46,11 @@ export class SupplyComponent implements OnInit {
     this.itemsForm.push(item);
   }
 
-
   deleteItem(i, id) {
     this.itemsForm.removeAt(i);
     var index = SupplyComponent.findWithAttr(SupplyComponent.selectedItems, 'id', id.value);
     SupplyComponent.selectedItems.splice(index, 1);
   }
-
- 
-
 
   addSupplyInvoice() {
     this.supplyService.newSupplyInvoice(this.supplyForm.value).subscribe(Response => {
@@ -142,9 +138,10 @@ export class SupplyComponent implements OnInit {
       rows.forEach(element => {
         var ID = multiSelectDT.row(element).data()['ID'];
         var name = multiSelectDT.row(element).data()['item_name'];
+        var colisage = multiSelectDT.row(element).data()['item_packing_list'];
 
         if (SupplyComponent.findWithAttr(SupplyComponent.selectedItems, 'id', ID) == -1)
-          SupplyComponent.selectedItems.push({ id: ID, name: name });
+          SupplyComponent.selectedItems.push({ id: ID, name: name, colisage:colisage });
       });
     });
 
@@ -154,7 +151,9 @@ export class SupplyComponent implements OnInit {
       rows.forEach(element => {
         var ID = multiSelectDT.row(element).data()['ID'];
         var name = multiSelectDT.row(element).data()['item_name'];
-        SupplyComponent.selectedItems.push({ id: ID, name: name });
+        var colisage = multiSelectDT.row(element).data()['item_packing_list'];
+
+        SupplyComponent.selectedItems.push({ id: ID, name: name ,colisage:colisage});
       });
     });
 
@@ -193,5 +192,6 @@ export class SupplyComponent implements OnInit {
 export interface item {
   id: number;
   name: string;
+  colisage: number;
   
 }

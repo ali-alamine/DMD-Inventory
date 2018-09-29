@@ -18,7 +18,7 @@ export class FactureClientComponent implements OnInit {
   invoiceForm: FormGroup;
   options;
   items: any;
-  static selectedItems: item[] = new Array();
+  static selectedItems: fcItem[] = new Array();
   static globalMultiSelectDT;
   constructor(private fb: FormBuilder, private factureClientService: FactureClientService, private modalService: NgbModal ) {
   }
@@ -208,7 +208,7 @@ export class FactureClientComponent implements OnInit {
 
 }
 
-export interface item {
+export interface fcItem {
   id: number;
   name: string;
   gate: boolean;

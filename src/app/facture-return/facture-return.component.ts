@@ -162,7 +162,8 @@ export class FactureReturnComponent implements OnInit {
           var name = multiSelectDT.row(element).data()['item_name'];
   
           if (FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id', ID) == -1)
-            FactureReturnComponent.selectedItems.push({ id: ID, name: name });
+            // FactureReturnComponent.selectedItems.push({ id: ID, name: name });
+            alert('')
         });
       });
   
@@ -172,7 +173,7 @@ export class FactureReturnComponent implements OnInit {
         rows.forEach(element => {
           var ID = multiSelectDT.row(element).data()['ID'];
           var name = multiSelectDT.row(element).data()['item_name'];
-          FactureReturnComponent.selectedItems.push({ id: ID, name: name });
+          // FactureReturnComponent.selectedItems.push({ id: ID, name: name });
         });
       });
   

@@ -7,9 +7,7 @@ class facture extends REST_Controller
         parent::__construct();
         $this->load->model('facture_model');
         $this->load->helper('string');
-    }
-
-    
+    }   
 
     public function newSupplyInvoice_post()
     {
@@ -32,8 +30,11 @@ class facture extends REST_Controller
                 "ord_note" => $row['comment'],
                 "ord_invID" => $invoiceID
             );
+            $itemID =  $row['itemID'];
+            $quantityToAdd = ($row['colisage'] * $row['crt']) + $row['piece'];
 
             $this->facture_model->addItemToInvoice($itemData);
+            $this->facture_model->updateStock($itemID,$quantityToAdd);
         }
 
         if ($this->db->trans_status() === false) {

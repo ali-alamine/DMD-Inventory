@@ -33,6 +33,19 @@ class facture_model extends CI_Model
         }
     }
 
+    public function updateStock($id,$quantity)  // update quantity of item
+    {
+        $this->db->where('itemID', $id);
+        $this->db->set('item_piece','item_piece + '. $quantity,FALSE);
+        $this->db->set('item_crt','floor(`item_piece`/`item_packing_list`)',FALSE);
+        $test = $this->db->last_query();
+        if ($this->db->update('item')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function searchForClient($name)
     {
         $this->db->select('*');
