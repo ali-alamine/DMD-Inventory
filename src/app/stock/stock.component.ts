@@ -92,6 +92,15 @@ export class StockComponent implements OnInit {
           element.click();
         }
 
+      },
+      {
+        label: 'Delete',
+        icon: 'pi pi-fw pi-times',
+        command: (event) => {
+          let element: HTMLElement = document.getElementById('deleteBtn') as HTMLElement;
+          element.click();
+        }
+
       }
     ];
     this.globalStocksDT = subscriberDataTable;
@@ -221,6 +230,26 @@ export class StockComponent implements OnInit {
     }
 
     this.modalReference.close();
+  }
+
+
+  deleteItem(){
+    this.stockService.deleteStockItem(StockComponent.selectedStockID).subscribe(Response => {
+      this.globalStocksDT.ajax.reload(null, false);
+      Swal({
+        type: 'success',
+        title: 'Success',
+        text: 'Item Added Successfully',
+        showConfirmButton: false,
+        timer: 1000
+      });
+    }, error => {
+      Swal({
+        type: 'error',
+        title: error.statusText,
+        text: error.message
+      });
+    });
   }
 
   get name() {

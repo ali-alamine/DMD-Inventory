@@ -19,6 +19,7 @@
 <div hidden>
   <button id="editStockBtn" (click)="editFlag=true;openStockModal(stockModal)"></button>
   <button id="transferBtn" (click)="openTransferModal(transferModal)"></button>
+  <button id="deleteBtn" (click)="deleteItem()"></button>
 </div>
 
 
@@ -75,9 +76,10 @@
       </div>
       
     </form>
-    <mat-error *ngIf="maxPiece < (tCRT * tcolisage) + tPiece">u exceed the stock total</mat-error> 
+    <mat-error *ngIf="maxPiece < (tCRT * tcolisage) + tPiece">u exceed the stock total   ..change it later</mat-error> 
+    <mat-error *ngIf="(tCRT * tcolisage) + tPiece == 0 ">u can not transfer 0 piece    ..change it later</mat-error> 
   </div>
   <div class="modal-footer">
-    <button mat-raised-button name="addButton" color="primary" (click)="submitTransfer()" [disabled]="!transferForm.valid || maxPiece < (tCRT * tcolisage) + tPiece">Transfer</button>
+    <button mat-raised-button name="addButton" color="primary" (click)="submitTransfer()" [disabled]="!transferForm.valid || (tCRT * tcolisage) + tPiece == 0 || maxPiece < (tCRT * tcolisage) + tPiece">Transfer</button>
   </div>
 </ng-template>

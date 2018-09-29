@@ -22,5 +22,9 @@ export class StockService {
     return this.httpClient.post(this.url+"transfer", formData);
   }
 
+  deleteStockItem(data): Observable<any>{
+    return this.httpClient.get(this.url+"deleteStockItem", {params:{ID:data}});
+  }
+
   
 }
