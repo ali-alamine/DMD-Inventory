@@ -143,10 +143,15 @@ export class StockComponent implements OnInit {
   openTransferModal(transferModal) {
     this.modalReference = this.modalService.open(transferModal, { centered: true, ariaLabelledBy: 'modal-basic-title' });
 
+  
     this.transferForm = this.fb.group({
       itemID: [StockComponent.selectedStockID,Validators.required],
-      crt: [0,Validators.required],
-      piece: [0,Validators.required]
+      colisage: [StockComponent.selectedRowData['pck_list']],
+      itemCode: [StockComponent.selectedRowData['code']],
+      itemName: [StockComponent.selectedRowData['name']],
+      crt: [0],
+      piece: [0]
+      
     });
   }
 
@@ -223,6 +228,20 @@ export class StockComponent implements OnInit {
   }
   get colisage() {
     return this.stockForm.get('colisage');
+  }
+  get maxPiece() {
+    return  StockComponent.selectedRowData['piece'];
+  }
+
+  get tCRT() {
+    return this.transferForm.get('crt').value;
+  }
+
+  get tPiece() {
+    return this.transferForm.get('piece').value;
+  }
+  get tcolisage() {
+    return this.transferForm.get('colisage').value;
   }
 
 }

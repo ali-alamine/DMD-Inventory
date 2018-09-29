@@ -60,29 +60,24 @@
     </button>
   </div>
   <div class="modal-body">
-    <form fxLayout="column" [formGroup]="transferForm" autocomplete="off">
-        <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-            <mat-form-field hidden>
-              <input matInput placeholder="itemID" formControlName="itemID" type="number">
-              <mat-error> Colisage is required</mat-error>
-            </mat-form-field>
-          </div>    
+    <form fxLayout="column" [formGroup]="transferForm" autocomplete="off">        
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="inputField" fxFlex>
           <input matInput placeholder="CRT" formControlName="crt" type="number">
-          <mat-error> Colisage is required</mat-error>
+          <mat-error> must be less than crt of stock</mat-error>
         </mat-form-field>
       </div>
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="inputField" fxFlex>
           <input matInput placeholder="Piece" formControlName="piece" type="number">
-          <mat-error> Colisage is required</mat-error>
+          <mat-error> must be less than piece of stock</mat-error>
         </mat-form-field>
       </div>
       
     </form>
+    <mat-error *ngIf="maxPiece < (tCRT * tcolisage) + tPiece">u exceed the stock total</mat-error> 
   </div>
   <div class="modal-footer">
-    <button mat-raised-button name="addButton" color="primary" (click)="submitTransfer()" [disabled]="!transferForm.valid">Transfer</button>
+    <button mat-raised-button name="addButton" color="primary" (click)="submitTransfer()" [disabled]="!transferForm.valid || maxPiece < (tCRT * tcolisage) + tPiece">Transfer</button>
   </div>
 </ng-template>

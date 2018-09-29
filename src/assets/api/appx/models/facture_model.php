@@ -33,13 +33,11 @@ class facture_model extends CI_Model
         }
     }
 
-    public function updateStock($id, $quantity) // update quantity of item and calculate crt based on item_piece and item_packing_list
+    public function updateStock($id, $quantity) // update quantity of item 
 
     {
         $this->db->where('itemID', $id);
         $this->db->set('item_piece', 'item_piece + ' . $quantity, false);
-        $this->db->set('item_crt', 'floor(`item_piece`/`item_packing_list`)', false);
-        $test = $this->db->last_query();
         if ($this->db->update('item')) {
             return true;
         } else {

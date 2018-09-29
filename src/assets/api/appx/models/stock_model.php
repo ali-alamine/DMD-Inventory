@@ -42,14 +42,25 @@ class stock_model extends CI_Model
         }
     }
 
-    // public function updateDamagedStock($data){
-    //     $query = $this->db->query(" INSERT INTO item (itemID, item_is_damaged, item_code, item_name, item_packing_list, item_crt, item_piece, item_isActivated) VALUES (NULL, '0', '', '', '', '0', '0', '1') ON DUPLICATE KEY UPDATE name=VALUES(name)");
-    //     if($query)){            
-    //        return true;
-    //     }else{
-    //        return false;
-    //     }
-    // }
+    public function updateDamagedStock($itemID,$crt,$piece,$colisage,$itemCode,$itemName){
+
+        $pieceToAdd = ($crt*$colisage) + $piece;
+
+        $sql = " INSERT INTO item (itemID, item_is_damaged, item_code, item_name, item_packing_list, item_piece, item_isActivated) VALUES (?,1, ?, ?, ?, ?,1) ON DUPLICATE KEY UPDATE item_piece = item_piece + ? ";
+
+        $query = $this->db->query($sql , array($itemID,$itemCode,$itemName,$colisage,$pieceToAdd,$pieceToAdd));
+
+        $this->db->where('itemID', $itemID);
+        $this->db->where('item_is_damaged', 0);
+        $this->db->set('item_piece', 'item_piece - ' . $pieceToAdd, false);
+        $this->db->update('item');
+
+        if($query){            
+           return true;
+        }else{
+           return false;
+        }
+    }
 
 
 }

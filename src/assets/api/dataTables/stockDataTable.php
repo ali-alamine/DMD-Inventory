@@ -20,9 +20,7 @@ if (count($_GET['order'])) {
     if ($orderBy == 'piece') {
         $orderBy = 'item_piece';
     }
-    if ($orderBy == 'crt') {
-        $orderBy = 'item_crt';
-    }
+    
     if ($orderBy == 'name') {
         $orderBy = 'item_name';
     }
@@ -33,11 +31,11 @@ if (count($_GET['order'])) {
 if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     $search = $_GET["search"]["value"];
 
-    $getAllFactureQuery = " SELECT * FROM item left join (select item.itemID , item_is_damaged as isDamagedFlag, item_crt as crtD, item_piece as pieceD FROM item where item_is_damaged = 1 ) as d on item.itemID = d.itemID where item_isActivated=1 AND item_is_damaged= 0 AND ( item_name like '%" . $search . "%' OR item_code like '%" . $search . "%' ) " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+    $getAllFactureQuery = " SELECT *, FLOOR(item_piece/item_packing_list) as crt FROM item left join (select item.itemID as itemIDD , item_is_damaged as isDamagedFlag, FLOOR(item_piece/item_packing_list) as crtD, item_piece as pieceD FROM item where item_is_damaged = 1 ) as d on item.itemID = d.itemIDD where item_isActivated = 1 AND item_is_damaged = 0 AND ( item_name like '%" . $search . "%' OR item_code like '%" . $search . "%' ) " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
 } else {
 
-    $getAllFactureQuery = " SELECT * FROM item left join (select item.itemID as itemIDD , item_is_damaged as isDamagedFlag, item_crt as crtD, item_piece as pieceD FROM item where item_is_damaged = 1 ) as d on item.itemID = d.itemIDD where item_isActivated = 1 AND item_is_damaged = 0 " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+    $getAllFactureQuery = "SELECT *, FLOOR(item_piece/item_packing_list) as crt FROM item left join (select item.itemID as itemIDD , item_is_damaged as isDamagedFlag, FLOOR(item_piece/item_packing_list) as crtD, item_piece as pieceD FROM item where item_is_damaged = 1 ) as d on item.itemID = d.itemIDD where item_isActivated = 1 AND item_is_damaged = 0 " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
 }
 
@@ -53,7 +51,7 @@ if ($getAllFactureQuerySQL) {
             $jsonData = $jsonData . '{"code":"' . $row['item_code'] . '",';
             $jsonData = $jsonData . '"name":"' . $row['item_name'] . '",';
             $jsonData = $jsonData . '"pck_list":"' . $row['item_packing_list'] . '",';
-            $jsonData = $jsonData . '"crt":"' . $row['item_crt'] . '",';
+            $jsonData = $jsonData . '"crt":"' . $row['crt'] . '",';
             $jsonData = $jsonData . '"piece":"' . $row['item_piece'] . '",';
             $jsonData = $jsonData . '"isDamagedFlag":"' . $row['isDamagedFlag'] . '",';
             $jsonData = $jsonData . '"crtD":"' . $row['crtD'] . '",';
