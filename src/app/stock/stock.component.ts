@@ -4,6 +4,7 @@ import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { StockService } from './stock.service';
 import { MenuItem } from 'primeng/api';
 import Swal from 'sweetalert2';
+import swal from 'sweetalert2';
 declare var $: any;
 
 @Component({
@@ -234,22 +235,48 @@ export class StockComponent implements OnInit {
 
 
   deleteItem(){
-    this.stockService.deleteStockItem(StockComponent.selectedStockID).subscribe(Response => {
-      this.globalStocksDT.ajax.reload(null, false);
-      Swal({
-        type: 'success',
-        title: 'Success',
-        text: 'Item Added Successfully',
-        showConfirmButton: false,
-        timer: 1000
-      });
-    }, error => {
-      Swal({
+
+    if(StockComponent.selectedRowData['isDamagedFlag']){
+      swal({
         type: 'error',
-        title: error.statusText,
-        text: error.message
+        title: 'you can not',
+        text: 'item has invoices'
       });
+      return;
+    }
+
+    swal({
+      title: "delete ?" ,
+      text: "?",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.value) {
+        this.stockService.deleteStockItem(StockComponent.selectedStockID).subscribe(Response => {
+          this.globalStocksDT.ajax.reload(null, false);
+          swal({
+            type: "success",
+            title: "success",
+            text: "ok",
+            showConfirmButton: false,
+            timer: 1000
+          });
+        }, error => {
+          swal({
+            type: 'error',
+            title: 'you can not',
+            text: 'item has invoices'
+          });
+        });
+      }
     });
+
+
+   
   }
 
   get name() {

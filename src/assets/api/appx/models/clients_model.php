@@ -26,4 +26,13 @@ class clients_model extends CI_Model
 
     }
 
+    public function getRepeatedCodeCount($prefix)
+    {
+        $this->db->count_all_results('person');
+        $this->db->like('per_code', $prefix, 'after');
+        $this->db->from('person');
+        return $this->db->count_all_results();
+
+    }
+
 }

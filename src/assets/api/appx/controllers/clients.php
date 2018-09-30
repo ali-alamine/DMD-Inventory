@@ -6,6 +6,7 @@ class clients extends REST_Controller
     {
         parent::__construct();
         $this->load->model('clients_model');
+        $this->load->helper('string');
     }
 
     public function client_post()
@@ -13,7 +14,9 @@ class clients extends REST_Controller
         $name = $this->post('name');
         $phone = $this->post('phone');
         $address = $this->post('address');
-        $result = $this->clients_model->add(array("per_name" => $name, "per_phone" => $phone, "per_address" => $address));
+        $code = $this->generateClientCode($name);
+
+        $result = $this->clients_model->add(array("per_name" => $name, "per_phone" => $phone, "per_address" => $address,"per_code" => $code));
 
         if ($result === 0) {
             $this->response("Client information could not be added. Try again.", 404);
@@ -36,6 +39,20 @@ class clients extends REST_Controller
         } else {
             $this->response("success", 200);
         }
+    }
+
+
+    public function generateClientCode($clientName){
+        $clientName=strtoupper($clientName);
+        // $clientName=$this->stripAccents($clientName);       
+        $prefix = substr($clientName,0,3);
+        $suffix='0001';
+        $repeatedCount = $this->clients_model->getRepeatedCodeCount($prefix);    
+        $code=$prefix.$suffix;
+        for($i=0;$i<$repeatedCount;$i++){
+            $code=increment_string($code,'');
+        }         
+        return $code;
     }
     
 

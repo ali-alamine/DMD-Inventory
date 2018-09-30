@@ -65,23 +65,26 @@ class stock_model extends CI_Model
         }
     }
 
-    public function checkItemInInvoices($itemID)
-    {
-        return $this->db->where(['ord_itemID' => $itemID])->from("order_inv")->count_all_results();
-    }
-
     public function deleteItem($id)
     {
-        if ($this->checkItemInInvoices($id) == 0) {
-
+        $flag = $this->checkItemInInvoices($id);
+        if ( $flag == 0) {
             $this->db->where('itemID', $id);
             $this->db->set('item_isActivated',0, false);
             $this->db->update('item');
             return true;
-
         } else {
             return false;
         }
+    }
+
+    public function checkItemInInvoices($itemID)
+    {
+        $this->db->select('*');
+        $this->db->from('order_inv');       
+        $this->db->where('ord_itemID', $itemID);
+        $query = $this->db->get();
+        return $query->num_rows();       
 
     }
 

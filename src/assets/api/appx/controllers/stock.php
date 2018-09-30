@@ -39,8 +39,7 @@ class stock extends REST_Controller
 
     public function generateItemCode($itemName){
         $itemName=strtoupper($itemName);
-        // $itemName=$this->stripAccents($itemName);
-       
+        // $itemName=$this->stripAccents($itemName);       
         $prefix = substr($itemName,0,3);
         $suffix='0001';
         $repeatedCount = $this->stock_model->getRepeatedCodeCount($prefix);    
@@ -76,10 +75,9 @@ class stock extends REST_Controller
 
     public function deleteStockItem_get()
     {
-        $itemID = $this->get('ID');        
-
+        $itemID = $this->get('ID');
         $result = $this->stock_model->deleteItem($itemID);
-        if ($result === 0) {
+        if ($result === false) {
             $this->response("you can not", 404);
         } else {
             $this->response("success", 200);
