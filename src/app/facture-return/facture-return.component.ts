@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { item } from '../facture-supply/facture-supply.component';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -13,22 +13,30 @@ declare var $: any;
   styleUrls: ['./facture-return.component.css']
 })
 export class FactureReturnComponent implements OnInit {
+  @ViewChild('f') myNgForm;
   modalReference: any;
-  supplyForm: FormGroup;
+  invoiceForm: FormGroup;
   options;
   items: any;
+  // order: any;
   newItemForm: FormGroup;
   rechargeCardForm: FormGroup;
-  static selectedItems: item[] = new Array();
+  static selectedItems: fcItem[] = new Array();
   static globalMultiSelectDT;
+  private orderNoConfirm;
+  dataComfirm={};
+  // private clientName;
+
+
   constructor(private fb: FormBuilder,
     private factureReturnService: FactureReturnService,
     private modalService: NgbModal,
     private stockService: StockService) { }
 
     ngOnInit() {
-      this.supplyForm = this.fb.group({
-        supplyDate: ['', Validators.required],
+      this.getOrderNoConfirm();
+      this.invoiceForm = this.fb.group({
+        invoiceDate: ['', Validators.required],
         clientName: ['', Validators.required],
         searchClient: '',
         clientID: '',
@@ -37,10 +45,18 @@ export class FactureReturnComponent implements OnInit {
       });
       this.onClientNameChange();
     }
-  
+    getOrderNoConfirm(){
+      this.factureReturnService.getOrderNoConfirm().subscribe(Response => {
+        this.orderNoConfirm = Response;
+
+        // console.log(this.orderNoConfirm)
+      },error => {
+        console.log(error)
+      });
+    }
     onClientNameChange(): void {
-      this.supplyForm.get('searchClient').valueChanges.subscribe(val => {
-        var data = this.supplyForm.get('searchClient').value;
+      this.invoiceForm.get('searchClient').valueChanges.subscribe(val => {
+        var data = this.invoiceForm.get('searchClient').value;
         if (data == "") {
           this.options = [];
           return;
@@ -55,6 +71,8 @@ export class FactureReturnComponent implements OnInit {
       const item = this.fb.group({
         itemID: [element['id'], Validators.required],
         itemName: [element['name']],
+        isDamaged:[element['gate']],
+        colisage:[element['colisage']],
         crt: [0],
         piece: [0],
         date_req: ['', Validators.required],
@@ -65,26 +83,26 @@ export class FactureReturnComponent implements OnInit {
     }
   
   
-    deleteItem(i, id) {
+    deleteItem(i, id,itemIsDamaged) {
       this.itemsForm.removeAt(i);
-      var index = FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id', id.value);
+      var index = FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id','gate', id.value , itemIsDamaged.value);
       FactureReturnComponent.selectedItems.splice(index, 1);
     }
   
     test(id, name) {
-      this.supplyForm.get('searchClient').setValue('');
-      this.supplyForm.get('clientName').setValue(name);
-      this.supplyForm.get('clientID').setValue(id);
+      this.invoiceForm.get('searchClient').setValue('');
+      this.invoiceForm.get('clientName').setValue(name);
+      this.invoiceForm.get('clientID').setValue(id);
     }
   
   
   
     addSupplyInvoice() {
-      this.factureReturnService.addSupply(this.supplyForm.value).subscribe(Response => {
+      this.factureReturnService.newReturnInvoice(this.invoiceForm.value).subscribe(Response => {
         swal({
           type: 'success',
           title: 'Success',
-          text: 'Supply Successfully',
+          text: 'Invoice Added Successfully',
           showConfirmButton: false,
           timer: 1000
         });
@@ -95,10 +113,61 @@ export class FactureReturnComponent implements OnInit {
           text: error.message
         });
       });
-      console.log(this.supplyForm.value);
-      this.supplyForm.reset();
+      // console.log(this.invoiceForm.value);
+      while (this.itemsForm.length !== 0) {
+        this.itemsForm.removeAt(0)
+      }
+      FactureReturnComponent.selectedItems=[];
+      this.invoiceForm.reset();
+      this.myNgForm.resetForm();
+      this.getOrderNoConfirm(); 
     }
-  
+    confirmOrder(ordID,invID,crt,piece,itemID,isDamaged,packingList){
+      // console.log(ordID)
+      this.dataComfirm['ordID']= ordID;
+      this.dataComfirm['invID']=invID;
+      this.dataComfirm['crt']=crt;
+      this.dataComfirm['piece']=piece;
+      this.dataComfirm['itemID']=itemID;
+      this.dataComfirm['isDamaged']=isDamaged;
+      this.dataComfirm['packingList']=packingList;
+      // console.log(this.dataComfirm)
+      this.factureReturnService.confirmOrder(this.dataComfirm).subscribe(Response => {
+        swal({
+          type: 'success',
+          title: 'Success',
+          text: 'Invoice Added Successfully',
+          showConfirmButton: false,
+          timer: 1000
+        });
+      }, error => {
+        swal({
+          type: 'error',
+          title: error.statusText,
+          text: error.message
+        });
+      });
+      this.getOrderNoConfirm();
+    }
+    rejectOrder(ordID){
+      // console.log(ordID)
+      this.factureReturnService.rejectOrder(ordID).subscribe(Response => {
+        swal({
+          type: 'success',
+          title: 'Success',
+          text: 'Invoice Added Successfully',
+          showConfirmButton: false,
+          timer: 1000
+        });
+      }, error => {
+        swal({
+          type: 'error',
+          title: error.statusText,
+          text: error.message
+        });
+      });
+      this.getOrderNoConfirm();
+    }
     addItemsToFacture() {
       FactureReturnComponent.globalMultiSelectDT.destroy();
       this.modalReference.close();
@@ -118,41 +187,41 @@ export class FactureReturnComponent implements OnInit {
   
       var multiSelectDT = $('#stockDT').DataTable({
         responsive: false,
-      paging: true,
-      pagingType: "numbers",
-      serverSide: true,
-      processing: true,
-      deferRender: true,
-      ordering: true,
-      stateSave: false,
-      fixedHeader: true,
-      select: true,
-      searching: true,
-      lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
-      ajax: {
-        type: "get",
-        url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/multiselectDT-NoGate.php",
-        data: {},
-        cache: true,
-        async: true
-      },
-      order: [[0, 'asc']],
-      columns: [
-        { data: "ID", title: "ID" },
-        { data: "item_name", title: "Article" },
-        { data: "item_code", title: "Code" },
-        { data: "item_crt", title: "CRT" },
-        { data: "item_piece", title: "Piece" },
-        { data: "item_packing_list", title: "Colisage" }
-
-      ],
-      rowId: 'ID',
-      "createdRow": function (row, data, index) {
-        if (FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id', data['ID']) > -1) {
-          multiSelectDT.row(row).select();
+        paging: true,
+        pagingType: "numbers",
+        serverSide: true,
+        processing: true,
+        deferRender: true,
+        ordering: true,
+        stateSave: false,
+        fixedHeader: false,
+        select: true,
+        searching: true,
+        lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+        ajax: {
+          type: "get",
+          url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/multiselectDT-Gate.php",
+          data: {},
+          cache: true,
+          async: true
+        },
+        order: [[0, 'asc']],
+        columns: [
+          { data: "ID", title: "ID" },
+          { data: "item_name", title: "Article" },
+          { data: "item_code", title: "Code" },
+          { data: "item_crt", title: "CRT" },
+          { data: "item_piece", title: "Piece" },
+          { data: "item_packing_list", title: "Colisage" }
+  
+        ],
+        rowId: 'ID',
+        "createdRow": function (row, data, index) {
+          if (FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id','gate', data['ID'],data['item_is_damaged']) > -1) {
+            multiSelectDT.row(row).select();
+          }
         }
-      }
-    });
+      });
   
   
       multiSelectDT.on('select', function (e, dt, type, indexes) {
@@ -160,10 +229,11 @@ export class FactureReturnComponent implements OnInit {
         rows.forEach(element => {
           var ID = multiSelectDT.row(element).data()['ID'];
           var name = multiSelectDT.row(element).data()['item_name'];
+          var gate = multiSelectDT.row(element).data()['item_is_damaged'];
+          var colisage = multiSelectDT.row(element).data()['item_packing_list'];
   
-          if (FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id', ID) == -1)
-            // FactureReturnComponent.selectedItems.push({ id: ID, name: name });
-            alert('')
+          if (FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id','gate', ID,gate) == -1)
+          FactureReturnComponent.selectedItems.push({ id: ID, name: name ,gate:gate , colisage:colisage});
         });
       });
   
@@ -173,35 +243,29 @@ export class FactureReturnComponent implements OnInit {
         rows.forEach(element => {
           var ID = multiSelectDT.row(element).data()['ID'];
           var name = multiSelectDT.row(element).data()['item_name'];
-          // FactureReturnComponent.selectedItems.push({ id: ID, name: name });
+          var gate = multiSelectDT.row(element).data()['item_is_damaged'];
+          var colisage = multiSelectDT.row(element).data()['item_packing_list'];
+          FactureReturnComponent.selectedItems.push({ id: ID, name: name ,gate:gate,colisage:colisage});
         });
       });
   
-  
-  
-      $('#subsMonths').on('key-focus.dt', function (e, datatable, cell) {
-        $(multiSelectDT.row(cell.index().row).node()).addClass('selected');
-  
-  
-      });
-      $('#subsMonths').on('key-blur.dt', function (e, datatable, cell) {
-        $(multiSelectDT.row(cell.index().row).node()).removeClass('selected');
-      });
   
       FactureReturnComponent.globalMultiSelectDT = multiSelectDT;
     }
   
     get itemsForm() {
-      return this.supplyForm.get('items') as FormArray;
+      return this.invoiceForm.get('items') as FormArray;
     }
   
     get itemID() {
-      return this.supplyForm.get('itemID');
+      return this.invoiceForm.get('itemID');
     }
-  
-    static findWithAttr(array, attr, value) {
+    get itemIsDamaged() {
+      return this.invoiceForm.get('isDamaged');
+    }
+    static findWithAttr(array, attr, attr2, value , value2) {
       for (var i = 0; i < array.length; i += 1) {
-        if (array[i][attr] === value) {
+        if (array[i][attr] === value && array[i][attr2] === value2) {
           return i;
         }
       }
@@ -210,7 +274,9 @@ export class FactureReturnComponent implements OnInit {
   
   }
   
-  export interface item {
+  export interface fcItem {
     id: number;
     name: string;
+    gate: boolean;
+    colisage :number;
   }
