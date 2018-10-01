@@ -33,10 +33,11 @@ class facture_model extends CI_Model
         }
     }
 
-    public function updateStock($id, $quantity) // update quantity of item 
+    public function updateStock($id, $quantity,$isDamaged) // update quantity of item 
 
     {
         $this->db->where('itemID', $id);
+        $this->db->where('item_is_damaged', $isDamaged);
         $this->db->set('item_piece', 'item_piece + ' . $quantity, false);
         if ($this->db->update('item')) {
             return true;

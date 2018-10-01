@@ -34,7 +34,7 @@ class facture extends REST_Controller
             $quantityToAdd = ($row['colisage'] * $row['crt']) + $row['piece'];
 
             $this->facture_model->addItemToInvoice($itemData);
-            $this->facture_model->updateStock($itemID,$quantityToAdd);
+            $this->facture_model->updateStock($itemID,$quantityToAdd,0);
         }
 
         if ($this->db->trans_status() === false) {
@@ -80,7 +80,7 @@ class facture extends REST_Controller
             $quantityToAdd = ($row['colisage'] * $row['crt']) + $row['piece'];
 
             $this->facture_model->addItemToInvoice($itemData);
-            $this->facture_model->updateStock($itemID,-$quantityToAdd);
+            $this->facture_model->updateStock($itemID,-$quantityToAdd,$isDamaged);
         }
 
         if ($this->db->trans_status() === false) {
