@@ -92,24 +92,6 @@ export class HistoryComponent implements OnInit {
           { data: "ord_note", title: "NOTE" ,"searchable": false,"sortable": false},
 
         ]
-        // ,
-        // "columnDefs": [
-        //   {
-        //     "targets": 2,
-        //     "data": "type",
-        //     "render": function (data, type, row, meta) {
-        //       if (data == null) {
-        //         return 'Payment';
-        //       }
-        //       else if (data == 'a') {
-        //         return 'Add';
-        //       }
-        //       else if(data == 'w') {
-        //         return 'Withdraw';
-        //       }
-        //     }
-        //   }
-        // ]
       });
       this.globalHistoryFactureDetailsDT = factureDetailDT;
       $('#factureDetailDT tbody').on('mousedown', 'tr', function (event) {
