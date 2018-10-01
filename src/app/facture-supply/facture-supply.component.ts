@@ -4,6 +4,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StockService } from '../stock/stock.service';
 import { SupplyService } from './facture-supply.service';
 import swal from 'sweetalert2';
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { Router } from '@angular/router';
 declare var $: any;
 
 @Component({
@@ -23,13 +25,35 @@ export class SupplyComponent implements OnInit {
   static selectedItems: item[] = new Array();
   static globalMultiSelectDT;
 
-  constructor(private fb: FormBuilder, private supplyService: SupplyService, private modalService: NgbModal) { }
+  constructor(private fb: FormBuilder, private supplyService: SupplyService,private router: Router, private modalService: NgbModal, private _hotkeysService: HotkeysService) { 
+    this._hotkeysService.add(new Hotkey('ctrl+`', (event: KeyboardEvent): boolean => {
+      let element: HTMLElement = document.getElementById('multiSelectBtn') as HTMLElement;
+      element.click();
+      return false;
+    }));
+    this._hotkeysService.add(new Hotkey('ctrl+z', (event: KeyboardEvent): boolean => {
+      this.router.navigate(["facture/supply"]);
+      return false;
+    }));
+    this._hotkeysService.add(new Hotkey('ctrl+a', (event: KeyboardEvent): boolean => {
+      this.router.navigate(["facture/client"]);
+      return false;
+    }));
+    this._hotkeysService.add(new Hotkey('ctrl+e', (event: KeyboardEvent): boolean => {
+      this.router.navigate(["facture/return"]);
+      return false;
+    }));
+  }
 
   ngOnInit() {
     this.supplyForm = this.fb.group({
       supplyDate: ['', Validators.required],
       items: this.fb.array([])
     });
+  }
+
+  ngOnDestroy() {
+    this._hotkeysService.reset();
   }
  
 

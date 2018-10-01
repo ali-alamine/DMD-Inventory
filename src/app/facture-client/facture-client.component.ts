@@ -5,6 +5,8 @@ import { StockService } from '../stock/stock.service';
 import { SupplyService } from '../facture-supply/facture-supply.service';
 import swal from 'sweetalert2';
 import { FactureClientService } from './facture-client.service';
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { Router } from '@angular/router';
 declare var $: any;
 @Component({
   selector: 'app-facture',
@@ -20,7 +22,24 @@ export class FactureClientComponent implements OnInit {
   items: any;
   static selectedItems: fcItem[] = new Array();
   static globalMultiSelectDT;
-  constructor(private fb: FormBuilder, private factureClientService: FactureClientService, private modalService: NgbModal ) {
+  constructor(private fb: FormBuilder, private factureClientService: FactureClientService,private router: Router, private modalService: NgbModal , private _hotkeysService: HotkeysService) {
+    this._hotkeysService.add(new Hotkey('ctrl+`', (event: KeyboardEvent): boolean => {
+      let element: HTMLElement = document.getElementById('multiSelectBtn') as HTMLElement;
+      element.click();
+      return false;
+    }));
+    this._hotkeysService.add(new Hotkey('ctrl+z', (event: KeyboardEvent): boolean => {
+      this.router.navigate(["facture/supply"]);
+      return false;
+    }));
+    this._hotkeysService.add(new Hotkey('ctrl+a', (event: KeyboardEvent): boolean => {
+      this.router.navigate(["facture/client"]);
+      return false;
+    }));
+    this._hotkeysService.add(new Hotkey('ctrl+e', (event: KeyboardEvent): boolean => {
+      this.router.navigate(["facture/return"]);
+      return false;
+    }));
   }
 
   ngOnInit() {
@@ -34,6 +53,11 @@ export class FactureClientComponent implements OnInit {
     });
     this.onClientNameChange();
   }
+  
+  ngOnDestroy() {
+    this._hotkeysService.reset();
+  }
+ 
 
   onClientNameChange(): void {
     this.invoiceForm.get('searchClient').valueChanges.subscribe(val => {

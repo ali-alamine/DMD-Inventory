@@ -35,7 +35,7 @@ import { HistoryItemsComponent } from './history-items/history-items.component';
 import { HistoryComponent } from './history/history.component';
 import { FactureClientComponent } from './facture-client/facture-client.component';
 import { FactureReturnComponent } from './facture-return/facture-return.component';
-
+import {HotkeyModule} from 'angular2-hotkeys';
 @NgModule({
   declarations: [
     AppComponent,
@@ -79,7 +79,8 @@ import { FactureReturnComponent } from './facture-return/facture-return.componen
     MatIconModule,
     NgxSpinnerModule,
     MatButtonToggleModule,
-    ChartModule
+    ChartModule,
+    HotkeyModule.forRoot()
   ],
   entryComponents: [],
   providers: [],
