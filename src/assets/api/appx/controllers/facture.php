@@ -78,6 +78,7 @@ class facture extends REST_Controller
 
             $itemID =  $row['itemID'];
             $quantityToAdd = ($row['colisage'] * $row['crt']) + $row['piece'];
+            $isDamaged =  $row['isDamaged'];
 
             $this->facture_model->addItemToInvoice($itemData);
             $this->facture_model->updateStock($itemID,-$quantityToAdd,$isDamaged);

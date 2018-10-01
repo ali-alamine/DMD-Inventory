@@ -1,0 +1,43 @@
+<div class="container-fluid">
+  <button mat-raised-button color="primary" (click)="backup()">
+    <i class="material-icons">backup</i> Backup
+  </button>
+  <button mat-raised-button color="primary" (click)="openRestoreModal(restoreModal)">
+    <i class="material-icons">restore</i> Restore
+  </button>
+</div>
+
+
+
+
+
+
+<ng-template #restoreModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Restore</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+      <p-fileUpload name="uploadedFile[]" customUpload="true" (uploadHandler)="myUpload($event)" accept=".sql"
+      maxFileSize="1000000" method="post" url="http://localhost/DMD-Inventory/src/assets/settings.php" >
+      <ng-template pTemplate="content">
+        <ul *ngIf="uploadedFile.length">
+          <li *ngFor="let file of uploadedFile">{{file.name}} - {{file.size}} bytes</li>
+        </ul>
+      </ng-template>
+      </p-fileUpload>
+
+   
+
+  </div>
+  
+</ng-template>
+
+
+
+
+
+

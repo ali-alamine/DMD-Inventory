@@ -22,10 +22,10 @@ export class FactureReturnService {
     return this.httpClient.post(this.url+"newReturnInvoice", invoiceData);
   }
   confirmOrder(data): Observable<any>{
-    console.log(data)
-    return this.httpClient.get(this.url+"confirmOrder", data);
+    return this.httpClient.post(this.url+"confirmOrder",data);
+
   }
   rejectOrder(ordID): Observable<any>{
-    return this.httpClient.post(this.url+"rejectOrder", ordID);
+    return this.httpClient.get(this.url+"rejectOrder",  {params:{ordID:ordID}});
   }
 }

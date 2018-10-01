@@ -36,6 +36,8 @@ import { HistoryComponent } from './history/history.component';
 import { FactureClientComponent } from './facture-client/facture-client.component';
 import { FactureReturnComponent } from './facture-return/facture-return.component';
 import {HotkeyModule} from 'angular2-hotkeys';
+import { SettingsComponent } from './settings/settings.component';
+import { FileUploadModule } from 'primeng/components/fileupload/fileupload';
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,7 +53,8 @@ import {HotkeyModule} from 'angular2-hotkeys';
     HistoryFactureComponent,
     HistoryItemsComponent,
     FactureClientComponent,
-    FactureReturnComponent
+    FactureReturnComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -80,7 +83,8 @@ import {HotkeyModule} from 'angular2-hotkeys';
     NgxSpinnerModule,
     MatButtonToggleModule,
     ChartModule,
-    HotkeyModule.forRoot()
+    HotkeyModule.forRoot(),
+    FileUploadModule
   ],
   entryComponents: [],
   providers: [],

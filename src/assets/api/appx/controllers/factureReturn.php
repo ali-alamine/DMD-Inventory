@@ -86,15 +86,15 @@ class factureReturn extends REST_Controller
             exit;
         }
     }
-    public function confirmOrder_get()
-    {
-        $ordID = $this->get('ordID');
-        $invID = $this->get('invID');
-        $crt = $this->get('crt');
-        $piece = $this->get('piece');
-        $itemID = $this->get('itemID');
-        $isDamaged = $this->get('isDamaged');
-        $packingList = $this->get('packingList');
+    public function confirmOrder_post()
+    {        
+        $ordID = $this->post('ordID');
+        $invID = $this->post('invID');
+        $crt = $this->post('crt');
+        $piece = $this->post('piece');
+        $itemID = $this->post('itemID');
+        $isDamaged = $this->post('isDamaged');
+        $packingList = $this->post('packingList');
         $this->db->trans_begin();
 
         $this->factureReturn_model->updateOrder($ordID,1);
@@ -114,9 +114,9 @@ class factureReturn extends REST_Controller
             $this->response("success", 200);
         }
     }
-    public function rejectOrder_post()
+    public function rejectOrder_get()
     {
-        $ordID = $this->post('ordID');
+        $ordID = $this->get('ordID');
         $this->db->trans_begin();
 
         $this->factureReturn_model->updateOrder($ordID,-1);

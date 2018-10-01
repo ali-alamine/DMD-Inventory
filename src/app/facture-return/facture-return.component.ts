@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StockService } from '../stock/stock.service';
 import swal from 'sweetalert2';
 import { FactureReturnService } from './facture-return.service';
+import { Router } from '@angular/router';
 declare var $: any;
 
 @Component({
@@ -23,17 +24,19 @@ export class FactureReturnComponent implements OnInit {
   rechargeCardForm: FormGroup;
   static selectedItems: fcItem[] = new Array();
   static globalMultiSelectDT;
-  private orderNoConfirm;
+  orderNoConfirm;
   dataComfirm={};
   // private clientName;
 
 
-  constructor(private fb: FormBuilder,
+  constructor(private router: Router,private fb: FormBuilder,
     private factureReturnService: FactureReturnService,
     private modalService: NgbModal,
     private stockService: StockService) { }
 
     ngOnInit() {
+      this.router.navigate(["facture/client"]);
+
       this.getOrderNoConfirm();
       this.invoiceForm = this.fb.group({
         invoiceDate: ['', Validators.required],
@@ -122,6 +125,8 @@ export class FactureReturnComponent implements OnInit {
       this.myNgForm.resetForm();
       this.getOrderNoConfirm(); 
     }
+
+
     confirmOrder(ordID,invID,crt,piece,itemID,isDamaged,packingList){
       // console.log(ordID)
       this.dataComfirm['ordID']= ordID;
@@ -149,8 +154,8 @@ export class FactureReturnComponent implements OnInit {
       });
       this.getOrderNoConfirm();
     }
+
     rejectOrder(ordID){
-      // console.log(ordID)
       this.factureReturnService.rejectOrder(ordID).subscribe(Response => {
         swal({
           type: 'success',
@@ -168,6 +173,7 @@ export class FactureReturnComponent implements OnInit {
       });
       this.getOrderNoConfirm();
     }
+    
     addItemsToFacture() {
       FactureReturnComponent.globalMultiSelectDT.destroy();
       this.modalReference.close();

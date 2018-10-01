@@ -12,6 +12,7 @@ import { HistoryItemsComponent } from './history-items/history-items.component';
 import { HistoryFactureComponent } from './history-facture/history-facture.component';
 import { FactureClientComponent } from './facture-client/facture-client.component';
 import { FactureReturnComponent } from './facture-return/facture-return.component';
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,9 @@ const routes: Routes = [
   },
   {
     path:"stock",component:StockComponent
+  },
+  {
+    path:"settings",component:SettingsComponent
   },
   {
     path:"clients",component:ClientsComponent
