@@ -9,9 +9,9 @@
 .inputForm{
     width: 70%;
 }
-/* #detailFactureDT{
+#detailFactureDT{
     text-align: center;
-} */
+}
 mat-button-toggle {
     margin-left: 3px;
     margin-right:3px;

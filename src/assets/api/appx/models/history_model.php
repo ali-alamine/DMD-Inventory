@@ -7,8 +7,8 @@ class history_model extends CI_Model
     }
     public function getFactureDetails($ID)
     {
-        $query = $this->db->query("SELECT * FROM order_inv INNER JOIN item ON itemID = ord_itemID
-         where ord_invID = '".$ID."' and ord_isDeleted = '0' ");
+        $query = $this->db->query("SELECT * FROM order_inv  INNER JOIN item ON itemID = ord_itemID
+         where ord_invID = '".$ID."' and ord_isDeleted = '0' and inv_status = 0 ");
         if ($query->num_rows() > 0) {
             return $query->result_array();
         } else {
