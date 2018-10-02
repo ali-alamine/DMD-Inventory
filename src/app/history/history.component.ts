@@ -63,10 +63,10 @@ export class HistoryComponent implements OnInit {
 
   }
   showFactureDetails(facture) {
-    console.log(facture[0].ID)
-    this.historyService.getFactureDetails(facture[0].ID).subscribe(Response => {
+    // console.log(facture[0].ID)
+    this.historyService.getFactureDetails(facture[0].ID,facture[0].type).subscribe(Response => {
       this.factureDetails = Response;
-      console.log(this.factureDetails);
+      // console.log(this.factureDetails);
       var factureDetailDT = $('#detailFactureDT').DataTable({
         responsive: true,
         paging: false,
@@ -90,8 +90,40 @@ export class HistoryComponent implements OnInit {
           { data: "ord_crt", title: "CRT" ,"searchable": false,"sortable": false},
           { data: "ord_piece", title: "PIECE","searchable": false,"sortable": false },
           { data: "ord_note", title: "NOTE" ,"searchable": false,"sortable": false},
-
-        ]
+          // { data: "ord_date_req", title: "DATE DE COMMANDE" ,"searchable": false,"sortable": false},
+          // { data: "ord_date_del", title: "DATE DE LIVRAISON" ,"searchable": false,"sortable": false},
+        ],"columnDefs": [ {
+          "targets": 0,
+          "render": function (td, data, rowData, row, col) {
+            if (rowData['ord_item_isDamaged'] == 1) {    
+                  return  rowData['item_name'] + " | GATE" ;
+            } else{
+              return rowData['item_name'];
+            }
+        } 
+        }]
+        // createdRow: function (row, data, index) {
+        //   if (data['ord_item_isDamaged'] == 1) {    
+        //     return         
+        //     $(row).addClass("bg-warning");
+        //     $(row).attr('title', " CRT: " + data['crtD'] + " || Piece: " + data['pieceD']);    
+        //   }
+        // }
+        // ,"columnDefs": [ {
+        //   "targets": 1,
+        //   "createdCell": function (td, cellData, rowData, row, col) {
+            
+        //     if ( rowData['isDamagedFlag']) {              
+        //       $(td).html(cellData+" <i style='float:right; color: #FF0000;' md-18 class='material-icons'>new_releases</i> ")
+        //     }
+        //   }
+        // } ],
+        // createdRow: function (row, data, index) {
+        //   if (data['isDamagedFlag'] == 1) {            
+        //     $(row).addClass("bg-warning");
+        //     $(row).attr('title', " CRT: " + data['crtD'] + " || Piece: " + data['pieceD']);    
+        //   }
+        // }
       });
       this.globalHistoryFactureDetailsDT = factureDetailDT;
       $('#factureDetailDT tbody').on('mousedown', 'tr', function (event) {

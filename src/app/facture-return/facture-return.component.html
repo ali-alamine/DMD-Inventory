@@ -34,34 +34,8 @@
         </div>
       </div>
       <hr>
-      <!-- <div formArrayName="order"> -->
-          <!-- <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-            <mat-form-field fxFlex class="itemName" style="text-align: center;">
-                <mat-select matInput placeholder="client Name" >
-                    <mat-option (onSelectionChange)="testa(option.perID,option.per_name)" *ngFor="let clientName of clientName"
-                    [value]="order.per_name">
-                     {{order.per_name}}
-                   </mat-option>
-                </mat-select>
-            </mat-form-field>
-            </div> -->
         <div *ngFor="let order of orderNoConfirm" >
           <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-              <!-- <mat-autocomplete #auto="matAutocomplete">
-                  <mat-option (onSelectionChange)="testa(option.perID,option.per_name)" *ngFor="let order of orderNoConfirm"
-                   [value]="order.per_name">
-                    {{order.per_name}}
-                  </mat-option>
-                </mat-autocomplete> -->
-            <!-- <mat-form-field fxFlex hidden>
-              <input matInput placeholder="Item ID" [value]="order.ord_itemID" #itemID type="number" [readonly]="true"> 
-            </mat-form-field> -->
-            <!-- <mat-form-field fxFlex hidden>
-              <input matInput placeholder="isDamaged" [value]="order.ord_item_isDamaged" #isDamaged type="number" [readonly]="true">
-            </mat-form-field> -->
-            <!-- <mat-form-field fxFlex hidden>
-              <input matInput placeholder="colisage" formControlName="colisage" type="number" [readonly]="true">
-            </mat-form-field> -->
             <mat-form-field fxFlex class="itemName" style="text-align: center;">
               <input matInput placeholder="Name" [value]="order.item_name" type="text" name="nameInput" tabIndex="-1"
                 [readonly]="true">
@@ -73,7 +47,7 @@
             <mat-form-field fxFlex class="itemInputs">
               <input matInput placeholder="Piece" [value]="order.ord_piece" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true" [readonly]="true">
             </mat-form-field>
-            <mat-form-field class="inputField">
+            <!-- <mat-form-field class="inputField">
               <input matInput [matDatepicker]="expDateStart" [value]="order.ord_date_req" placeholder="Date de Commande" [readonly]="true">
               <mat-datepicker-toggle matSuffix [for]="expDateStart" tabIndex="-1"></mat-datepicker-toggle>
               <mat-datepicker touchUi #expDateStart></mat-datepicker>
@@ -84,7 +58,7 @@
               <mat-datepicker-toggle matSuffix [for]="expDateStart2" tabIndex="-1"></mat-datepicker-toggle>
               <mat-datepicker touchUi #expDateStart2></mat-datepicker>
               <mat-error> Date is required</mat-error>
-            </mat-form-field>
+            </mat-form-field> -->
             <!-- <mat-form-field class="inputField"> -->
                 <button mat-raised-button matTooltip=""  (click)="confirmOrder(order.ordID,order.ord_invID,order.ord_crt,order.ord_piece,order.ord_itemID,order.ord_item_isDamaged,order.item_packing_list)" value="Confirmer" color="primary">Confirmer</button>
             <!-- </mat-form-field> -->
@@ -98,6 +72,46 @@
         </div>
       <!-- </div> -->
       <!-- <hr> -->
+      <div formArrayName="itemsEdit">
+        <div *ngFor="let item of itemsEditForm.controls; let i=index" [formGroupName]="i">
+          <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex hidden>
+              <input matInput placeholder="Item ID" formControlName="itemID" #itemID type="number">
+            </mat-form-field>
+            <mat-form-field fxFlex hidden>
+              <input matInput placeholder="isDamaged" formControlName="isDamaged" #isDamaged type="number">
+            </mat-form-field>
+            <mat-form-field fxFlex hidden>
+              <input matInput placeholder="colisage" formControlName="colisage" type="number">
+            </mat-form-field>
+            <mat-form-field fxFlex class="itemName" style="text-align: center;">
+              <input matInput placeholder="Name" formControlName="itemName" type="text" name="nameInput" tabIndex="-1"
+                [readonly]="true">
+            </mat-form-field>
+            <mat-form-field fxFlex class="itemInputs">
+              <input matInput placeholder="CRT" formControlName="crt" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
+            </mat-form-field>
+            <mat-form-field fxFlex class="itemInputs">
+              <input matInput placeholder="Piece" formControlName="piece" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
+            </mat-form-field>
+            <!-- <mat-form-field class="inputField">
+              <input matInput [matDatepicker]="expDateStart" formControlName="date_req" placeholder="Date de Commande">
+              <mat-datepicker-toggle matSuffix [for]="expDateStart" tabIndex="-1"></mat-datepicker-toggle>
+              <mat-datepicker touchUi #expDateStart></mat-datepicker>
+              <mat-error> Date is required</mat-error>
+            </mat-form-field>
+            <mat-form-field class="inputField">
+              <input matInput [matDatepicker]="expDateStart2" formControlName="date_com" placeholder="Date de Livraison">
+              <mat-datepicker-toggle matSuffix [for]="expDateStart2" tabIndex="-1"></mat-datepicker-toggle>
+              <mat-datepicker touchUi #expDateStart2></mat-datepicker>
+              <mat-error> Date is required</mat-error>
+            </mat-form-field> -->
+            <button mat-icon-button (click)="deleteItemEdit(i,itemID,isDamaged)" color="warn" tabindex="-1">
+              <mat-icon aria-label="Delete Item" title="Delete Item">close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
       <div formArrayName="items">
         <div *ngFor="let item of itemsForm.controls; let i=index" [formGroupName]="i">
           <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
@@ -120,7 +134,7 @@
             <mat-form-field fxFlex class="itemInputs">
               <input matInput placeholder="Piece" formControlName="piece" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
             </mat-form-field>
-            <mat-form-field class="inputField">
+            <!-- <mat-form-field class="inputField">
               <input matInput [matDatepicker]="expDateStart" formControlName="date_req" placeholder="Date de Commande">
               <mat-datepicker-toggle matSuffix [for]="expDateStart" tabIndex="-1"></mat-datepicker-toggle>
               <mat-datepicker touchUi #expDateStart></mat-datepicker>
@@ -131,7 +145,7 @@
               <mat-datepicker-toggle matSuffix [for]="expDateStart2" tabIndex="-1"></mat-datepicker-toggle>
               <mat-datepicker touchUi #expDateStart2></mat-datepicker>
               <mat-error> Date is required</mat-error>
-            </mat-form-field>
+            </mat-form-field> -->
             <!-- <mat-form-field class="inputField">
                 <button mat-raised-button matTooltip=""  (click)="confirmerItem()" value="Confirmer" color="primary">Confirmer</button>
             </mat-form-field>
@@ -145,7 +159,8 @@
         </div>
       </div>
   
-      <button mat-raised-button name="addButton" class="addBtns" color="primary" (click)="addSupplyInvoice()" [disabled]="!invoiceForm.valid || itemsForm.length == 0">Submit</button>
+      <button mat-raised-button id="submit" class="addBtns" color="primary" (click)="addEditReturnInvoice()" [disabled]="!invoiceForm.valid || itemsForm.length == 0 " >Soumettre</button>
+      <button mat-raised-button id="update" class="addBtns" color="primary" (click)="addEditReturnInvoice()" [disabled]="!invoiceForm.valid || itemsEditForm.length == 0 " >Mis à Jour</button>
     </form>
   </div>
   

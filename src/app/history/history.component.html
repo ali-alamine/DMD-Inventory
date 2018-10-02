@@ -1,15 +1,18 @@
 <div class="container-fluid">
   <mat-button-toggle-group #group="matButtonToggleGroup" style="width:100%" value="mobileDrawer" class="center">
     <mat-button-toggle  routerLink="facture" value="historyFacture" class="historyBtns" mat-raised-button color="primary">
-      <i class="material-icons">network_cell</i>
+      <i class="material-icons">description</i>
       FACTURE
     </mat-button-toggle>
 
     <mat-button-toggle routerLink="items" value="historyItems" class="historyBtns" mat-raised-button color="primary">
-      <i class="material-icons">apps</i>
+      <i class="material-icons">format_list_bulleted</i>
       ARTICLE
     </mat-button-toggle>
-
+    <mat-button-toggle routerLink="items" value="historyItems" class="historyBtns" mat-raised-button color="primary">
+    <i class="material-icons">get_app</i>
+    <span matBadge="2" matBadgeOverlap="false">RETOUR</span>
+  </mat-button-toggle>
    </mat-button-toggle-group>
 
   <router-outlet></router-outlet>

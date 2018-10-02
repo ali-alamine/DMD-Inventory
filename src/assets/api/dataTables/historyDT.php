@@ -25,7 +25,7 @@ if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     if($show=="facture")
         $getAllFactureQuery = "select * from invoice INNER JOIN person on perID= inv_perID  where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_status = '0' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     if($show=="items")
-        $getAllFactureQuery = "select * from order_inv  INNER JOIN invoice on invID = ord_invID INNER JOIN person on perID = inv_perID  INNER JOIN item on itemID = ord_itemID 
+        $getAllFactureQuery = "select * from order_inv  INNER JOIN invoice on invID = ord_invID INNER JOIN person on perID = inv_perID  INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged
          where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' OR inv_type like '%" . $search . "%' OR item_name like '%" . $search . "%') and ord_isDeleted = '0' and inv_status = '0'
           " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
@@ -33,7 +33,7 @@ if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     if($show=="facture")
         $getAllFactureQuery = "select * from invoice INNER JOIN person on perID= inv_perID where  inv_status = '0'  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     if($show=="items")
-        $getAllFactureQuery = "select * from order_inv INNER JOIN invoice on invID = ord_invID  INNER JOIN person on perID= inv_perID  INNER JOIN item on itemID = ord_itemID  where ord_isDeleted = '0' and inv_status = '0'
+        $getAllFactureQuery = "select * from order_inv INNER JOIN invoice on invID = ord_invID  INNER JOIN person on perID= inv_perID  INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged  where ord_isDeleted = '0' and inv_status = '0'
          " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
 }

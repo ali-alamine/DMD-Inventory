@@ -38,6 +38,7 @@ import { FactureReturnComponent } from './facture-return/facture-return.componen
 import {HotkeyModule} from 'angular2-hotkeys';
 import { SettingsComponent } from './settings/settings.component';
 import { FileUploadModule } from 'primeng/components/fileupload/fileupload';
+import {MatBadgeModule} from '@angular/material/badge';
 @NgModule({
   declarations: [
     AppComponent,
@@ -84,7 +85,8 @@ import { FileUploadModule } from 'primeng/components/fileupload/fileupload';
     MatButtonToggleModule,
     ChartModule,
     HotkeyModule.forRoot(),
-    FileUploadModule
+    FileUploadModule,
+    MatBadgeModule
   ],
   entryComponents: [],
   providers: [],

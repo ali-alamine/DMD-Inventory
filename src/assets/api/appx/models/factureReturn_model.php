@@ -6,23 +6,6 @@ class factureReturn_model extends CI_Model
         $this->load->database();
     }
 
-    public function addSupplyInvoice($data)
-    {
-        if ($this->db->insert('invoice', $data)) {
-            return $this->db->insert_id();
-        } else {
-            return false;
-        }
-    }
-
-    public function addClientInvoice($data)
-    {
-        if ($this->db->insert('invoice', $data)) {
-            return $this->db->insert_id();
-        } else {
-            return false;
-        }
-    }
     public function addReturnInvoice($data)
     {
         if ($this->db->insert('invoice', $data)) {
@@ -52,22 +35,6 @@ class factureReturn_model extends CI_Model
             return true;
         } else {
             return false;
-        }
-    }
-
-    public function searchForClient($name)
-    {
-        $this->db->select('*');
-        $this->db->from('person');
-        $this->db->like('per_name', $name, 'after');
-        $this->db->where('per_isClient', 1);
-        $this->db->where('per_isActivated', 1);
-        $this->db->limit(20);
-        $query = $this->db->get();
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
-        } else {
-            return 0;
         }
     }
 
@@ -125,6 +92,49 @@ class factureReturn_model extends CI_Model
         $this->db->where('invID', $invID);
         $this->db->set('inv_status',$status);
         if ($this->db->update('invoice')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function getFactureDetails($invID){
+        // if($type=='FR'){
+            $query = $this->db->query("SELECT *,date(inv_date_req) as inv_date_req FROM order_inv  INNER JOIN invoice on invID = ord_invID 
+            INNER JOIN item ON itemID = ord_itemID INNER JOIN return_details on date_ordID = ordID 
+            INNER JOIN person on perID = ord_perID
+            where ord_invID = '".$invID."' and ord_isDeleted = '0' and ord_status = '1' ");
+        // } else{
+        //     $query = $this->db->query("SELECT * FROM order_inv  
+        //     INNER JOIN item ON itemID = ord_itemID
+        //     where ord_invID = '".$ID."' and ord_isDeleted = '0'");
+        // }
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return 0;
+        }
+    }
+    public function editReturnInvoice($invID,$data){
+        $this->db->where('invID', $invID);
+        if ($this->db->update('invoice',$data)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function editItemToInvoice($ordID,$data)
+    {
+        $this->db->where('ordID', $ordID);
+        if ($this->db->update('order_inv',$data)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function editDateReturn($ordID,$data)
+    {
+        $this->db->where('date_ordID', $ordID);
+        if ($this->db->update('return_details',$data)) {
             return true;
         } else {
             return false;

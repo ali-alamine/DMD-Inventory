@@ -6,6 +6,8 @@ import { StockService } from '../stock/stock.service';
 import swal from 'sweetalert2';
 import { FactureReturnService } from './facture-return.service';
 import { Router } from '@angular/router';
+import { FactureComponent } from '../facture/facture.component';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
 declare var $: any;
 
 @Component({
@@ -18,6 +20,7 @@ export class FactureReturnComponent implements OnInit {
   modalReference: any;
   invoiceForm: FormGroup;
   options;
+  itemsEdit: any;
   items: any;
   // order: any;
   newItemForm: FormGroup;
@@ -26,32 +29,67 @@ export class FactureReturnComponent implements OnInit {
   static globalMultiSelectDT;
   orderNoConfirm;
   dataComfirm={};
-  // private clientName;
-
+  addEditBtn;
+  factureDetails;
 
   constructor(private router: Router,private fb: FormBuilder,
     private factureReturnService: FactureReturnService,
     private modalService: NgbModal,
-    private stockService: StockService) { }
+    private stockService: StockService,
+    private factureComponent: FactureComponent) { }
 
     ngOnInit() {
-      this.router.navigate(["facture/client"]);
-
-      this.getOrderNoConfirm();
+      // this.router.navigate(["facture/client"]);
+      if(this.factureComponent.factureID != -1){
+        document.getElementById('submit').style.display = "none";
+        this.getFactureDetails(this.factureComponent.factureID);
+      } else{
+        document.getElementById('update').style.display = "none";
+        this.getOrderNoConfirm();
+      }
       this.invoiceForm = this.fb.group({
+        invID : '-1',
         invoiceDate: ['', Validators.required],
         clientName: ['', Validators.required],
         searchClient: '',
         clientID: '',
-        code: '',
+        itemsEdit: this.fb.array([]),
         items: this.fb.array([])
       });
       this.onClientNameChange();
     }
+    getFactureDetails(FactureID){
+      this.factureReturnService.getFactureDetails(FactureID,'FR').subscribe(Response => {
+        this.factureDetails = Response;
+        console.log(this.factureDetails)
+        for (var i = 0; i < this.factureDetails.length;i++){
+          const item = this.fb.group({
+            ordID: [this.factureDetails[i].ordID, Validators.required],
+            itemID: [this.factureDetails[i].ord_itemID, Validators.required],
+            itemName: [this.factureDetails[i].item_name],
+            isDamaged:[this.factureDetails[i].ord_item_isDamaged],
+            colisage:[this.factureDetails[i].item_packing_list],
+            crt: [this.factureDetails[i].ord_crt],
+            piece: [this.factureDetails[i].ord_piece],
+            // date_req: [this.factureDetails[i].ord_date_req, Validators.required],
+            // date_com: [this.factureDetails[i].ord_date_com, Validators.required],
+            isDeleted: [0, Validators.required]
+          });
+          this.itemsEditForm.push(item)
+        }
+        this.invoiceForm.get('invID').setValue(FactureID)
+        this.invoiceForm.get('invoiceDate').setValue(this.factureDetails[0].inv_date_req)
+        this.invoiceForm.get('clientName').setValue(this.factureDetails[0].per_name)
+        this.invoiceForm.get('clientID').setValue(this.factureDetails[0].perID)
+        console.log(this.invoiceForm.value)
+      },error => {
+        console.log(error)
+      });
+    }
     getOrderNoConfirm(){
+      // debugger
       this.factureReturnService.getOrderNoConfirm().subscribe(Response => {
         this.orderNoConfirm = Response;
-
         // console.log(this.orderNoConfirm)
       },error => {
         console.log(error)
@@ -78,14 +116,20 @@ export class FactureReturnComponent implements OnInit {
         colisage:[element['colisage']],
         crt: [0],
         piece: [0],
-        date_req: ['', Validators.required],
-        date_com: ['', Validators.required]
+        // date_req: ['', Validators.required],
+        // date_com: ['', Validators.required]
   
       });
       this.itemsForm.push(item);
     }
   
   
+    deleteItemEdit(i, id,itemIsDamaged) {
+      this.itemsEditForm.removeAt(i);
+      this.itemsEditForm.controls[i].get('isDeleted').setValue(1);
+      // var index = FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id','gate', id.value , itemIsDamaged.value);
+      // FactureReturnComponent.selectedItems.splice(index, 1);
+    }
     deleteItem(i, id,itemIsDamaged) {
       this.itemsForm.removeAt(i);
       var index = FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id','gate', id.value , itemIsDamaged.value);
@@ -97,33 +141,60 @@ export class FactureReturnComponent implements OnInit {
       this.invoiceForm.get('clientName').setValue(name);
       this.invoiceForm.get('clientID').setValue(id);
     }
-  
-  
-  
-    addSupplyInvoice() {
-      this.factureReturnService.newReturnInvoice(this.invoiceForm.value).subscribe(Response => {
-        swal({
-          type: 'success',
-          title: 'Success',
-          text: 'Invoice Added Successfully',
-          showConfirmButton: false,
-          timer: 1000
+
+    addEditReturnInvoice() {
+      if(this.factureComponent.factureID != -1){
+        // console.log(this.invoiceForm.value)
+        this.factureReturnService.editReturnInvoice(this.invoiceForm.value).subscribe(Response => {
+          this.getOrderNoConfirm(); 
+          swal({
+            type: 'success',
+            title: 'Success',
+            text: 'Invoice Added Successfully',
+            showConfirmButton: false,
+            timer: 1000
+          });
+        }, error => {
+          swal({
+            type: 'error',
+            title: error.statusText,
+            text: error.message
+          });
         });
-      }, error => {
-        swal({
-          type: 'error',
-          title: error.statusText,
-          text: error.message
+        // console.log(this.invoiceForm.value);
+        // while (this.itemsForm.length !== 0) {
+        //   this.itemsForm.removeAt(0)
+        // }
+        // FactureReturnComponent.selectedItems=[];
+        // this.invoiceForm.reset();
+        // this.myNgForm.resetForm();
+        var routerHistory = localStorage.getItem('routerHistory');
+        this.router.navigate([routerHistory]);
+      } else{
+        this.factureReturnService.newReturnInvoice(this.invoiceForm.value).subscribe(Response => {
+          this.getOrderNoConfirm(); 
+          swal({
+            type: 'success',
+            title: 'Success',
+            text: 'Invoice Added Successfully',
+            showConfirmButton: false,
+            timer: 1000
+          });
+        }, error => {
+          swal({
+            type: 'error',
+            title: error.statusText,
+            text: error.message
+          });
         });
-      });
-      // console.log(this.invoiceForm.value);
-      while (this.itemsForm.length !== 0) {
-        this.itemsForm.removeAt(0)
+        // console.log(this.invoiceForm.value);
+        while (this.itemsForm.length !== 0) {
+          this.itemsForm.removeAt(0)
+        }
+        FactureReturnComponent.selectedItems=[];
+        this.invoiceForm.reset();
+        this.myNgForm.resetForm();
       }
-      FactureReturnComponent.selectedItems=[];
-      this.invoiceForm.reset();
-      this.myNgForm.resetForm();
-      this.getOrderNoConfirm(); 
     }
 
 
@@ -138,6 +209,7 @@ export class FactureReturnComponent implements OnInit {
       this.dataComfirm['packingList']=packingList;
       // console.log(this.dataComfirm)
       this.factureReturnService.confirmOrder(this.dataComfirm).subscribe(Response => {
+        this.getOrderNoConfirm();
         swal({
           type: 'success',
           title: 'Success',
@@ -152,11 +224,11 @@ export class FactureReturnComponent implements OnInit {
           text: error.message
         });
       });
-      this.getOrderNoConfirm();
     }
 
     rejectOrder(ordID){
       this.factureReturnService.rejectOrder(ordID).subscribe(Response => {
+        this.getOrderNoConfirm();
         swal({
           type: 'success',
           title: 'Success',
@@ -171,7 +243,6 @@ export class FactureReturnComponent implements OnInit {
           text: error.message
         });
       });
-      this.getOrderNoConfirm();
     }
     
     addItemsToFacture() {
@@ -259,6 +330,9 @@ export class FactureReturnComponent implements OnInit {
       FactureReturnComponent.globalMultiSelectDT = multiSelectDT;
     }
   
+    get itemsEditForm() {
+      return this.invoiceForm.get('itemsEdit') as FormArray;
+    }
     get itemsForm() {
       return this.invoiceForm.get('items') as FormArray;
     }

@@ -177,14 +177,14 @@ export class HistoryFactureComponent implements OnInit {
     localStorage.setItem('routerHistory',"history/facture");
     if(HistoryFactureComponent.selectedFacture[0].type=="FR"){
       // localStorage.setItem('routerFacture',"sell/return");
-      this.router.navigate(["sell/return"], { queryParams: { factureID: HistoryFactureComponent.selectedFactureID }});
+      this.router.navigate(["facture/return"], { queryParams: { factureID: HistoryFactureComponent.selectedFactureID }});
     }
     if(HistoryFactureComponent.selectedFacture[0].type=="FD"){
-      this.router.navigate(["sell/supply"], { queryParams: { factureID: HistoryFactureComponent.selectedFactureID }});
+      this.router.navigate(["facture/supply"], { queryParams: { factureID: HistoryFactureComponent.selectedFactureID }});
 
     }
     if(HistoryFactureComponent.selectedFacture[0].type=="FC"){
-      this.router.navigate(["sell/facture"], { queryParams: { factureID: HistoryFactureComponent.selectedFactureID }});
+      this.router.navigate(["facture/client"], { queryParams: { factureID: HistoryFactureComponent.selectedFactureID }});
 
     }
   }
@@ -200,7 +200,7 @@ export class HistoryFactureComponent implements OnInit {
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.value) {
-        this.historyService.deleteFacture(HistoryFactureComponent.selectedFactureID).subscribe(Response => {
+        this.historyService.deleteFacture(HistoryFactureComponent.selectedFactureID,HistoryFactureComponent.selectedFacture[0].type).subscribe(Response => {
           // console.log(Response)
           if(Response!=0){
             this.globalHistoryFactureDT.ajax.reload(null, false);

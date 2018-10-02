@@ -110,7 +110,16 @@ export class HistoryItemsComponent implements OnInit {
               $(td).html(" <span style='color: #0000FF;' >"+data+"</span> ");
             } 
           }
-        },
+        },{
+            "targets": 3,
+          "createdCell": function (td, data, rowData, row, col) {
+            if (rowData['ord_item_isDamaged'] == 1) {    
+                  return  rowData['item_name'] + " | GATE" ;
+            } else{
+              return rowData['item_name'];
+            }
+        } 
+      },
         {
           "targets": 1,
           "createdCell": function (td, data) {
@@ -186,20 +195,15 @@ export class HistoryItemsComponent implements OnInit {
     localStorage.setItem('YOffset', window.pageYOffset.toString());
     localStorage.setItem('routerHistory',"history/items");
     if(HistoryItemsComponent.selectedFacture[0].type=="FR")
-      this.router.navigate(["sell/return"], { queryParams: { factureID: HistoryItemsComponent.selectedFactureID }});
+      this.router.navigate(["facture/return"], { queryParams: { factureID: HistoryItemsComponent.selectedFactureID }});
     if(HistoryItemsComponent.selectedFacture[0].type=="FD")
-      this.router.navigate(["sell/supply"], { queryParams: { factureID: HistoryItemsComponent.selectedFactureID }});
+      this.router.navigate(["facture/supply"], { queryParams: { factureID: HistoryItemsComponent.selectedFactureID }});
     if(HistoryItemsComponent.selectedFacture[0].type=="FC")
-      this.router.navigate(["sell/facture"], { queryParams: { factureID: HistoryItemsComponent.selectedFactureID }});
+      this.router.navigate(["facture/client"], { queryParams: { factureID: HistoryItemsComponent.selectedFactureID }});
   }
   deleteItem(){
     var title = "Supprimer Article";
     var text = "Vous voulez vraiment supprimer cette Article!"
-    // if (SubscribersComponent.selectedRowData['is_activated'] == 1) {
-    //   text = "Do you want to <b> deactivate </b> this user ?";
-    //   title = "Deactivate User";
-    // }
-
     swal({
       title: title,
       html: text,
@@ -231,105 +235,4 @@ export class HistoryItemsComponent implements OnInit {
     });
   }
   }
-  // openOperationModal(openModal,type){
-  //   this.modalReference = this.modalService.open(openModal, { centered: true, ariaLabelledBy: 'modal-basic-title' });
-  //   if(type=='a')
-  //     this.operationModalTitle = 'ADD'; 
-  //   else if(type=='w')
-  //     this.operationModalTitle = 'WITHDRAW';
-  //   this.operationForm = this.fb.group({
-  //     op_type: [type],
-  //     drawer: ['a'],
-  //     amount: [ 0,Validators.min(1)],
-  //     comment: ['']
-  //   });
-
-  // }
-  // addNewOperation(){
-  //   this.drawerService.newOperation(this.operationForm.value).subscribe(Response => {
-  //     this.accDrawer='';
-  //     $('#accDrawerDT').DataTable().destroy();
-  //     $('#accDrawerDT').empty();
-  //     this.getAccDrawerDT();
-  //     swal({
-  //       type: 'success',
-  //       title: 'Success',
-  //       text:'Operation Successfully',
-  //       showConfirmButton: false,
-  //       timer: 1000
-  //     });
-  //   }, error => {
-  //     swal({
-  //       type: 'error',
-  //       title: error.statusText,
-  //       text:error.message
-  //     });
-  //   });
-  //   this.modalReference.close();
-  // }
-  // openShowDetails(showDetails) {
-  //   this.accDrawerService.getAccDetailsDay(AccessoriesDrawerComponent.selectedDay).subscribe(Response => {
-  //     this.detailsDay = Response;
-  //     var detailDayDT = $('#detailDay').DataTable({
-  //       responsive: true,
-  //       paging: true,
-  //       pagingType: "full_numbers",
-  //       serverSide: false,
-  //       processing: true,
-  //       select: {
-  //         "style": "single"
-  //       },
-  //       ordering: true,
-  //       stateSave: false,
-  //       fixedHeader: false,
-  //       searching: true,
-  //       lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
-  //       data: this.detailsDay,
-  //       order: [[0, 'desc']],
-  //       columns: [
-
-  //         { data: "dayTime", title: "Time" },
-  //         { data: "amount", title: "Amount", render: $.fn.dataTable.render.number(',', '.', 0, 'LL ') },
-  //         { data: "type", title: "Type" },
-  //         { data: "note", title: "Note" }
-
-  //       ],
-  //       "columnDefs": [
-  //         {
-  //           "targets": 2,
-  //           "data": "type",
-  //           "render": function (data, type, row, meta) {
-  //             if (data == null) {
-  //               return 'Payment';
-  //             }
-  //             else if (data == 'a') {
-  //               return 'Add';
-  //             }
-  //             else if(data == 'w') {
-  //               return 'Withdraw';
-  //             }
-  //           }
-  //         }
-  //       ]
-  //     });
-  //     $('#detailDay tbody').on('mousedown', 'tr', function (event) {
-  //       if (event.which == 3) {
-  //         detailDayDT.row(this).select();
-  //       }
-  //     });
-
-  //     $('#detailDay').on('key-focus.dt', function (e, datatable, cell) {
-  //       $(detailDayDT.row(cell.index().row).node()).addClass('selected');
-
-  //     });
-  //     $('#detailDay').on('key-blur.dt', function (e, datatable, cell) {
-  //       $(detailDayDT.row(cell.index().row).node()).removeClass('selected');
-  //     });
-
-  //   }, error => {
-  //     alert(error)
-  //   });
-  //   this.modalReference = this.modalService.open(showDetails, { centered: true, ariaLabelledBy: 'modal-basic-title', size: 'lg' });
-  //   this.showDetailsDay="Show Details " + AccessoriesDrawerComponent.selectedDay;
-  // }
-
+  

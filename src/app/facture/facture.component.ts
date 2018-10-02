@@ -8,7 +8,10 @@ import { HotkeysService, Hotkey } from 'angular2-hotkeys';
   styleUrls: ['./facture.component.css']
 })
 export class FactureComponent implements OnInit {
-  constructor(private router: Router, private _hotkeysService: HotkeysService) {
+  private sub;
+  factureID;
+
+  constructor(private router: Router, private _hotkeysService: HotkeysService, private route: ActivatedRoute) {
     this._hotkeysService.add(new Hotkey('ctrl+z', (event: KeyboardEvent): boolean => {
       this.router.navigate(["facture/supply"]);
       return false;
@@ -23,8 +26,11 @@ export class FactureComponent implements OnInit {
     }));
   }
   ngOnInit() {
-
-    this.router.navigate(["facture/client"]);
+    this.sub = this.route.queryParams.subscribe(params => {
+      this.factureID = params['factureID'] || '-1';
+    });
+    if(this.factureID == '-1')
+      this.router.navigate(["facture/client"]);
 
   }
 
