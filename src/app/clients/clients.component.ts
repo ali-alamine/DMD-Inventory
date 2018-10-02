@@ -118,8 +118,8 @@ export class ClientsComponent implements OnInit {
   addEditClient() {
     if (this.editFlag == true) {
       this.editedClientData['name'] = this.name.value;
-      this.editedClientData['phone'] = this.address.value;
-      this.editedClientData['address'] = this.phoneNumber.value;
+      this.editedClientData['address'] = this.address.value;
+      this.editedClientData['phone'] = this.phoneNumber.value;
       this.editedClientData['ID'] = ClientsComponent.selectedClientID;
       
       console.log(this.editedClientData)

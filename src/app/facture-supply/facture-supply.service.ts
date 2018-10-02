@@ -11,4 +11,13 @@ export class SupplyService {
   newSupplyInvoice(supplyData): Observable<any>{
     return this.httpClient.post(this.url+"newSupplyInvoice", supplyData);
   }
+  
+  getFactureDetails(factureID):Observable<any>{
+    return this.httpClient.get(this.url+"getFactureDetails", {params:{factureID:factureID}});
+  } 
+
+  editSupplyInvoice(supplyData): Observable<any>{
+    return this.httpClient.post(this.url+"editSupplyInvoice", supplyData);
+  }
+  
 }

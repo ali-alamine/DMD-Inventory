@@ -5,9 +5,9 @@ import { StockService } from '../stock/stock.service';
 import { SupplyService } from './facture-supply.service';
 import swal from 'sweetalert2';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 declare var $: any;
-
+import * as moment from 'moment/moment';
 @Component({
   selector: 'app-supply',
   templateUrl: './facture-supply.component.html',
@@ -24,8 +24,13 @@ export class SupplyComponent implements OnInit {
   items: any;
   static selectedItems: item[] = new Array();
   static globalMultiSelectDT;
+  private sub;
+  factureID;
+  factureHeader = [];
+  factureDetails = [];
+  editFactureTitle="";
 
-  constructor(private fb: FormBuilder, private supplyService: SupplyService,private router: Router, private modalService: NgbModal, private _hotkeysService: HotkeysService) { 
+  constructor(private fb: FormBuilder, private supplyService: SupplyService,private router: Router, private modalService: NgbModal, private _hotkeysService: HotkeysService, private route: ActivatedRoute) { 
     this._hotkeysService.add(new Hotkey('ctrl+`', (event: KeyboardEvent): boolean => {
       let element: HTMLElement = document.getElementById('multiSelectBtn') as HTMLElement;
       element.click();
@@ -46,14 +51,52 @@ export class SupplyComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.sub = this.route.queryParams.subscribe(params => {
+      this.factureID = params['factureID'] || '-1';
+    });
     this.supplyForm = this.fb.group({
       supplyDate: ['', Validators.required],
-      items: this.fb.array([])
+      items: this.fb.array([]),
+      invoiceID: []
     });
+    
+    if(this.factureID != '-1'){
+      this.supplyService.getFactureDetails(this.factureID).subscribe(Response => {        
+        this.factureHeader = Response[0];
+        this.factureDetails = Response[1];
+        var supplyDate = this.factureHeader[0]['inv_date_req'];
+        this.factureDate.setValue(supplyDate);
+        this.invoiceID.setValue(this.factureID);
+        this.factureDetails.forEach(element => {
+          this.addFactureEditRow(element);
+          SupplyComponent.selectedItems.push({ id: element['itemID'], name: element['item_name'], colisage:element['item_packing_list'] });
+        });
+        this.editFactureTitle = "Edit Facture: "+this.factureHeader[0]['inv_code'];        
+      }, error => {
+        swal({
+          type: 'error',
+          title: error.statusText,
+          text: error.message
+        });
+      });
+    }   
   }
 
   ngOnDestroy() {
     this._hotkeysService.reset();
+  }
+
+  addFactureEditRow(element) {
+    const item = this.fb.group({
+      itemID: [element['itemID'], Validators.required],
+      itemName: [element['item_name']],
+      colisage:[element['item_packing_list']],
+      crt: [element['ord_crt']],
+      piece: [element['ord_piece']],
+      comment: [element['ord_note']]
+
+    });
+    this.itemsForm.push(item);
   }
  
 
@@ -77,21 +120,42 @@ export class SupplyComponent implements OnInit {
   }
 
   addSupplyInvoice() {
-    this.supplyService.newSupplyInvoice(this.supplyForm.value).subscribe(Response => {
-      swal({
-        type: 'success',
-        title: 'Success',
-        text: 'Supply Successfully',
-        showConfirmButton: false,
-        timer: 1000
+    if(this.factureID != '-1')
+    {
+      this.supplyService.editSupplyInvoice(this.supplyForm.value).subscribe(Response => {
+        swal({
+          type: 'success',
+          title: 'Success',
+          text: 'updated Successfully',
+          showConfirmButton: false,
+          timer: 1000
+        });
+      }, error => {
+        swal({
+          type: 'error',
+          title: error.statusText,
+          text: error.message
+        });
       });
-    }, error => {
-      swal({
-        type: 'error',
-        title: error.statusText,
-        text: error.message
+    }
+    else{
+      this.supplyService.newSupplyInvoice(this.supplyForm.value).subscribe(Response => {
+        swal({
+          type: 'success',
+          title: 'Success',
+          text: 'Supply Successfully',
+          showConfirmButton: false,
+          timer: 1000
+        });
+      }, error => {
+        swal({
+          type: 'error',
+          title: error.statusText,
+          text: error.message
+        });
       });
-    });
+    }
+    
     console.log(this.supplyForm.value);
     while (this.itemsForm.length !== 0) {
       this.itemsForm.removeAt(0)
@@ -197,6 +261,14 @@ export class SupplyComponent implements OnInit {
 
   get itemsForm() {
     return this.supplyForm.get('items') as FormArray
+  }
+
+  get factureDate() {
+    return this.supplyForm.get('supplyDate');
+  }
+
+  get invoiceID() {
+    return this.supplyForm.get('invoiceID');
   }
 
   get itemID() {

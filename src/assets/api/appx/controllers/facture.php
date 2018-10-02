@@ -102,6 +102,19 @@ class facture extends REST_Controller
         }
     }
 
+    public function getFactureDetails_get(){
+        $factureID = $this->get('factureID');
+        $result1 = $this->facture_model->getFactureDetails($factureID);
+        $result2 = $this->facture_model->getOrderInvoiceDetails($factureID);
+        if ($result1 && $result2) {
+            $response = array();
+            $response[0] = $result1;
+            $response[1] = $result2;
+            $this->response($response, 200);
+            exit;
+        }
+    }
+
     public function generateFactureCode($factureType){
         $factureType=strtoupper($factureType);
         $suffix='00001';
@@ -111,6 +124,55 @@ class facture extends REST_Controller
             $code=increment_string($code,'');
         }
         return $code;
+    }
+
+    public function editSupplyInvoice_post()
+    {
+        $supplyDate = $this->post('supplyDate');
+        $invoiceID = $this->post('invoiceID');
+        $invoiceItems = $this->post('items');
+
+        $correctDate = new DateTime($supplyDate);
+        $correctDate->setTimezone(new DateTimeZone('Asia/Beirut'));
+
+       
+        $this->db->trans_begin();
+
+        $this->facture_model->updateSupplyInvoice( $invoiceID , array("inv_date_req" => $correctDate->format('Y-m-d H:i:s')));
+
+
+        $oldInvoiceOrder = $this->facture_model->getOrderInvoiceDetails($invoiceID);
+
+        foreach ($oldInvoiceOrder as $row) {
+            $itemID =  $row['ord_itemID'];
+            $quantity = ($row['item_packing_list'] * $row['ord_crt']) + $row['ord_piece'];            
+            $this->facture_model->updateStock($itemID,-$quantity,0);
+        }
+
+        $this->facture_model->deleteOldOrderInvoice($invoiceID);
+
+        foreach ($invoiceItems as $row) {
+            $itemData = array(
+                "ord_itemID" => $row['itemID'],
+                "ord_piece" => $row['piece'],
+                "ord_crt" => $row['crt'],
+                "ord_note" => $row['comment'],
+                "ord_invID" => $invoiceID
+            );
+            $itemID =  $row['itemID'];
+            $quantityToAdd = ($row['colisage'] * $row['crt']) + $row['piece'];
+
+            $this->facture_model->addItemToInvoice($itemData);
+            $this->facture_model->updateStock($itemID,$quantityToAdd,0);
+        }
+
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            $this->response("Invoice information could not be saved. Try again.", 404);
+        } else {
+            $this->db->trans_commit();
+            $this->response("success", 200);
+        }
     }
 
 }

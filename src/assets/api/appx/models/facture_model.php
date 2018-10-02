@@ -14,6 +14,17 @@ class facture_model extends CI_Model
             return false;
         }
     }
+    public function updateSupplyInvoice($id,$data)
+    {
+        $this->db->where('invID', $id);
+        if ($this->db->update('invoice', $data)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+   
 
     public function addClientInvoice($data)
     {
@@ -70,5 +81,46 @@ class facture_model extends CI_Model
         return $this->db->count_all_results();
 
     }
+
+
+    public function getFactureDetails($factureID)
+    {
+        $this->db->select('*');
+        $this->db->from('invoice');
+        $this->db->where('invID', $factureID);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return 0;
+        }
+    }
+
+    public function getOrderInvoiceDetails($factureID)
+    {
+        $this->db->select('*');
+        $this->db->from('order_inv');
+        $this->db->join('item', 'item.itemID = order_inv.ord_itemID', 'inner');
+        $this->db->where('ord_invID', $factureID);
+
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return 0;
+        }
+    }
+
+    public function deleteOldOrderInvoice($factureID)
+    {
+        $this->db->where('ord_invID', $factureID);       
+        if ($this->db->delete('order_inv')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+  
 
 }
