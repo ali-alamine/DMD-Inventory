@@ -39,6 +39,7 @@ import {HotkeyModule} from 'angular2-hotkeys';
 import { SettingsComponent } from './settings/settings.component';
 import { FileUploadModule } from 'primeng/components/fileupload/fileupload';
 import {MatBadgeModule} from '@angular/material/badge';
+import {DatePipe} from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -89,7 +90,7 @@ import {MatBadgeModule} from '@angular/material/badge';
     MatBadgeModule
   ],
   entryComponents: [],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

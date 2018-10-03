@@ -7,7 +7,9 @@
 /* solve datepicker issue with ngx-modal */
 .cdk-overlay-container{ z-index: 1500 !important; }  
 
-
+.test{
+  color: red;
+}
 
 @font-face {
     font-family: 'Material Icons';
