@@ -39,6 +39,7 @@ import {HotkeyModule} from 'angular2-hotkeys';
 import { SettingsComponent } from './settings/settings.component';
 import { FileUploadModule } from 'primeng/components/fileupload/fileupload';
 import {MatBadgeModule} from '@angular/material/badge';
+import { HistoryReturnComponent } from './history-return/history-return.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,7 +56,8 @@ import {MatBadgeModule} from '@angular/material/badge';
     HistoryItemsComponent,
     FactureClientComponent,
     FactureReturnComponent,
-    SettingsComponent
+    SettingsComponent,
+    HistoryReturnComponent
   ],
   imports: [
     BrowserModule,

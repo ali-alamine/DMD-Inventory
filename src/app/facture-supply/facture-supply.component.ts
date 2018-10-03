@@ -7,7 +7,7 @@ import swal from 'sweetalert2';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { Router, ActivatedRoute } from '@angular/router';
 declare var $: any;
-import * as moment from 'moment/moment';
+import * as moment from 'moment';
 @Component({
   selector: 'app-supply',
   templateUrl: './facture-supply.component.html',
