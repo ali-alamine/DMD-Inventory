@@ -248,7 +248,7 @@ export class HistoryReturnComponent implements OnInit {
     this.historyService.confirmOrder(this.dataComfirm).subscribe(Response => {
       if(Response == 0) {
         // this.modalReference = this.modalService.open(showDetails, { centered: true, ariaLabelledBy: 'modal-basic-title', size: 'lg' });
-      this.globalReturnDetailsDT.ajax.reload(null, false);
+      // this.globalReturnDetailsDT.ajax.reload(null, false);
       // $('.showTemplate').
 
       }

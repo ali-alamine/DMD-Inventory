@@ -46,7 +46,7 @@ class stock_model extends CI_Model
 
     public function updateDamagedStock($itemID, $crt, $piece, $colisage, $itemCode, $itemName)
     {
-
+        $itemName = $itemName.' | Gate';
         $pieceToAdd = ($crt * $colisage) + $piece;
 
         $sql = " INSERT INTO item (itemID, item_is_damaged, item_code, item_name, item_packing_list, item_piece, item_isActivated) VALUES (?,1, ?, ?, ?, ?,1) ON DUPLICATE KEY UPDATE item_piece = item_piece + ? ";

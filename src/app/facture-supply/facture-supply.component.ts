@@ -51,11 +51,13 @@ export class SupplyComponent implements OnInit {
   }
 
   ngOnInit() {
+    const currentDate = new Date();
+    var factureDate = currentDate.toISOString().substring(0, 10);
     this.sub = this.route.queryParams.subscribe(params => {
       this.factureID = params['factureID'] || '-1';
     });
     this.supplyForm = this.fb.group({
-      supplyDate: ['', Validators.required],
+      supplyDate: [factureDate, Validators.required],
       items: this.fb.array([]),
       invoiceID: []
     });
@@ -105,8 +107,8 @@ export class SupplyComponent implements OnInit {
       itemID: [element['id'], Validators.required],
       itemName: [element['name']],
       colisage:[element['colisage']],
-      crt: [0],
-      piece: [0],
+      crt: [''],
+      piece: [''],
       comment: ['']
 
     });

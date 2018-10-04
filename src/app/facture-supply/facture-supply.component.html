@@ -8,13 +8,12 @@
             <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
               
               
-              <mat-form-field class="itemName">
-                <input matInput [matDatepicker]="factureDate" formControlName="supplyDate" placeholder="Facture Date">
-                <mat-datepicker-toggle matSuffix [for]="factureDate" tabIndex="-1"></mat-datepicker-toggle>
-                <mat-datepicker touchUi #factureDate></mat-datepicker>
-                <mat-error> Date is required</mat-error>
-              </mat-form-field>
+            
       
+              <mat-form-field class="itemName">
+                <input matInput formControlName="supplyDate" placeholder="Facture Date" readonly= true>      
+              </mat-form-field>
+
              
               <button class="addBtns" id="multiSelectBtn" mat-raised-button color="primary" (click)="openMultiSelect(mutliSelectModal)" style="float:right">
                 <i class="material-icons">subdirectory_arrow_left</i> MultiSelect

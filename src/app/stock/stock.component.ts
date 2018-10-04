@@ -60,8 +60,7 @@ export class StockComponent implements OnInit {
 
       ],"columnDefs": [ {
         "targets": 1,
-        "createdCell": function (td, cellData, rowData, row, col) {
-          
+        "createdCell": function (td, cellData, rowData, row, col) {          
           if ( rowData['isDamagedFlag']) {              
             $(td).html(cellData+" <i style='float:right; color: #FF0000;' md-18 class='material-icons'>new_releases</i> ")
           }
@@ -69,7 +68,7 @@ export class StockComponent implements OnInit {
       } ],
       createdRow: function (row, data, index) {
         if (data['isDamagedFlag'] == 1) {            
-          $(row).addClass("bg-warning");
+          $(row).addClass("text-danger");
           $(row).attr('title', " CRT: " + data['crtD'] + " || Piece: " + data['pieceD']);    
         }
       }

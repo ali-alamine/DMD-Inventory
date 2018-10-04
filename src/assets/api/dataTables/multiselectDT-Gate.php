@@ -39,13 +39,8 @@ if ($getAllFactureQuerySQL) {
                 $jsonData = $jsonData . ",";
             }
             $jsonData = $jsonData . '{"ID":"' . $row['itemID'] . '",';
-            $jsonData = $jsonData . '"item_is_damaged":"' . $row['item_is_damaged'] . '",';
-            if ($row['item_is_damaged']) {
-                $jsonData = $jsonData . '"item_name":"' . $row['item_name'] . ' | Gate ",';
-            } else {
-                $jsonData = $jsonData . '"item_name":"' . $row['item_name'] . ' ",';
-            }
-           
+            $jsonData = $jsonData . '"item_is_damaged":"' . $row['item_is_damaged'] . '",';            
+            $jsonData = $jsonData . '"item_name":"' . $row['item_name'] . ' ",';
             $jsonData = $jsonData . '"item_code":"' . $row['item_code'] . '",';
             $jsonData = $jsonData . '"item_packing_list":"' . $row['item_packing_list'] . '",';
             $jsonData = $jsonData . '"item_crt":"' . $row['item_crt'] . '",';

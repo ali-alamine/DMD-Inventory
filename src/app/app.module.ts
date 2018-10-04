@@ -40,6 +40,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { FileUploadModule } from 'primeng/components/fileupload/fileupload';
 import {MatBadgeModule} from '@angular/material/badge';
 import { HistoryReturnComponent } from './history-return/history-return.component';
+import {DatePipe} from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -91,7 +92,7 @@ import { HistoryReturnComponent } from './history-return/history-return.componen
     MatBadgeModule
   ],
   entryComponents: [],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
