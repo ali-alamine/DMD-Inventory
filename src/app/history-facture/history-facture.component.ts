@@ -23,7 +23,7 @@ export class HistoryFactureComponent implements OnInit {
   private selectedFactureRowData;
   static selectedFactureID;
   rightClick: MenuItem[];
-  private globalHistoryFactureDT;
+  globalHistoryFactureDT;
   private itemsForm;
   static selectedFacture = new Array();
 

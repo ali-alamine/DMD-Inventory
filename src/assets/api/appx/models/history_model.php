@@ -22,32 +22,44 @@ class history_model extends CI_Model
             return 0;
         }
     }
-    public function deleteFacture($ID)
+    public function deleteFacture($invID)
     {
         $this->db->set('inv_status', -1);
-        $this->db->where('invID', $ID);        
+        $this->db->where('invID', $invID);        
         if ($this->db->update('invoice')) {
             return true;
         } else {
             return false;
         }
     }
-    public function deleteItem($ID)
+    public function deleteItem($ordID)
     {
+        // $this->db->where('date_ordID', $ordID);
+        // if ($this->db->delete('return_details')) {
+        //     $this->db->where('ordID', $ordID);
+        //     if ($this->db->delete('order_inv')) {
+        //         return true;
+        //     } else {
+        //         return false;
+        //     }
+        // } else {
+        //     return false;
+        // }
+
         $this->db->set('ord_isDeleted', 1);
-        $this->db->where('ordID', $ID);        
+        $this->db->where('ordID', $ordID);        
         if ($this->db->update('order_inv')) {
             return true;
         } else {
             return false;
         }
     }
-    public function getFactureReturnDetails($ID){
+    public function getFactureReturnDetails($invID){
         $query = $this->db->query("SELECT * FROM order_inv 
         INNER JOIN return_details on date_ordID = ordID 
         INNER JOIN person on ord_perID = perID 
         INNER JOIN item on itemID = ord_itemID and item_is_Damaged = ord_item_isDamaged 
-        where ord_status = 0 and ord_invID = '".$ID."' ");
+        where ord_status = 0 and ord_invID = '".$invID."' ");
 
         if ($query->num_rows() > 0) {
             return $query->result_array();
@@ -128,11 +140,11 @@ class history_model extends CI_Model
         }
 
     }
-    public function checkInvoice($invID)
+    public function checkInvoice($invID,$status)
     {
         $query = $this->db->query("SELECT * FROM return_details
         INNER JOIN order_inv on ordID=date_ordID
-        where ord_status = -1 and ord_invID = '".$invID."' ");
+        where ord_status = '".$status."' and ord_invID = '".$invID."' ");
         if ($query->num_rows() > 0) {
             return 1;
         } else {

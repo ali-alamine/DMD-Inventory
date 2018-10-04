@@ -8,6 +8,7 @@ import { FactureReturnService } from './facture-return.service';
 import { Router } from '@angular/router';
 import { FactureComponent } from '../facture/facture.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
+import { DatePipe } from '../../../node_modules/@angular/common';
 declare var $: any;
 
 @Component({
@@ -33,13 +34,19 @@ export class FactureReturnComponent implements OnInit {
   factureDetails;
   editFactureTitle="";
 
-  constructor(private router: Router,private fb: FormBuilder,
+  constructor(private datePipe: DatePipe,
+    private router: Router,private fb: FormBuilder,
     private factureReturnService: FactureReturnService,
     private modalService: NgbModal,
     private stockService: StockService,
     private factureComponent: FactureComponent) { }
 
     ngOnInit() {
+      
+    const currentDate = new Date();
+    var deliveryDate = currentDate.toISOString().substring(0, 10);
+    var s = this.datePipe.transform(currentDate,"MM/d/yyyy");
+
       // this.router.navigate(["facture/client"]);
       if(this.factureComponent.factureID != -1){
         document.getElementById('submit').style.display = "none";
@@ -50,7 +57,7 @@ export class FactureReturnComponent implements OnInit {
       }
       this.invoiceForm = this.fb.group({
         invID : '-1',
-        invoiceDate: ['', Validators.required],
+        invoiceDate: [deliveryDate, Validators.required],
         clientName: ['', Validators.required],
         searchClient: '',
         clientID: '',
@@ -74,7 +81,7 @@ export class FactureReturnComponent implements OnInit {
             piece: [this.factureDetails[i].ord_piece],
             // date_req: [this.factureDetails[i].ord_date_req, Validators.required],
             // date_com: [this.factureDetails[i].ord_date_com, Validators.required],
-            isDeleted: [0, Validators.required]
+            isDeleted: 0
           });
           this.itemsEditForm.push(item)
         }
@@ -126,9 +133,11 @@ export class FactureReturnComponent implements OnInit {
     }
   
   
-    deleteItemEdit(i, id,itemIsDamaged) {
-      this.itemsEditForm.removeAt(i);
+    deleteItemEdit(i) {
       this.itemsEditForm.controls[i].get('isDeleted').setValue(1);
+      // this.itemsEditForm.controls[i].disable(;
+      // this.itemsEditForm.removeAt(i);
+      console.log(this.itemsEditForm.value)
       // var index = FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id','gate', id.value , itemIsDamaged.value);
       // FactureReturnComponent.selectedItems.splice(index, 1);
     }
@@ -262,9 +271,8 @@ export class FactureReturnComponent implements OnInit {
   
     openMultiSelect(mutliSelectModal) {
   
-  
       this.modalReference = this.modalService.open(mutliSelectModal, { centered: true, size: 'lg', ariaLabelledBy: 'modal-basic-title' });
-  
+
       var multiSelectDT = $('#stockDT').DataTable({
         responsive: false,
         paging: true,
@@ -297,8 +305,12 @@ export class FactureReturnComponent implements OnInit {
         ],
         rowId: 'ID',
         "createdRow": function (row, data, index) {
-          if (FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id','gate', data['ID'],data['item_is_damaged']) > -1) {
+          if (FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id', 'gate', data['ID'], data['item_is_damaged']) > -1) {
             multiSelectDT.row(row).select();
+          }
+  
+          if (data['item_is_damaged'] == 1) {
+            $(row).addClass("text-danger");
           }
         }
       });
@@ -312,8 +324,8 @@ export class FactureReturnComponent implements OnInit {
           var gate = multiSelectDT.row(element).data()['item_is_damaged'];
           var colisage = multiSelectDT.row(element).data()['item_packing_list'];
   
-          if (FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id','gate', ID,gate) == -1)
-          FactureReturnComponent.selectedItems.push({ id: ID, name: name ,gate:gate , colisage:colisage});
+          if (FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id', 'gate', ID, gate) == -1)
+            FactureReturnComponent.selectedItems.push({ id: ID, name: name, gate: gate, colisage: colisage });
         });
       });
   
@@ -325,7 +337,7 @@ export class FactureReturnComponent implements OnInit {
           var name = multiSelectDT.row(element).data()['item_name'];
           var gate = multiSelectDT.row(element).data()['item_is_damaged'];
           var colisage = multiSelectDT.row(element).data()['item_packing_list'];
-          FactureReturnComponent.selectedItems.push({ id: ID, name: name ,gate:gate,colisage:colisage});
+          FactureReturnComponent.selectedItems.push({ id: ID, name: name, gate: gate, colisage: colisage });
         });
       });
   

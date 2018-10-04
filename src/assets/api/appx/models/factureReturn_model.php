@@ -94,22 +94,27 @@ class factureReturn_model extends CI_Model
         }
     }
     public function deletedOrder($ordID){
-        $this->db->where('ordID', $ordID);
-        if ($this->db->delete('order_inv')) {
-            return true;
+        $this->db->where('date_ordID', $ordID);
+        if ($this->db->delete('return_details')) {
+            $this->db->where('ordID', $ordID);
+            if ($this->db->delete('order_inv')) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
     }
-    public function updateInvoice($invID,$status){
-        $this->db->where('invID', $invID);
-        $this->db->set('inv_status',$status);
-        if ($this->db->update('invoice')) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // public function updateInvoice($invID,$status){
+    //     $this->db->where('invID', $invID);
+    //     $this->db->set('inv_status',$status);
+    //     if ($this->db->update('invoice')) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
     public function getFactureDetails($invID){
         // if($type=='FR'){
             $query = $this->db->query("SELECT *,date(inv_date_req) as inv_date_req FROM order_inv  

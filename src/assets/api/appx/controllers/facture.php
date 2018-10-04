@@ -20,7 +20,7 @@ class facture extends REST_Controller
         $invoiceCode = $this->generateFactureCode('FD');
         $this->db->trans_begin();
 
-        $invoiceID = $this->facture_model->addSupplyInvoice(array("inv_perID" => 1, "inv_code" => $invoiceCode, "inv_type" => 'FD', "inv_date_req" => $correctDate->format('Y-m-d H:i:s'), "inv_status" => 0));
+        $invoiceID = $this->facture_model->addSupplyInvoice(array("inv_perID" => 1, "inv_code" => $invoiceCode, "inv_type" => 'FD', "inv_date_req" => $correctDate->format('Y-m-d H:i:s')));
 
         foreach ($invoiceItems as $row) {
             $itemData = array(
@@ -64,7 +64,7 @@ class facture extends REST_Controller
 
         $this->db->trans_begin();
 
-        $invoiceID = $this->facture_model->addClientInvoice(array("inv_perID" =>  $clientID, "inv_code" => $invoiceCode, "inv_type" => 'FC', "inv_date_req" => $invoiceCorrectDate->format('Y-m-d H:i:s'), "inv_date_del" => $deliveryCorrectDate->format('Y-m-d'), "inv_status" => 0));
+        $invoiceID = $this->facture_model->addClientInvoice(array("inv_perID" =>  $clientID, "inv_code" => $invoiceCode, "inv_type" => 'FC', "inv_date_req" => $invoiceCorrectDate->format('Y-m-d H:i:s'), "inv_date_del" => $deliveryCorrectDate->format('Y-m-d')));
 
         foreach ($invoiceItems as $row) {
             $itemData = array(

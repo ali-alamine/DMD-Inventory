@@ -19,9 +19,9 @@ export class HistoryItemsComponent implements OnInit {
   modalReference: any;
   private static selectedItemsRowData;
   static selectedFactureID;
-  static selectedItemID;
+  static selectedOrdID;
   rightClick: MenuItem[];
-  private globalHistoryItemsDT;
+  globalHistoryItemsDT;
   private globalHistoryItemsDetailsDT;
   private itemsForm;
   static selectedFacture = new Array();
@@ -33,6 +33,9 @@ export class HistoryItemsComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
+    
+      if(this.globalHistoryItemsDT!= null)
+        this.globalHistoryItemsDT.ajax.reload(null, false);
     this.getHistoryItemsDT();
 
     this.rightClick = [
@@ -155,7 +158,7 @@ export class HistoryItemsComponent implements OnInit {
           localStorage.setItem('selectedRow', indexes);
           HistoryItemsComponent.selectedItemsRowData = historyItemsDT.row(indexes).data();
           HistoryItemsComponent.selectedFactureID = historyItemsDT.row(indexes).data()['invID'];
-          HistoryItemsComponent.selectedItemID = historyItemsDT.row(indexes).data()['ordID'];
+          HistoryItemsComponent.selectedOrdID = historyItemsDT.row(indexes).data()['ordID'];
           HistoryItemsComponent.selectedFacture.push({
             ID:historyItemsDT.row(indexes).data()['invID'],
             type:historyItemsDT.row(indexes).data()['inv_type'],
@@ -169,7 +172,7 @@ export class HistoryItemsComponent implements OnInit {
         }
         else if (type === 'column') {
           HistoryItemsComponent.selectedFactureID =-1;
-          HistoryItemsComponent.selectedItemID = -1;
+          HistoryItemsComponent.selectedOrdID = -1;
         }
       });
       $('#historyItemsDT tbody').on('mousedown', 'tr', function (event) {
@@ -215,7 +218,7 @@ export class HistoryItemsComponent implements OnInit {
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.value) {
-        this.histoeyService.deleteItem(HistoryItemsComponent.selectedItemID).subscribe(Response => {
+        this.histoeyService.deleteItem(HistoryItemsComponent.selectedOrdID,HistoryItemsComponent.selectedFacture[0].type).subscribe(Response => {
           this.globalHistoryItemsDT.ajax.reload(null, false);
           swal({
             type: 'success',

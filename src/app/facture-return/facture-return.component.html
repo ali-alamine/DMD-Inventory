@@ -78,7 +78,7 @@
             <mat-form-field fxFlex class="itemInputs">
               <input matInput placeholder="Piece" formControlName="piece" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
             </mat-form-field>
-            <button mat-icon-button (click)="deleteItemEdit(i,itemID,isDamaged)" color="warn" tabindex="-1">
+            <button mat-icon-button (click)="deleteItemEdit(i)" color="warn" tabindex="-1">
               <mat-icon aria-label="Delete Item" title="Delete Item">close</mat-icon>
             </button>
           </div>

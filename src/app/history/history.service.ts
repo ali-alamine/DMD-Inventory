@@ -18,17 +18,24 @@ export class HistoryService {
   getFactureReturnDetails(ID):Observable<any>{
     return this.httpClient.get(this.url+"getFactureReturnDetails", {params:{ID:ID}});
   }
-  deleteFacture(ID,type): Observable<any>{
-    return this.httpClient.get(this.url+"deleteFacture", {params:{ID:ID,type:type}});
+  deleteFacture(invID,type): Observable<any>{
+    return this.httpClient.get(this.url+"deleteFacture", {params:{invID:invID,type:type}});
   }
-  deleteItem(data): Observable<any>{
-    return this.httpClient.get(this.url+"deleteItem", {params:{ID:data}});
+  deleteItem(ordID,type): Observable<any>{
+    return this.httpClient.get(this.url+"deleteItem", {params:{ordID:ordID,type:type}});
   }
   confirmOrder(data): Observable<any>{
     return this.httpClient.post(this.url+"confirmOrder",data);
 
   }
-  rejectOrder(ordID): Observable<any>{
-    return this.httpClient.get(this.url+"rejectOrder",  {params:{ordID:ordID}});
+  rejectOrder(ordID,invID): Observable<any>{
+    return this.httpClient.get(this.url+"rejectOrder",  {params:{ordID:ordID,invID:invID}});
+  }
+  confirmAll(invID): Observable<any>{
+    return this.httpClient.get(this.url+"confirmAll",{params:{invID:invID}});
+
+  }
+  rejectAll(invID): Observable<any>{
+    return this.httpClient.get(this.url+"rejectAll",  {params:{invID:invID}});
   }
 }

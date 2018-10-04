@@ -77,41 +77,41 @@ class factureReturn extends REST_Controller
             exit;
         }
     }
-    public function confirmOrder_post(){        
-        $ordID = $this->post('ordID');
-        $invID = $this->post('invID');
-        $crt = $this->post('crt');
-        $piece = $this->post('piece');
-        $itemID = $this->post('itemID');
-        $isDamaged = $this->post('isDamaged');
-        $packingList = $this->post('packingList');
-        date_default_timezone_set("Asia/Beirut");
-        $date_com=date("Y-m-d H:i:s");
-        $this->db->trans_begin();
-        $this->factureReturn_model->updateOrder($ordID,1,$date_com);
-        $this->factureReturn_model->updateInvoice($invID,0);
-        $quantityToAdd = ($packingList * $crt) + $piece;
-        $this->factureReturn_model->updateStock($itemID,+$quantityToAdd,$isDamaged);
-        if ($this->db->trans_status() === false) {
-            $this->db->trans_rollback();
-            $this->response("Invoice information could not be saved. Try again.", 404);
-        } else {
-            $this->db->trans_commit();
-            $this->response("success", 200);
-        }
-    }
-    public function rejectOrder_get(){
-        $ordID = $this->get('ordID');
-        $this->db->trans_begin();
-        $this->factureReturn_model->deletedOrder($ordID);
-        if ($this->db->trans_status() === false) {
-            $this->db->trans_rollback();
-            $this->response("Invoice information could not be saved. Try again.", 404);
-        } else {
-            $this->db->trans_commit();
-            $this->response("success", 200);
-        }
-    }
+    // public function confirmOrder_post(){        
+    //     $ordID = $this->post('ordID');
+    //     $invID = $this->post('invID');
+    //     $crt = $this->post('crt');
+    //     $piece = $this->post('piece');
+    //     $itemID = $this->post('itemID');
+    //     $isDamaged = $this->post('isDamaged');
+    //     $packingList = $this->post('packingList');
+    //     date_default_timezone_set("Asia/Beirut");
+    //     $date_com=date("Y-m-d H:i:s");
+    //     $this->db->trans_begin();
+    //     $this->factureReturn_model->updateOrder($ordID,1,$date_com);
+    //     $this->factureReturn_model->updateInvoice($invID,1);
+    //     $quantityToAdd = ($packingList * $crt) + $piece;
+    //     $this->factureReturn_model->updateStock($itemID,+$quantityToAdd,$isDamaged);
+    //     if ($this->db->trans_status() === false) {
+    //         $this->db->trans_rollback();
+    //         $this->response("Invoice information could not be saved. Try again.", 404);
+    //     } else {
+    //         $this->db->trans_commit();
+    //         $this->response("success", 200);
+    //     }
+    // }
+    // public function rejectOrder_get(){
+    //     $ordID = $this->get('ordID');
+    //     $this->db->trans_begin();
+    //     $this->factureReturn_model->deletedOrder($ordID);
+    //     if ($this->db->trans_status() === false) {
+    //         $this->db->trans_rollback();
+    //         $this->response("Invoice information could not be saved. Try again.", 404);
+    //     } else {
+    //         $this->db->trans_commit();
+    //         $this->response("success", 200);
+    //     }
+    // }
     public function getFactureDetails_get()
     {
         $invID = $this->get('invID');
@@ -134,21 +134,19 @@ class factureReturn extends REST_Controller
         $this->factureReturn_model->editReturnInvoice($invID,array("inv_perID" =>  $clientID, 
         "inv_date_req" => $invoiceCorrectDate->format('Y-m-d H:i:s')));
         foreach ($invoiceItemsEdit as $row) {
-            if($row['isDeleted'] == 1){
-                $this->factureReturn_model->deletedOrder($row['ordID']);
-            }else{
-                $query = $this->db->query("SELECT ord_crt,ord_piece,ord_perID FROM order_inv INNER JOIN return_details on date_ordID = ordID where ordID = '".$row['ordID']."'");
-                if ($query->num_rows() > 0) {     
-                    $result = $query->result_array();
-                    foreach ($result as $rowQuantity) {
-                        $crt = $rowQuantity['ord_crt'];
-                        $piece = $rowQuantity['ord_piece'];
-                        $ord_perID = $rowQuantity['ord_perID'];
-                    }
+            $query = $this->db->query("SELECT ord_crt,ord_piece,ord_perID FROM order_inv INNER JOIN return_details on date_ordID = ordID where ordID = '".$row['ordID']."'");
+            if ($query->num_rows() > 0) {     
+                $result = $query->result_array();
+                foreach ($result as $rowQuantity) {
+                    $crt = $rowQuantity['ord_crt'];
+                    $piece = $rowQuantity['ord_piece'];
+                    $ord_perID = $rowQuantity['ord_perID'];
                 }
-                if($crt != $row['crt'] || $piece != $row['piece']){
-                    $quantityToAdd = ($row['colisage'] * $crt) + $piece;
-                    $this->factureReturn_model->updateStock($row['itemID'],-$quantityToAdd,$row['isDamaged']);
+            }
+            if($crt != $row['crt'] || $piece != $row['piece'] || $row['isDeleted'] == "1"){
+                $quantityToAdd = ($row['colisage'] * $crt) + $piece;
+                $this->factureReturn_model->updateStock($row['itemID'],-$quantityToAdd,$row['isDamaged']);
+                if($row['isDeleted'] == "0"){
                     $quantityToAdd = ($row['colisage'] * $row['crt']) + $row['piece'];
                     $this->factureReturn_model->updateStock($row['itemID'],$quantityToAdd,$row['isDamaged']);
                     $itemData = array(
@@ -157,9 +155,12 @@ class factureReturn extends REST_Controller
                     );
                     $this->factureReturn_model->editItemToInvoice($row['ordID'],$itemData);
                 }
-                if($ord_perID != $clientID)
-                    $this->factureReturn_model->editDateReturn($row['ordID'],array('ord_perID' => $clientID));                
             }
+            if($ord_perID != $clientID)
+                $this->factureReturn_model->editDateReturn($row['ordID'],array('ord_perID' => $clientID));
+            if($row['isDeleted'] == "1"){
+                $this->factureReturn_model->deletedOrder($row['ordID']);
+            }            
         }
         foreach ($invoiceItems as $row) {
             $itemData = array(

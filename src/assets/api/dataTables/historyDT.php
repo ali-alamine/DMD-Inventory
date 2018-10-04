@@ -7,11 +7,20 @@ $rowsReq = (isset($_GET['length'])) ? intval($_GET['length']) : 10;
 $start = (isset($_GET['start'])) ? intval($_GET['start']) : 0;
 $orderString = "";
 if($show=="facture")
-    $rowsCount = mysqli_fetch_assoc(mysqli_query(openConn(), "SELECT COUNT(invID) as exp FROM invoice WHERE inv_status = '0'"))['exp'];
+    $rowsCount = mysqli_fetch_assoc(mysqli_query(openConn(), "SELECT COUNT(invID) as exp FROM invoice INNER JOIN person on perID= inv_perID where  inv_status = '1'"))['exp'];
 if($show=="items")
-    $rowsCount = mysqli_fetch_assoc(mysqli_query(openConn(), "SELECT COUNT(ordID) as exp FROM order_inv"))['exp'];
+    $rowsCount = mysqli_fetch_assoc(mysqli_query(openConn(), "(SELECT COUNT(ordID) as exp FROM order_inv  INNER JOIN invoice on invID = ord_invID 
+    INNER JOIN person on perID = inv_perID  
+    INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged  
+    where  ord_isDeleted = '0' and inv_type != 'FR')
+UNION
+(SELECT COUNT(ordID) as exp FROM order_inv INNER JOIN invoice on invID = ord_invID 
+    INNER JOIN person on perID = inv_perID  
+    INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged 
+    INNER JOIN return_details on ordID = date_ordID 
+    where ord_isDeleted = '0' and ord_status = 1)"))['exp'];
 if($show=="return")
-    $rowsCount = mysqli_fetch_assoc(mysqli_query(openConn(), "SELECT COUNT(invID) as exp FROM invoice WHERE inv_status = '-1' and inv_type = 'FR'"))['exp'];
+    $rowsCount = mysqli_fetch_assoc(mysqli_query(openConn(), "SELECT COUNT(invID) as exp FROM invoice INNER JOIN person on perID= inv_perID where inv_type = 'FR' and inv_status='-1'"))['exp'];
 if (count($_GET['order'])) {
     $orderBy = $_GET['columns'][$_GET['order'][0]['column']]['data'];
     // if ($orderBy == 'invID') {
@@ -24,20 +33,43 @@ if (count($_GET['order'])) {
 if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     $search = $_GET["search"]["value"];
     if($show=="facture")
-        $getAllFactureQuery = "select * from invoice INNER JOIN person on perID= inv_perID  where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_status = '0' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+        $getAllFactureQuery = "select * from invoice INNER JOIN person on perID= inv_perID  where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_status = '1' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     if($show=="items")
-        $getAllFactureQuery = "select * from order_inv  INNER JOIN invoice on invID = ord_invID INNER JOIN person on perID = inv_perID  INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged
-         where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' OR inv_type like '%" . $search . "%' OR item_name like '%" . $search . "%') and ord_isDeleted = '0'
-          " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+        $getAllFactureQuery = "(select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,inv_date_del,inv_date_req from order_inv  
+        INNER JOIN invoice on invID = ord_invID 
+        INNER JOIN person on perID = inv_perID  
+        INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged  
+        where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' OR inv_type like '%" . $search . "%' OR item_name like '%" . $search . "%') 
+        and ord_isDeleted = '0' and inv_type != 'FR')
+    UNION
+    (select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,inv_date_del,inv_date_req from order_inv  
+        INNER JOIN invoice on invID = ord_invID 
+        INNER JOIN person on perID = inv_perID  
+        INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged 
+        INNER JOIN return_details on ordID = date_ordID 
+        where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' OR inv_type like '%" . $search . "%' OR item_name like '%" . $search . "%')
+        and ord_isDeleted = '0' and inv_type = 'FR' and ord_status = 1) 
+        " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     if($show=="return")
-        $getAllFactureQuery = "select * from invoice INNER JOIN person on perID= inv_perID inner  where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_type = 'FR' and inv_status='-1' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+        $getAllFactureQuery = "select * from invoice INNER JOIN person on perID= inv_perID where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_type = 'FR' and inv_status='-1' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
      
 } else {
     if($show=="facture")
-        $getAllFactureQuery = "select * from invoice INNER JOIN person on perID= inv_perID where  inv_status = '0'  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+        $getAllFactureQuery = "select * from invoice INNER JOIN person on perID= inv_perID where  inv_status = '1'  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     if($show=="items")
-        $getAllFactureQuery = "select * from order_inv INNER JOIN invoice on invID = ord_invID  INNER JOIN person on perID= inv_perID  INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged  where ord_isDeleted = '0' 
-         " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+        $getAllFactureQuery = "(select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,inv_date_del,inv_date_req from order_inv  
+        INNER JOIN invoice on invID = ord_invID 
+        INNER JOIN person on perID = inv_perID  
+        INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged  
+        where  ord_isDeleted = '0' and inv_type != 'FR')
+    UNION
+    (select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,inv_date_del,inv_date_req from order_inv  
+        INNER JOIN invoice on invID = ord_invID 
+        INNER JOIN person on perID = inv_perID  
+        INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged 
+        INNER JOIN return_details on ordID = date_ordID 
+        where  ord_isDeleted = '0' and inv_type = 'FR' and ord_status = 1) 
+        " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     if($show=="return")
         $getAllFactureQuery = "select * from invoice INNER JOIN person on perID= inv_perID where inv_type = 'FR' and inv_status='-1'  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
      

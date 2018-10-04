@@ -4,6 +4,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder } from '@angular/forms';
 import { HistoryService } from './history.service';
 import { MenuItem } from 'primeng/api';
+import { HistoryItemsComponent } from '../history-items/history-items.component';
+import { HistoryFactureComponent } from '../history-facture/history-facture.component';
 declare var $: any;
 
 @Component({
@@ -28,6 +30,8 @@ export class HistoryComponent implements OnInit {
   
 
   constructor(private historyService: HistoryService,
+    // private historyItemsComponent : HistoryItemsComponent,
+    // private historyFactureComponent : HistoryFactureComponent,
     private modalService: NgbModal,
     private router: Router, 
     private fb: FormBuilder) { }
@@ -36,9 +40,13 @@ export class HistoryComponent implements OnInit {
     var router = localStorage.getItem('routerHistory');
     if (router !== null){
       this.router.navigate([router]);
+      // if(this.historyItemsComponent.globalHistoryItemsDT!= null)
+        // this.historyItemsComponent.globalHistoryItemsDT.ajax.reload(null, false);
       localStorage.removeItem('routerHistory');
     }
     else{
+      // if(this.historyFactureComponent.globalHistoryFactureDT != null)
+        // this.historyFactureComponent.globalHistoryFactureDT.ajax.reload(null, false);
       this.router.navigate(["history/facture"]);
     }
     this.rightClick = [
@@ -92,16 +100,17 @@ export class HistoryComponent implements OnInit {
           { data: "ord_note", title: "NOTE" ,"searchable": false,"sortable": false},
           // { data: "ord_date_req", title: "DATE DE COMMANDE" ,"searchable": false,"sortable": false},
           // { data: "ord_date_del", title: "DATE DE LIVRAISON" ,"searchable": false,"sortable": false},
-        ],"columnDefs": [ {
-          "targets": 0,
-          "render": function (td, data, rowData, row, col) {
-            if (rowData['ord_item_isDamaged'] == 1) {    
-                  return  rowData['item_name'] + " | GATE" ;
-            } else{
-              return rowData['item_name'];
-            }
-        } 
-        }]
+        ]
+        // ,"columnDefs": [ {
+        //   "targets": 0,
+        //   "render": function (td, data, rowData, row, col) {
+        //     if (rowData['ord_item_isDamaged'] == 1) {    
+        //           return  rowData['item_name'] + " | GATE" ;
+        //     } else{
+        //       return rowData['item_name'];
+        //     }
+        // } 
+        // }]
         // createdRow: function (row, data, index) {
         //   if (data['ord_item_isDamaged'] == 1) {    
         //     return         
