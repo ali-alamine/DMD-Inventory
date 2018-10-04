@@ -37,7 +37,6 @@ class factureReturn_model extends CI_Model
             return false;
         }
     }
-
     public function getRepeatedCodeCount($prefix)
     {
         $this->db->count_all_results('invoice');

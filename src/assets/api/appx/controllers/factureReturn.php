@@ -18,6 +18,7 @@ class factureReturn extends REST_Controller
         }
         return $code;
     }
+    
     public function searchPerson_get(){
         $name = $this->get('keyword');
         $isClient = $this->get('isClient');
