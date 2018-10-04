@@ -116,13 +116,12 @@ class facture extends REST_Controller
     }
 
     public function generateFactureCode($factureType){
-        $factureType=strtoupper($factureType);
-        $suffix='00001';
-        $repeatedCount = $this->facture_model->getRepeatedCodeCount($factureType);    
+        $factureType=strtoupper($factureType);        
+        $repeatedCount = $this->facture_model->getRepeatedCodeCount($factureType);
+        $suffix = $repeatedCount+1;
+        $suffix = str_pad($suffix, 5, '0', STR_PAD_LEFT);
         $code=$factureType.$suffix;
-        for($i=0;$i<$repeatedCount;$i++){
-            $code=increment_string($code,'');
-        }
+        
         return $code;
     }
 
