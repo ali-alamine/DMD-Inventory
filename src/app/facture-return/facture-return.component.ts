@@ -31,6 +31,7 @@ export class FactureReturnComponent implements OnInit {
   dataComfirm={};
   addEditBtn;
   factureDetails;
+  editFactureTitle="";
 
   constructor(private router: Router,private fb: FormBuilder,
     private factureReturnService: FactureReturnService,
@@ -81,6 +82,7 @@ export class FactureReturnComponent implements OnInit {
         this.invoiceForm.get('invoiceDate').setValue(this.factureDetails[0].inv_date_req)
         this.invoiceForm.get('clientName').setValue(this.factureDetails[0].per_name)
         this.invoiceForm.get('clientID').setValue(this.factureDetails[0].perID)
+        this.editFactureTitle = "Edit Facture: "+this.factureDetails[0].inv_code;
         console.log(this.invoiceForm.value)
       },error => {
         console.log(error)
@@ -173,12 +175,13 @@ export class FactureReturnComponent implements OnInit {
       } else{
         this.factureReturnService.newReturnInvoice(this.invoiceForm.value).subscribe(Response => {
           this.getOrderNoConfirm(); 
+          // alert(Response)
           swal({
             type: 'success',
             title: 'Success',
-            text: 'Invoice Added Successfully',
+            text: 'Facture Retourn Code: '+Response,
             showConfirmButton: false,
-            timer: 1000
+            timer: 5000
           });
         }, error => {
           swal({
@@ -213,7 +216,7 @@ export class FactureReturnComponent implements OnInit {
         swal({
           type: 'success',
           title: 'Success',
-          text: 'Invoice Added Successfully',
+          text: 'Order Confirmer.',
           showConfirmButton: false,
           timer: 1000
         });
@@ -232,7 +235,7 @@ export class FactureReturnComponent implements OnInit {
         swal({
           type: 'success',
           title: 'Success',
-          text: 'Invoice Added Successfully',
+          text: 'Order Rejeter.',
           showConfirmButton: false,
           timer: 1000
         });

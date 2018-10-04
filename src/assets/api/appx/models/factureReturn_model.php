@@ -70,7 +70,11 @@ class factureReturn_model extends CI_Model
     }
     public function getOrderNoConfirm()
     {
-        $query = $this->db->query("SELECT * FROM order_inv INNER JOIN return_details on date_ordID = ordID INNER JOIN person on ord_perID = perID INNER JOIN item on itemID = ord_itemID and item_is_Damaged = ord_item_isDamaged where ord_status = 0 ");
+        $query = $this->db->query("SELECT * FROM order_inv 
+        INNER JOIN return_details on date_ordID = ordID 
+        INNER JOIN person on ord_perID = perID 
+        INNER JOIN item on itemID = ord_itemID and item_is_Damaged = ord_item_isDamaged 
+        where ord_status = 0 ");
 
         if ($query->num_rows() > 0) {
             return $query->result_array();
@@ -79,10 +83,19 @@ class factureReturn_model extends CI_Model
         }
 
     }
-    public function updateOrder($ordID,$status){
+    public function updateOrder($ordID,$status,$date_com){
         $this->db->where('date_ordID', $ordID);
+        $this->db->set('ord_date_com',$date_com);
         $this->db->set('ord_status',$status);
         if ($this->db->update('return_details')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function deletedOrder($ordID){
+        $this->db->where('ordID', $ordID);
+        if ($this->db->delete('order_inv')) {
             return true;
         } else {
             return false;
@@ -99,8 +112,10 @@ class factureReturn_model extends CI_Model
     }
     public function getFactureDetails($invID){
         // if($type=='FR'){
-            $query = $this->db->query("SELECT *,date(inv_date_req) as inv_date_req FROM order_inv  INNER JOIN invoice on invID = ord_invID 
-            INNER JOIN item ON itemID = ord_itemID INNER JOIN return_details on date_ordID = ordID 
+            $query = $this->db->query("SELECT *,date(inv_date_req) as inv_date_req FROM order_inv  
+            INNER JOIN invoice on invID = ord_invID 
+            INNER JOIN item ON itemID = ord_itemID and item_is_damaged = ord_item_isDamaged 
+            INNER JOIN return_details on date_ordID = ordID 
             INNER JOIN person on perID = ord_perID
             where ord_invID = '".$invID."' and ord_isDeleted = '0' and ord_status = '1' ");
         // } else{

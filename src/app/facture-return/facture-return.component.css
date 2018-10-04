@@ -24,4 +24,14 @@
 .inputNewItem{
     width: 100%;
 }
+.factureHeader{
+    margin: 5px;
+    margin-bottom: 15px;
+    margin-left: 40%;
+    background-color: lightblue;
+    width: 300px;
+    text-align: center;
+    font-weight: 500;
+    
+}
 

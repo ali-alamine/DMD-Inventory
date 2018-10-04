@@ -146,19 +146,19 @@ export class HistoryComponent implements OnInit {
     if(facture[0].type=="FD"){
       this.showDetailsCode="Show Details Facture Déchargement" ;
       this.info_client="";
-      this.info_code_date="Date de Commande: " + facture[0].date_req + "<br> Code: "+facture[0].code;
+      this.info_code_date="Date de Commande: " + facture[0].date_req + "\n Code: "+facture[0].code;
     }
     if(facture[0].type=="FR"){
       this.showDetailsCode="Show Details Facture Retour" ;
-      this.info_client="Client: " + facture[0].clientName + "<br> Phone: " + facture[0].phone + "<br> Address: "+facture[0].address;
+      this.info_client="Client: " + facture[0].clientName + "\n Phone: " + facture[0].phone + "\n Address: "+facture[0].address;
       this.info_code_date="Code: "+facture[0].code;
     }
     if(facture[0].type=="FC"){
       this.showDetailsCode="Show Details Facture Client" ;
-      this.info_client="Client: " + facture[0].clientName + "<br> Phone: " + facture[0].phone + "<br> Address: "+facture[0].address;
-      this.info_code_date="Date de Commande: " + facture[0].date_req + "<br>Date de Livraison: " + facture[0].date_del + "<br> Code: "+facture[0].code;
-      // Client: {{clientName}}<br>Phone: {{phone}}<br>Address: {{address}}
-      // Date de Commande: {{date_req}}<br>Date de Livraison: {{date_del}}<br>Code: {{code}}
+      this.info_client="Client: " + facture[0].clientName + "\n Phone: " + facture[0].phone + "\n Address: "+facture[0].address;
+      this.info_code_date="Date de Commande: " + facture[0].date_req + "\n Date de Livraison: " + facture[0].date_del + "\n Code: "+facture[0].code;
+      // Client: {{clientName}}\nPhone: {{phone}}\nAddress: {{address}}
+      // Date de Commande: {{date_req}}\nDate de Livraison: {{date_del}}\nCode: {{code}}
     }
     // this.name=facture[0].clientName; 
     // this.phone=facture[0].phone;
