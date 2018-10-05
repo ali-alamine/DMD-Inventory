@@ -41,6 +41,7 @@ import { FileUploadModule } from 'primeng/components/fileupload/fileupload';
 import {MatBadgeModule} from '@angular/material/badge';
 import { HistoryReturnComponent } from './history-return/history-return.component';
 import {DatePipe} from '@angular/common';
+import { HistoryTransferComponent } from './history-transfer/history-transfer.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,7 +59,8 @@ import {DatePipe} from '@angular/common';
     FactureClientComponent,
     FactureReturnComponent,
     SettingsComponent,
-    HistoryReturnComponent
+    HistoryReturnComponent,
+    HistoryTransferComponent
   ],
   imports: [
     BrowserModule,

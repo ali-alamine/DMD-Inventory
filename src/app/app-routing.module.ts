@@ -14,6 +14,7 @@ import { FactureClientComponent } from './facture-client/facture-client.componen
 import { FactureReturnComponent } from './facture-return/facture-return.component';
 import { SettingsComponent } from './settings/settings.component';
 import { HistoryReturnComponent } from './history-return/history-return.component';
+import { HistoryTransferComponent } from './history-transfer/history-transfer.component';
 
 const routes: Routes = [
   {
@@ -36,7 +37,8 @@ const routes: Routes = [
     path:"history",component:HistoryComponent,  children: [
       { path: 'facture',component:  HistoryFactureComponent},
       { path : 'items',component: HistoryItemsComponent } ,
-      { path : 'return',component: HistoryReturnComponent } 
+      { path : 'return',component: HistoryReturnComponent },
+      { path : 'transfer',component: HistoryTransferComponent }
     ]
   },
   {

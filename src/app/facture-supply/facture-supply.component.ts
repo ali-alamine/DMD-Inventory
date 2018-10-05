@@ -82,6 +82,7 @@ export class SupplyComponent implements OnInit {
 
   ngOnDestroy() {
     this._hotkeysService.reset();
+    SupplyComponent.selectedItems = [];
   }
 
   addFactureEditRow(element) {
@@ -96,7 +97,7 @@ export class SupplyComponent implements OnInit {
     });
     this.itemsForm.push(item);
   }
-  
+
   addRow(element) {
     const item = this.fb.group({
       itemID: [element['id'], Validators.required],
