@@ -85,8 +85,9 @@ class facture_model extends CI_Model
 
     public function getFactureDetails($factureID)
     {
-        $this->db->select('*');
+        $this->db->select('*,date(inv_date_req) as inv_date_req');
         $this->db->from('invoice');
+        $this->db->join('person', 'perID=inv_perID', 'inner');
         $this->db->where('invID', $factureID);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
@@ -100,7 +101,7 @@ class facture_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('order_inv');
-        $this->db->join('item', 'item.itemID = order_inv.ord_itemID', 'inner');
+        $this->db->join('item', 'item.itemID = order_inv.ord_itemID and item.item_is_damaged=ord_item_isDamaged', 'inner');
         $this->db->where('ord_invID', $factureID);
 
         $query = $this->db->get();

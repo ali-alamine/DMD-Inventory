@@ -19,19 +19,15 @@ export class HistoryComponent implements OnInit {
   rightClick: MenuItem[];
   factureDetails;
   showDetailsCode;
-  name; phone;address;date_del;date_req;code;
-  info_client;info_code_date;
-  // showDetails:any;
   private selectedFactureDetailsRowData;
   private selectedFactureDetailsID;
   private globalHistoryFactureDetailsDT;
   @ViewChild('showDetails')
   private showDetailsTPL : TemplateRef<any>;
+  clientName; clientPhone; clientAddress; dateReq; codeFR; type;
   
 
   constructor(private historyService: HistoryService,
-    // private historyItemsComponent : HistoryItemsComponent,
-    // private historyFactureComponent : HistoryFactureComponent,
     private modalService: NgbModal,
     private router: Router, 
     private fb: FormBuilder) { }
@@ -43,8 +39,7 @@ export class HistoryComponent implements OnInit {
       // if(this.historyItemsComponent.globalHistoryItemsDT!= null)
         // this.historyItemsComponent.globalHistoryItemsDT.ajax.reload(null, false);
       localStorage.removeItem('routerHistory');
-    }
-    else{
+    } else{
       // if(this.historyFactureComponent.globalHistoryFactureDT != null)
         // this.historyFactureComponent.globalHistoryFactureDT.ajax.reload(null, false);
       this.router.navigate(["history/facture"]);
@@ -71,14 +66,27 @@ export class HistoryComponent implements OnInit {
 
   }
   showFactureDetails(facture) {
-    // console.log(facture[0].ID)
+    this.modalReference = this.modalService.open(this.showDetailsTPL, { centered: true, ariaLabelledBy: 'modal-basic-title', size: 'lg' });
     this.historyService.getFactureDetails(facture[0].ID,facture[0].type).subscribe(Response => {
       this.factureDetails = Response;
-      // console.log(this.factureDetails);
+      this.clientName = facture[0].clientName;
+      this.clientPhone = facture[0].phone;
+      this.clientAddress = facture[0].address;
+      this.dateReq = facture[0].date_req;
+      this.codeFR = facture[0].code;
+      this.type = facture[0].type;
+      if(facture[0].type=="FD"){
+        this.showDetailsCode="Afficher les détails du facture Déchargement" ;
+      }
+      if(facture[0].type=="FR"){
+        this.showDetailsCode="Afficher les détails du facture Retour" ;
+      }
+      if(facture[0].type=="FC"){
+        this.showDetailsCode="Afficher les détails du facture Client" ;
+      }
       var factureDetailDT = $('#detailFactureDT').DataTable({
         responsive: true,
         paging: false,
-        // pagingType: "full_numbers",
         lengthChange:false,
         serverSide: false,
         processing: true,
@@ -89,7 +97,6 @@ export class HistoryComponent implements OnInit {
         stateSave: false,
         fixedHeader: false,
         searching: true,
-        // lengthMenu: [[25, 50, 100], [25, 50, 100]],
         data: this.factureDetails,
         order: [[0, 'desc']],
         columns: [
@@ -98,41 +105,7 @@ export class HistoryComponent implements OnInit {
           { data: "ord_crt", title: "CRT" ,"searchable": false,"sortable": false},
           { data: "ord_piece", title: "PIECE","searchable": false,"sortable": false },
           { data: "ord_note", title: "NOTE" ,"searchable": false,"sortable": false},
-          // { data: "ord_date_req", title: "DATE DE COMMANDE" ,"searchable": false,"sortable": false},
-          // { data: "ord_date_del", title: "DATE DE LIVRAISON" ,"searchable": false,"sortable": false},
         ]
-        // ,"columnDefs": [ {
-        //   "targets": 0,
-        //   "render": function (td, data, rowData, row, col) {
-        //     if (rowData['ord_item_isDamaged'] == 1) {    
-        //           return  rowData['item_name'] + " | GATE" ;
-        //     } else{
-        //       return rowData['item_name'];
-        //     }
-        // } 
-        // }]
-        // createdRow: function (row, data, index) {
-        //   if (data['ord_item_isDamaged'] == 1) {    
-        //     return         
-        //     $(row).addClass("bg-warning");
-        //     $(row).attr('title', " CRT: " + data['crtD'] + " || Piece: " + data['pieceD']);    
-        //   }
-        // }
-        // ,"columnDefs": [ {
-        //   "targets": 1,
-        //   "createdCell": function (td, cellData, rowData, row, col) {
-            
-        //     if ( rowData['isDamagedFlag']) {              
-        //       $(td).html(cellData+" <i style='float:right; color: #FF0000;' md-18 class='material-icons'>new_releases</i> ")
-        //     }
-        //   }
-        // } ],
-        // createdRow: function (row, data, index) {
-        //   if (data['isDamagedFlag'] == 1) {            
-        //     $(row).addClass("bg-warning");
-        //     $(row).attr('title', " CRT: " + data['crtD'] + " || Piece: " + data['pieceD']);    
-        //   }
-        // }
       });
       this.globalHistoryFactureDetailsDT = factureDetailDT;
       $('#factureDetailDT tbody').on('mousedown', 'tr', function (event) {
@@ -140,7 +113,6 @@ export class HistoryComponent implements OnInit {
           factureDetailDT.row(this).select();
         }
       });
-
       $('#factureDetailDT').on('key-focus.dt', function (e, datatable, cell) {
         $(factureDetailDT.row(cell.index().row).node()).addClass('selected');
 
@@ -151,30 +123,6 @@ export class HistoryComponent implements OnInit {
     }, error => {
       alert(error)
     });
-    this.modalReference = this.modalService.open(this.showDetailsTPL, { centered: true, ariaLabelledBy: 'modal-basic-title', size: 'lg' });
-    if(facture[0].type=="FD"){
-      this.showDetailsCode="Show Details Facture Déchargement" ;
-      this.info_client="";
-      this.info_code_date="Date de Commande: " + facture[0].date_req + "\n Code: "+facture[0].code;
-    }
-    if(facture[0].type=="FR"){
-      this.showDetailsCode="Show Details Facture Retour" ;
-      this.info_client="Client: " + facture[0].clientName + "\n Phone: " + facture[0].phone + "\n Address: "+facture[0].address;
-      this.info_code_date="Code: "+facture[0].code;
-    }
-    if(facture[0].type=="FC"){
-      this.showDetailsCode="Show Details Facture Client" ;
-      this.info_client="Client: " + facture[0].clientName + "\n Phone: " + facture[0].phone + "\n Address: "+facture[0].address;
-      this.info_code_date="Date de Commande: " + facture[0].date_req + "\n Date de Livraison: " + facture[0].date_del + "\n Code: "+facture[0].code;
-      // Client: {{clientName}}\nPhone: {{phone}}\nAddress: {{address}}
-      // Date de Commande: {{date_req}}\nDate de Livraison: {{date_del}}\nCode: {{code}}
-    }
-    // this.name=facture[0].clientName; 
-    // this.phone=facture[0].phone;
-    // this.address=facture[0].address;
-    // this.date_req=facture[0].date_req;
-    // this.date_del=facture[0].date_del;
-    // this.code=facture[0].code;
   }
 
 }

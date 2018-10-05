@@ -1,4 +1,7 @@
 <div class="container-fluid">
+  <div class="factureHeader" >
+      {{editFactureTitle}}
+  </div>
 
 
   <form [formGroup]="invoiceForm" autocomplete="off" #f="ngForm">
@@ -7,42 +10,72 @@
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="searchClient" fxFlex>
 
-          <input matInput placeholder="Search Client Name" formControlName="searchClient" type="text" name="nameInput"
-            [matAutocomplete]="auto">
+          <input matInput placeholder="Rechercher le Nom du Client" formControlName="searchClient" type="text" name="nameInput"
+            [matAutocomplete]="auto" autofocus>
 
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option (onSelectionChange)="setClientName(option.perID,option.per_name)" *ngFor="let option of options"
               [value]="option.name">{{option.per_name}}
               || {{option.per_code}}</mat-option>
           </mat-autocomplete>
-          <mat-error> Client name is required</mat-error>
+          <mat-error> Le nom du client est requis</mat-error>
         </mat-form-field>
       </div>
 
       <mat-form-field class="itemName" fxFlex>
-        <input matInput placeholder="Name" formControlName="clientName" type="text" name="nameInput" [readonly]="true">
+        <input matInput placeholder="Nom" formControlName="clientName" type="text" name="nameInput" [readonly]="true">
       </mat-form-field>
 
       <mat-form-field class="inputField">
-        <input matInput formControlName="invoiceDate" placeholder="Facture Date" readonly=true>
+        <input matInput formControlName="invoiceDate" placeholder="Date de Commande" readonly=true>
       </mat-form-field>
 
       <mat-form-field class="inputField">
-        <input appFocusDirective matInput [matDatepicker]="deliveryDate" formControlName="delDate" placeholder="Delivery Date">
+        <input appFocusDirective matInput [matDatepicker]="deliveryDate" formControlName="delDate" placeholder="Date de Livraison">
         <mat-datepicker-toggle matSuffix [for]="deliveryDate" tabIndex="-1"></mat-datepicker-toggle>
         <mat-datepicker touchUi #deliveryDate></mat-datepicker>
-        <mat-error> Date is required</mat-error>
+        <mat-error> Date de Livraison est requis</mat-error>
       </mat-form-field>
 
       <button class="addBtns" id="multiSelectBtn" mat-raised-button color="primary" (click)="openMultiSelect(mutliSelectModal)"
         style="float:right">
-        <i class="material-icons">subdirectory_arrow_left</i> MultiSelect
+        <i class="material-icons">subdirectory_arrow_left</i> Sélection Multiple
       </button>
 
     </div>
 
     <hr>
-
+    <div formArrayName="itemsEdit">
+        <div *ngFor="let item of itemsEditForm.controls; let i=index" [formGroupName]="i">
+          <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+            <mat-form-field fxFlex hidden>
+              <input matInput placeholder="Item ID" formControlName="itemID" #itemID type="number">
+            </mat-form-field>
+            <mat-form-field fxFlex hidden>
+              <input matInput placeholder="isDamaged" formControlName="isDamaged" #isDamaged type="number">
+            </mat-form-field>
+            <mat-form-field fxFlex hidden>
+              <input matInput placeholder="colisage" formControlName="colisage" type="number">
+            </mat-form-field>
+            <mat-form-field fxFlex class="itemName" style="text-align: center;">
+              <input matInput placeholder="Article" formControlName="itemName" type="text" name="nameInput" tabIndex="-1"
+                [readonly]="true">
+            </mat-form-field>
+            <mat-form-field fxFlex class="itemInputs">
+              <input matInput placeholder="CRT" formControlName="crt" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
+            </mat-form-field>
+            <mat-form-field fxFlex class="itemInputs">
+              <input matInput placeholder="Piece" formControlName="piece" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
+            </mat-form-field>
+            <mat-form-field fxFlex class="itemName">
+              <input matInput placeholder="Comment" formControlName="comment" type="text">
+            </mat-form-field>
+            <button mat-icon-button (click)="deleteItemEdit(i)" color="warn" tabindex="-1">
+              <mat-icon aria-label="Delete Item" title="Delete Item">close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
     <div formArrayName="items">
       <div *ngFor="let item of itemsForm.controls; let i=index" [formGroupName]="i">
 
@@ -56,7 +89,7 @@
           <input matInput placeholder="colisage" formControlName="colisage" type="number">
         </mat-form-field>
         <mat-form-field fxFlex class="itemName" style="text-align: center;">
-          <input matInput placeholder="Name" formControlName="itemName" type="text" name="nameInput" tabIndex="-1"
+          <input matInput placeholder="Article" formControlName="itemName" type="text" name="nameInput" tabIndex="-1"
             [readonly]="true">
         </mat-form-field>
         <mat-form-field fxFlex class="itemInputs">
@@ -76,11 +109,15 @@
 
     </div>
 
-    <button mat-raised-button name="addButton" class="addBtns" color="primary" (click)="addClientInvoice(false)"
-      [disabled]="!invoiceForm.valid || itemsForm.length == 0">Submit</button>
-
-    <button mat-raised-button name="submitPrint" class="addBtns" color="primary" (click)="addClientInvoice(true)"
-      [disabled]="!invoiceForm.valid || itemsForm.length == 0">Submit and print</button>
+    <!-- <button mat-raised-button id="submit" class="addBtns" color="primary" (click)="addEditReturnInvoice()" [disabled]="!invoiceForm.valid || itemsForm.length == 0 " >Soumettre</button> -->
+    <button mat-raised-button id="update" class="addBtns" color="primary" (click)="editClientInvoice()" [disabled]="!invoiceForm.valid || itemsEditForm.length == 0 " >Mis à Jour</button>
+    <div id="submit">
+      <button mat-raised-button name="addButton" class="addBtns" color="primary" (click)="addClientInvoice(false)"
+        [disabled]="!invoiceForm.valid || itemsForm.length == 0">Soumettre</button>
+  
+      <button mat-raised-button name="submitPrint" class="addBtns" color="primary" (click)="addClientInvoice(true)"
+        [disabled]="!invoiceForm.valid || itemsForm.length == 0">Soumettre et Imprimer</button>
+    </div>
   </form>
 </div>
 

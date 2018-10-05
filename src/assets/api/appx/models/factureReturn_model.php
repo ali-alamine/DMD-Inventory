@@ -6,8 +6,7 @@ class factureReturn_model extends CI_Model
         $this->load->database();
     }
 
-    public function addReturnInvoice($data)
-    {
+    public function addReturnInvoice($data){
         if ($this->db->insert('invoice', $data)) {
             return $this->db->insert_id();
         } else {
@@ -15,8 +14,7 @@ class factureReturn_model extends CI_Model
         }
     }
 
-    public function addItemToInvoice($data)
-    {
+    public function addItemToInvoice($data){
         if ($this->db->insert('order_inv', $data)) {
             $ordID = $this->db->insert_id();
             return $ordID;
@@ -26,7 +24,6 @@ class factureReturn_model extends CI_Model
     }
 
     public function updateStock($id, $quantity,$isDamaged) // update quantity of item 
-
     {
         $this->db->where('itemID', $id);
         $this->db->where('item_is_damaged', $isDamaged);
@@ -37,8 +34,7 @@ class factureReturn_model extends CI_Model
             return false;
         }
     }
-    public function getRepeatedCodeCount($prefix)
-    {
+    public function getRepeatedCodeCount($prefix){
         $this->db->count_all_results('invoice');
         $this->db->like('inv_type', $prefix, 'after');
         $this->db->from('invoice');
@@ -105,15 +101,6 @@ class factureReturn_model extends CI_Model
             return false;
         }
     }
-    // public function updateInvoice($invID,$status){
-    //     $this->db->where('invID', $invID);
-    //     $this->db->set('inv_status',$status);
-    //     if ($this->db->update('invoice')) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
     public function getFactureDetails($invID){
         // if($type=='FR'){
             $query = $this->db->query("SELECT *,date(inv_date_req) as inv_date_req FROM order_inv  
@@ -154,6 +141,15 @@ class factureReturn_model extends CI_Model
     {
         $this->db->where('date_ordID', $ordID);
         if ($this->db->update('return_details',$data)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function updateInvoice($invID,$status){
+        $this->db->where('invID', $invID);
+        $this->db->set('inv_status',$status);
+        if ($this->db->update('invoice')) {
             return true;
         } else {
             return false;

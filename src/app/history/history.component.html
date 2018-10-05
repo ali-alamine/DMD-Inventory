@@ -4,7 +4,6 @@
       <i class="material-icons">description</i>
       FACTURE
     </mat-button-toggle>
-
     <mat-button-toggle routerLink="items" value="historyItems" class="historyBtns" mat-raised-button color="primary">
       <i class="material-icons">format_list_bulleted</i>
       ARTICLE
@@ -14,7 +13,6 @@
     <span matBadge="2" matBadgeOverlap="false">RETOUR</span>
   </mat-button-toggle>
    </mat-button-toggle-group>
-
   <router-outlet></router-outlet>
 </div>
 <ng-template #showDetails  let-c="close" let-d="dismiss" class="showTemplate">
@@ -26,11 +24,14 @@
       </button>
     </div>
     <div class="modal-body">
-      <div style="float:left;">
-        {{info_client}}
+      <div style="float:left;" *ngIf="type == 'FC'">
+        <b>Nom:</b> {{clientName}}<br>
+        <b>Phone:</b> {{clientPhone}}<br>
+        <b>Adresse:</b> {{clientAddress}}
       </div>
       <div style="float: right;">
-        {{info_code_date}}
+        <b>Date De Commande:</b> {{dateReq}}<br>
+        <b>Code:</b> {{codeFR}}
       </div>
       <br>
       <br>
@@ -46,11 +47,5 @@
       </div>
     </div>
     <div class="modal-footer">
-      
     </div>
-  </ng-template>
-  <div hidden>
-      <!-- <button id="showDetailsBtn" (click)="openShowDetails(showDetails)"></button> -->
-      <!-- <button id="deletedBtn" (click)="deleted()"></button> -->
-      <!-- <button id="editBtn" (click)="edit()"></button> -->
-    </div>
+</ng-template>

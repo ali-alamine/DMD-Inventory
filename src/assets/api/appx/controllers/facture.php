@@ -23,6 +23,8 @@ class facture extends REST_Controller
         $invoiceID = $this->facture_model->addSupplyInvoice(array("inv_perID" => 1, "inv_code" => $invoiceCode, "inv_type" => 'FD', "inv_date_req" => $correctDate->format('Y-m-d H:i:s')));
 
         foreach ($invoiceItems as $row) {
+            if($row['crt'] == '') $row['crt']=0;
+            if($row['piece'] == '') $row['piece']=0;
             $itemData = array(
                 "ord_itemID" => $row['itemID'],
                 "ord_piece" => $row['piece'],
@@ -42,7 +44,7 @@ class facture extends REST_Controller
             $this->response("Invoice information could not be saved. Try again.", 404);
         } else {
             $this->db->trans_commit();
-            $this->response("success", 200);
+            $this->response($invoiceCode, 200);
         }
     }
 
@@ -67,6 +69,8 @@ class facture extends REST_Controller
         $invoiceID = $this->facture_model->addClientInvoice(array("inv_perID" =>  $clientID, "inv_code" => $invoiceCode, "inv_type" => 'FC', "inv_date_req" => $invoiceCorrectDate->format('Y-m-d H:i:s'), "inv_date_del" => $deliveryCorrectDate->format('Y-m-d')));
 
         foreach ($invoiceItems as $row) {
+            if($row['crt'] == '') $row['crt']=0;
+            if($row['piece'] == '') $row['piece']=0;
             $itemData = array(
                 "ord_itemID" => $row['itemID'],
                 "ord_item_isDamaged" => $row['isDamaged'],
@@ -89,7 +93,7 @@ class facture extends REST_Controller
             $this->response("Invoice information could not be saved. Try again.", 404);
         } else {
             $this->db->trans_commit();
-            $this->response("success", 200);
+            $this->response($invoiceCode, 200);
         }
     }
 
@@ -151,6 +155,8 @@ class facture extends REST_Controller
         $this->facture_model->deleteOldOrderInvoice($invoiceID);
 
         foreach ($invoiceItems as $row) {
+            if($row['crt'] == '') $row['crt']=0;
+            if($row['piece'] == '') $row['piece']=0;
             $itemData = array(
                 "ord_itemID" => $row['itemID'],
                 "ord_piece" => $row['piece'],

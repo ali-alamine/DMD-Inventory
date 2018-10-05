@@ -6,9 +6,10 @@ import { SupplyService } from '../facture-supply/facture-supply.service';
 import swal from 'sweetalert2';
 import { FactureClientService } from './facture-client.service';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 declare var $: any;
 import { DatePipe } from '@angular/common';
+import { FactureComponent } from '../facture/facture.component';
 @Component({
   selector: 'app-facture',
   templateUrl: './facture-client.component.html',
@@ -22,9 +23,25 @@ export class FactureClientComponent implements OnInit {
   invoiceForm: FormGroup;
   options;
   items: any;
+  editForm: any;
   static selectedItems: fcItem[] = new Array();
   static globalMultiSelectDT;
-  constructor(private datePipe: DatePipe,private fb: FormBuilder, private factureClientService: FactureClientService, private router: Router, private modalService: NgbModal, private _hotkeysService: HotkeysService) {
+  editFactureTitle='';
+  deliveryDate;
+  invoiceDate;
+  private sub;
+  factureID;
+  factureHeader = [];
+  factureDetails = [];
+  
+  constructor(private datePipe: DatePipe,
+    private fb: FormBuilder,
+    private factureClientService: FactureClientService,
+    private router: Router, 
+    private modalService: NgbModal, 
+    private _hotkeysService: HotkeysService,
+    private route: ActivatedRoute) {
+
     this._hotkeysService.add(new Hotkey('ctrl+`', (event: KeyboardEvent): boolean => {
       let element: HTMLElement = document.getElementById('multiSelectBtn') as HTMLElement;
       element.click();
@@ -46,17 +63,65 @@ export class FactureClientComponent implements OnInit {
 
   ngOnInit() {
     const currentDate = new Date();
-    var deliveryDate = currentDate.toISOString().substring(0, 10);
-    var s = this.datePipe.transform(currentDate,"MM/d/yyyy");
-    
+    this.deliveryDate = currentDate.toISOString().substring(0, 10);
+    this.invoiceDate = this.datePipe.transform(currentDate,"MM/d/yyyy");
     this.invoiceForm = this.fb.group({
-      invoiceDate: [s, Validators.required],
-      delDate: [deliveryDate, Validators.required],
+      invoiceID : [],
+      invoiceDate: [this.invoiceDate, Validators.required],
+      delDate: [this.deliveryDate, Validators.required],
       clientName: ['', Validators.required],
       searchClient: '',
       clientID: '',
+      itemsEdit: this.fb.array([]),
       items: this.fb.array([])
     });
+    this.sub = this.route.queryParams.subscribe(params => {
+      this.factureID = params['factureID'] || '-1';
+    });
+    if(this.factureID != -1){
+      document.getElementById('submit').style.display = "none";
+    } else{
+      document.getElementById('update').style.display = "none";
+    }
+
+    if(this.factureID != '-1'){
+      this.factureClientService.getFactureDetails(this.factureID).subscribe(Response => {        
+        this.factureHeader = Response[0];
+        this.factureDetails = Response[1];
+        var dateReq = this.factureHeader[0]['inv_date_req'];
+        var dateDel = this.factureHeader[0]['inv_date_del'];
+        this.factureDate.setValue(dateReq);
+        this.delDate.setValue(dateDel);
+        this.invoiceID.setValue(this.factureID);
+        this.clientName.setValue(this.factureHeader[0]['per_name']);
+        console.log(this.factureDetails)
+        this.factureDetails.forEach(element => {
+          const item = this.fb.group({
+            ordID: [element['ordID'], Validators.required],
+            itemID: [element['ord_itemID'], Validators.required],
+            itemName: [element['item_name']],
+            isDamaged:[element['ord_item_isDamaged']],
+            colisage:[element['item_packing_list']],
+            crt: [element['ord_crt']],
+            piece: [element['ord_piece']],
+            comment: [element['ord_note']],
+            // date_req: [this.factureDetails[i].ord_date_req, Validators.required],
+            // date_com: [this.factureDetails[i].ord_date_com, Validators.required],
+            isDeleted: 0
+          });
+          this.itemsEditForm.push(item)
+          // SupplyComponent.selectedItems.push({ id: element['itemID'], name: element['item_name'], colisage:element['item_packing_list'] });
+        });
+        this.editFactureTitle = "Edit Facture: "+this.factureHeader[0]['inv_code'];        
+      }, error => {
+        swal({
+          type: 'error',
+          title: error.statusText,
+          text: error.message
+        });
+      });
+    } 
+    
     this.onClientNameChange();
   }
 
@@ -84,14 +149,23 @@ export class FactureClientComponent implements OnInit {
       itemName: [element['name']],
       isDamaged: [element['gate']],
       colisage: [element['colisage']],
-      crt: [''],
-      piece: [''],
+      crt:'',
+      piece:'',
+      // crt: ['',[Validators.required, Validators.min(0)]],
+      // piece: ['',[Validators.required, Validators.min(0)]],
       comment: ['']
 
     });
     this.itemsForm.push(item);
   }
-
+  deleteItemEdit(i) {
+    this.itemsEditForm.controls[i].get('isDeleted').setValue(1);
+    // this.itemsEditForm.controls[i].disable(;
+    // this.itemsEditForm.removeAt(i);
+    console.log(this.itemsEditForm.value)
+    // var index = FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id','gate', id.value , itemIsDamaged.value);
+    // FactureReturnComponent.selectedItems.splice(index, 1);
+  }
 
   deleteItem(i, id, itemIsDamaged) {
     this.itemsForm.removeAt(i);
@@ -114,6 +188,43 @@ export class FactureClientComponent implements OnInit {
       swal({
         type: 'success',
         title: 'Success',
+        text: 'Facture Client Code: '+Response,
+        showConfirmButton: false,
+        timer: 4000
+      });
+    }, error => {
+      swal({
+        type: 'error',
+        title: error.statusText,
+        text: error.message
+      });
+    });
+    console.log(this.invoiceForm.value);
+    while (this.itemsForm.length !== 0) {
+      this.itemsForm.removeAt(0)
+    }
+    FactureClientComponent.selectedItems = [];
+    this.invoiceForm.reset();
+    this.myNgForm.resetForm();
+    this.invoiceForm.get('invoiceDate').setValue(this.invoiceDate);
+    this.invoiceForm.get('delDate').setValue(this.deliveryDate);
+    if(flag == true)
+    this.printFactureClient()
+  }
+
+  printFactureClient(){
+    var printContents = document.getElementById('printFacture').innerHTML;
+    var popupWin = window.open('', '_blank', 'width=800,height=600');
+    popupWin.document.open();
+    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="../../styles.css"></head><body onload="window.print()">' + printContents + '</body></html>');
+    popupWin.document.close();
+    setTimeout(function(){ popupWin.close(); }, 1000);
+  }
+  editClientInvoice(){
+    this.factureClientService.newClientInvoice(this.invoiceForm.value).subscribe(Response => {
+      swal({
+        type: 'success',
+        title: 'Success',
         text: 'Invoice Added Successfully',
         showConfirmButton: false,
         timer: 1000
@@ -132,20 +243,11 @@ export class FactureClientComponent implements OnInit {
     FactureClientComponent.selectedItems = [];
     this.invoiceForm.reset();
     this.myNgForm.resetForm();
+    this.invoiceForm.get('invoiceDate').setValue(this.invoiceDate);
+    this.invoiceForm.get('delDate').setValue(this.deliveryDate);
 
-    if(flag == true)
-    this.printFactureClient()
+
   }
-
-   printFactureClient(){
-    var printContents = document.getElementById('printFacture').innerHTML;
-    var popupWin = window.open('', '_blank', 'width=800,height=600');
-    popupWin.document.open();
-    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="../../styles.css"></head><body onload="window.print()">' + printContents + '</body></html>');
-    popupWin.document.close();
-    setTimeout(function(){ popupWin.close(); }, 1000);
-}
-
   addItemsToFacture() {
     FactureClientComponent.globalMultiSelectDT.destroy();
     this.modalReference.close();
@@ -234,11 +336,21 @@ export class FactureClientComponent implements OnInit {
 
     FactureClientComponent.globalMultiSelectDT = multiSelectDT;
   }
-
+  get itemsEditForm() {
+    return this.invoiceForm.get('itemsEdit') as FormArray;
+  }
   get itemsForm() {
     return this.invoiceForm.get('items') as FormArray
   }
-
+  get factureDate() {
+    return this.invoiceForm.get('invoiceDate');
+  }
+  get delDate(){
+    return this.invoiceForm.get('delDate');
+  }
+  get invoiceID() {
+    return this.invoiceForm.get('invoiceID');
+  }
   get itemID() {
     return this.invoiceForm.get('itemID');
   }

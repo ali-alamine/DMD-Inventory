@@ -17,4 +17,7 @@ export class FactureClientService {
   newClientInvoice(invoiceData): Observable<any>{
     return this.httpClient.post(this.url+"newClientInvoice", invoiceData);
   }
+  getFactureDetails(factureID):Observable<any>{
+    return this.httpClient.get(this.url+"getFactureDetails", {params:{factureID:factureID}});
+  }
 }

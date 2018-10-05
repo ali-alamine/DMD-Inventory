@@ -155,10 +155,10 @@ class history extends REST_Controller
             $this->history_model->deletedOrder($ordID);
         }
         $count = $this->history_model->checkInvoice($invID,1);
-        
         if($count != 0)
             $this->history_model->updateInvoice($invID,1);
-        // $this->history_model->updateInvoice($invID,1);
+        if($count == 0)
+            $this->history_model->updateInvoice($invID,0);
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
             $this->response("Invoice information could not be saved. Try again.", 404);

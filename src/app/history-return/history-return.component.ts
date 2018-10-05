@@ -20,6 +20,8 @@ export class HistoryReturnComponent implements OnInit {
   modalReference: any;
   private selectedFactureRowData;
   static selectedFactureID;
+  static selectedFactureCode;
+  static selectedFactureDate;
   rightClick2: MenuItem[];
   private globalHistoryReturnDT;
   private globalReturnDetailsDT;
@@ -27,6 +29,7 @@ export class HistoryReturnComponent implements OnInit {
   static selectedFacture = new Array();
   lengthFR;
   dataComfirm={};
+  clientName; clientPhone; clientAddress; dateReq; codeFR;
 
   constructor(private historyComponent : HistoryComponent,
     private historyService: HistoryService,
@@ -109,6 +112,8 @@ export class HistoryReturnComponent implements OnInit {
         if (type === 'row') {
           this.selectedFactureRowData = historyReturnDT.row(indexes).data();
           HistoryReturnComponent.selectedFactureID = historyReturnDT.row(indexes).data()['invID'];
+          HistoryReturnComponent.selectedFactureCode = historyReturnDT.row(indexes).data()['inv_code'];
+          HistoryReturnComponent.selectedFactureDate = historyReturnDT.row(indexes).data()['inv_date_req'];
 
         }
       });
@@ -133,6 +138,11 @@ export class HistoryReturnComponent implements OnInit {
       this.modalReference = this.modalService.open(showDetails, { centered: true, ariaLabelledBy: 'modal-basic-title', size: 'lg' });
     this.historyService.getFactureReturnDetails(HistoryReturnComponent.selectedFactureID).subscribe(Response => {
       this.factureDetails = Response;
+      this.clientName = this.factureDetails[0].per_name;
+      this.clientPhone = this.factureDetails[0].per_phone;
+      this.clientAddress = this.factureDetails[0].per_address;
+      this.dateReq = HistoryReturnComponent.selectedFactureDate;
+      this.codeFR = HistoryReturnComponent.selectedFactureCode;
     }, error => {
       alert(error)
     });

@@ -51,10 +51,6 @@ class factureReturn extends REST_Controller
             if ($ordID === 0) {
                 $this->response("Item information could not be saved. Try again.", 404);
             } else {
-                // $reqCorrectDate = new DateTime($row['date_req']);
-                // $reqCorrectDate->setTimezone(new DateTimeZone('Asia/Beirut'));
-                // $comCorrectDate = new DateTime($row['date_com']);
-                // $comCorrectDate->setTimezone(new DateTimeZone('Asia/Beirut'));
                 date_default_timezone_set("Asia/Beirut");
                 $date=date("Y-m-d H:i:s");
                 $this->factureReturn_model->addDateReturn(array('date_ordID' => $ordID,'ord_perID' => $clientID,
@@ -69,51 +65,14 @@ class factureReturn extends REST_Controller
             $this->response($invoiceCode);
         }
     }
-    public function getOrderNoConfirm_get()
-    {
+    public function getOrderNoConfirm_get(){
         $result = $this->factureReturn_model->getOrderNoConfirm();
         if ($result) {
             $this->response($result, 200);
             exit;
         }
     }
-    // public function confirmOrder_post(){        
-    //     $ordID = $this->post('ordID');
-    //     $invID = $this->post('invID');
-    //     $crt = $this->post('crt');
-    //     $piece = $this->post('piece');
-    //     $itemID = $this->post('itemID');
-    //     $isDamaged = $this->post('isDamaged');
-    //     $packingList = $this->post('packingList');
-    //     date_default_timezone_set("Asia/Beirut");
-    //     $date_com=date("Y-m-d H:i:s");
-    //     $this->db->trans_begin();
-    //     $this->factureReturn_model->updateOrder($ordID,1,$date_com);
-    //     $this->factureReturn_model->updateInvoice($invID,1);
-    //     $quantityToAdd = ($packingList * $crt) + $piece;
-    //     $this->factureReturn_model->updateStock($itemID,+$quantityToAdd,$isDamaged);
-    //     if ($this->db->trans_status() === false) {
-    //         $this->db->trans_rollback();
-    //         $this->response("Invoice information could not be saved. Try again.", 404);
-    //     } else {
-    //         $this->db->trans_commit();
-    //         $this->response("success", 200);
-    //     }
-    // }
-    // public function rejectOrder_get(){
-    //     $ordID = $this->get('ordID');
-    //     $this->db->trans_begin();
-    //     $this->factureReturn_model->deletedOrder($ordID);
-    //     if ($this->db->trans_status() === false) {
-    //         $this->db->trans_rollback();
-    //         $this->response("Invoice information could not be saved. Try again.", 404);
-    //     } else {
-    //         $this->db->trans_commit();
-    //         $this->response("success", 200);
-    //     }
-    // }
-    public function getFactureDetails_get()
-    {
+    public function getFactureDetails_get(){
         $invID = $this->get('invID');
         $result = $this->factureReturn_model->getFactureDetails($invID);      
         if ($result) {
@@ -162,27 +121,32 @@ class factureReturn extends REST_Controller
                 $this->factureReturn_model->deletedOrder($row['ordID']);
             }            
         }
-        foreach ($invoiceItems as $row) {
-            $itemData = array(
-                "ord_itemID" => $row['itemID'],
-                "ord_item_isDamaged" => $row['isDamaged'],
-                "ord_piece" => $row['piece'],
-                "ord_crt" => $row['crt'],
-                "ord_invID" => $invID,
-                "ord_isDeleted" => 0
-            );
-
-            $ordID = $this->factureReturn_model->addItemToInvoice($itemData);
-            if ($ordID === 0) {
-                $this->response("Item information could not be saved. Try again.", 404);
-            } else {
-                date_default_timezone_set("Asia/Beirut");
-                $date=date("Y-m-d H:i:s");
-                $this->factureReturn_model->addDateReturn(array('date_ordID' => $ordID,'ord_perID' => $clientID,
-                'ord_date_req' => $date,'ord_date_com' =>$date,'ord_status'=> 1));
+        if($invoiceItems != ''){
+            $this->factureReturn_model->updateInvoice($invID,-1);
+            foreach ($invoiceItems as $row) {
+                if($row['crt'] == '') $row['crt']=0;
+                if($row['piece'] == '') $row['piece']=0;
+                $itemData = array(
+                    "ord_itemID" => $row['itemID'],
+                    "ord_item_isDamaged" => $row['isDamaged'],
+                    "ord_piece" => $row['piece'],
+                    "ord_crt" => $row['crt'],
+                    "ord_invID" => $invID,
+                    "ord_isDeleted" => 0
+                );
+    
+                $ordID = $this->factureReturn_model->addItemToInvoice($itemData);
+                if ($ordID === 0) {
+                    $this->response("Item information could not be saved. Try again.", 404);
+                } else {
+                    date_default_timezone_set("Asia/Beirut");
+                    $date=date("Y-m-d H:i:s");
+                    $this->factureReturn_model->addDateReturn(array('date_ordID' => $ordID,'ord_perID' => $clientID,
+                    'ord_date_req' => $date,'ord_date_com' =>$date,'ord_status'=> 0));
+                }
+                $quantityToAdd = ($row['colisage'] * $row['crt']) + $row['piece'];
+                $this->factureReturn_model->updateStock($row['itemID'],$quantityToAdd,$row['isDamaged']);
             }
-            $quantityToAdd = ($row['colisage'] * $row['crt']) + $row['piece'];
-            $this->factureReturn_model->updateStock($row['itemID'],$quantityToAdd,$row['isDamaged']);
         }
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
