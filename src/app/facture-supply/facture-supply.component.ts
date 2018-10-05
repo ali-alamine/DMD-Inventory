@@ -1,13 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { StockService } from '../stock/stock.service';
 import { SupplyService } from './facture-supply.service';
 import swal from 'sweetalert2';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { Router, ActivatedRoute } from '@angular/router';
 declare var $: any;
-import * as moment from 'moment';
 @Component({
   selector: 'app-supply',
   templateUrl: './facture-supply.component.html',
@@ -16,9 +14,7 @@ import * as moment from 'moment';
 
 
 export class SupplyComponent implements OnInit {
-
   @ViewChild('f') myNgForm;
-
   modalReference: any;
   supplyForm: FormGroup;
   items: any;
@@ -100,8 +96,7 @@ export class SupplyComponent implements OnInit {
     });
     this.itemsForm.push(item);
   }
- 
-
+  
   addRow(element) {
     const item = this.fb.group({
       itemID: [element['id'], Validators.required],
@@ -157,31 +152,28 @@ export class SupplyComponent implements OnInit {
         });
       });
     }
-    
-    console.log(this.supplyForm.value);
     while (this.itemsForm.length !== 0) {
       this.itemsForm.removeAt(0)
     }
     SupplyComponent.selectedItems=[];
     this.supplyForm.reset();
     this.myNgForm.resetForm();
+    const currentDate = new Date();
+    var factureDate = currentDate.toISOString().substring(0, 10);
+    this.factureDate.setValue(factureDate);
   }
 
   addItemsToFacture() {
     SupplyComponent.globalMultiSelectDT.destroy();
     this.modalReference.close();
-    while (this.itemsForm.length !== 0) {
-      this.itemsForm.removeAt(0)
-    }
     SupplyComponent.selectedItems.forEach(element => {
+      var ID = element['id'];
+      if(SupplyComponent.findWithAttr(this.itemsForm.value, 'itemID', ID) == -1)
       this.addRow(element);
     });
-
   }
 
   openMultiSelect(mutliSelectModal) {
-
-
     this.modalReference = this.modalService.open(mutliSelectModal, { centered: true, size: 'lg', ariaLabelledBy: 'modal-basic-title' });
 
     var multiSelectDT = $('#stockDT').DataTable({
@@ -214,12 +206,7 @@ export class SupplyComponent implements OnInit {
         { data: "item_packing_list", title: "Colisage" }
 
       ],
-      rowId: 'ID',
-      "createdRow": function (row, data, index) {
-        if (SupplyComponent.findWithAttr(SupplyComponent.selectedItems, 'id', data['ID']) > -1) {
-          multiSelectDT.row(row).select();
-        }
-      }
+      rowId: 'ID'
     });
 
 
@@ -245,17 +232,6 @@ export class SupplyComponent implements OnInit {
 
         SupplyComponent.selectedItems.push({ id: ID, name: name ,colisage:colisage});
       });
-    });
-
-
-
-    $('#subsMonths').on('key-focus.dt', function (e, datatable, cell) {
-      $(multiSelectDT.row(cell.index().row).node()).addClass('selected');
-
-
-    });
-    $('#subsMonths').on('key-blur.dt', function (e, datatable, cell) {
-      $(multiSelectDT.row(cell.index().row).node()).removeClass('selected');
     });
 
     SupplyComponent.globalMultiSelectDT = multiSelectDT;
