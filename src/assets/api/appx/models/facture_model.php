@@ -122,6 +122,39 @@ class facture_model extends CI_Model
         }
     }
 
-  
+    public function editReturnInvoice($invID,$data){
+        $this->db->where('invID', $invID);
+        if ($this->db->update('invoice',$data)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function editItemToInvoice($ordID,$data)
+    {
+        $this->db->where('ordID', $ordID);
+        if ($this->db->update('order_inv',$data)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function deletedOrder($ordID){
+        $this->db->where('ordID', $ordID);
+        if ($this->db->delete('order_inv')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function searchClientName($keyword){
+        $query = $this->db->query('SELECT perID FROM person WHERE  per_name = "' . $keyword . '" ');
+        if ($query->num_rows() > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 
 }

@@ -21,7 +21,7 @@ class clients extends REST_Controller
         if ($result === 0) {
             $this->response("Client information could not be added. Try again.", 404);
         } else {
-            $this->response("success", 200);
+            $this->response($result, 200);
         }
 
     }

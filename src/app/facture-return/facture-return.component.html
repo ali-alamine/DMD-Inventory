@@ -34,7 +34,8 @@
       <hr>
       <div formArrayName="itemsEdit">
         <div *ngFor="let item of itemsEditForm.controls; let i=index" [formGroupName]="i" >
-          <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" *ngIf="isDeleted != 1">
+          <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" 
+          *ngIf=" itemsEditForm.controls[i].get('isDeleted').value != 1">
             <mat-form-field fxFlex hidden>
               <input matInput placeholder="Item ID" formControlName="itemID" #itemID type="number">
             </mat-form-field>

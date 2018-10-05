@@ -23,6 +23,7 @@ class facture extends REST_Controller
         $invoiceID = $this->facture_model->addSupplyInvoice(array("inv_perID" => 1, "inv_code" => $invoiceCode, "inv_type" => 'FD', "inv_date_req" => $correctDate->format('Y-m-d H:i:s')));
 
         foreach ($invoiceItems as $row) {
+            
             if($row['crt'] == '') $row['crt']=0;
             if($row['piece'] == '') $row['piece']=0;
             $itemData = array(
@@ -179,5 +180,88 @@ class facture extends REST_Controller
             $this->response("success", 200);
         }
     }
+    public function editClientInvoice_post(){
+        $delDate = $this->post('delDate');
+        $invID = $this->post('invID');
+        $clientID = $this->post('clientID');
+        $invoiceItemsEdit = $this->post('itemsEdit');
+        $invoiceItems = $this->post('items');
+        $correctDate = new DateTime($delDate);
+        $correctDate->setTimezone(new DateTimeZone('Asia/Beirut'));
+        $this->db->trans_begin();
 
+        $this->facture_model->editReturnInvoice($invID,array("inv_perID" =>  $clientID, 
+        "inv_date_del" => $correctDate->format('Y-m-d')));
+
+        foreach ($invoiceItemsEdit as $row) {
+
+            $query = $this->db->query("SELECT ord_crt,ord_piece FROM order_inv 
+            where ordID = '".$row['ordID']."'");
+
+            if ($query->num_rows() > 0) {     
+                $result = $query->result_array();
+                foreach ($result as $rowQuantity) {
+                    $crt = $rowQuantity['ord_crt'];
+                    $piece = $rowQuantity['ord_piece'];
+                }
+            }
+            if($crt != $row['crt'] || $piece != $row['piece'] || $row['isDeleted'] == "1"){
+                
+                if($row['crt'] == '') $row['crt']=0;
+                if($row['piece'] == '') $row['piece']=0;
+                
+                $quantityToAdd = ($row['colisage'] * $crt) + $piece;
+                $this->facture_model->updateStock($row['itemID'],+$quantityToAdd,$row['isDamaged']);
+                if($row['isDeleted'] == "0"){
+                    $quantityToAdd = ($row['colisage'] * $row['crt']) + $row['piece'];
+                    $this->facture_model->updateStock($row['itemID'],-$quantityToAdd,$row['isDamaged']);
+                    $itemData = array(
+                        "ord_piece" => $row['piece'],
+                        "ord_crt" => $row['crt'],
+                        "ord_note" => $row['comment']
+                    );
+                    $this->facture_model->editItemToInvoice($row['ordID'],$itemData);
+                }
+            }
+            if($row['isDeleted'] == "1"){
+                $this->facture_model->deletedOrder($row['ordID']);
+            }            
+        }
+        if($invoiceItems != ''){
+            // $this->facture_model->updateInvoice($invID,-1);
+            foreach ($invoiceItems as $row) {
+                if($row['crt'] == '') $row['crt']=0;
+                if($row['piece'] == '') $row['piece']=0;
+                $itemData = array(
+                    "ord_itemID" => $row['itemID'],
+                    "ord_item_isDamaged" => $row['isDamaged'],
+                    "ord_piece" => $row['piece'],
+                    "ord_crt" => $row['crt'],
+                    "ord_note" => $row['comment'],
+                    "ord_invID" => $invID
+                );
+    
+                $ordID = $this->facture_model->addItemToInvoice($itemData);
+                
+                $quantityToAdd = ($row['colisage'] * $row['crt']) + $row['piece'];
+                $this->facture_model->updateStock($row['itemID'],$quantityToAdd,$row['isDamaged']);
+            }
+        }
+        if ($this->db->trans_status() === false) {
+            $this->db->trans_rollback();
+            $this->response("Invoice information could not be saved. Try again.", 404);
+        } else {
+            $this->db->trans_commit();
+            $this->response("success", 200);
+        }
+    }
+    public function searchClientName_get(){
+        $keyword = $this->get('keyword');
+        $result = $this->facture_model->searchClientName($keyword);      
+        if ($result) {
+            $this->response($result, 200);
+
+            exit;
+        }
+    }
 }

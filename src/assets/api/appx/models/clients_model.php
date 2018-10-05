@@ -9,7 +9,8 @@ class clients_model extends CI_Model
     public function add($data)
     {
         if ($this->db->insert('person', $data)) {
-            return true;
+            $perID = $this->db->insert_id();
+            return $perID;
         } else {
             return false;
         }

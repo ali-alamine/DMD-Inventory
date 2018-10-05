@@ -33,6 +33,8 @@ export class FactureClientComponent implements OnInit {
   factureID;
   factureHeader = [];
   factureDetails = [];
+  private clientForm;
+  isExist;
   
   constructor(private datePipe: DatePipe,
     private fb: FormBuilder,
@@ -66,7 +68,7 @@ export class FactureClientComponent implements OnInit {
     this.deliveryDate = currentDate.toISOString().substring(0, 10);
     this.invoiceDate = this.datePipe.transform(currentDate,"MM/d/yyyy");
     this.invoiceForm = this.fb.group({
-      invoiceID : [],
+      invID : [],
       invoiceDate: [this.invoiceDate, Validators.required],
       delDate: [this.deliveryDate, Validators.required],
       clientName: ['', Validators.required],
@@ -92,8 +94,9 @@ export class FactureClientComponent implements OnInit {
         var dateDel = this.factureHeader[0]['inv_date_del'];
         this.factureDate.setValue(dateReq);
         this.delDate.setValue(dateDel);
-        this.invoiceID.setValue(this.factureID);
+        this.invID.setValue(this.factureID);
         this.clientName.setValue(this.factureHeader[0]['per_name']);
+        this.clientID.setValue(this.factureHeader[0]['perID']);
         console.log(this.factureDetails)
         this.factureDetails.forEach(element => {
           const item = this.fb.group({
@@ -128,7 +131,20 @@ export class FactureClientComponent implements OnInit {
   ngOnDestroy() {
     this._hotkeysService.reset();
   }
-
+  onClientIsExistChange(): void {
+    this.clientForm.get('name').valueChanges.subscribe(val => {
+      var data = this.clientForm.get('name').value;
+      this.factureClientService.searchClientName(data).subscribe(Response => {
+        console.log(Response)
+        if(Response == 1){
+          // alert('exist')
+          this.isExist = true;
+        }
+        else
+          this.isExist = false;
+      })
+    })
+  }
 
   onClientNameChange(): void {
     this.invoiceForm.get('searchClient').valueChanges.subscribe(val => {
@@ -189,7 +205,9 @@ export class FactureClientComponent implements OnInit {
         type: 'success',
         title: 'Success',
         text: 'Facture Client Code: '+Response,
-        showConfirmButton: false,
+        showConfirmButton: true,
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK',
         timer: 4000
       });
     }, error => {
@@ -221,11 +239,11 @@ export class FactureClientComponent implements OnInit {
     setTimeout(function(){ popupWin.close(); }, 1000);
   }
   editClientInvoice(){
-    this.factureClientService.newClientInvoice(this.invoiceForm.value).subscribe(Response => {
+    this.factureClientService.editClientInvoice(this.invoiceForm.value).subscribe(Response => {
       swal({
         type: 'success',
         title: 'Success',
-        text: 'Invoice Added Successfully',
+        text: 'Invoice Mis a Jour Successfully',
         showConfirmButton: false,
         timer: 1000
       });
@@ -236,17 +254,8 @@ export class FactureClientComponent implements OnInit {
         text: error.message
       });
     });
-    console.log(this.invoiceForm.value);
-    while (this.itemsForm.length !== 0) {
-      this.itemsForm.removeAt(0)
-    }
-    FactureClientComponent.selectedItems = [];
-    this.invoiceForm.reset();
-    this.myNgForm.resetForm();
-    this.invoiceForm.get('invoiceDate').setValue(this.invoiceDate);
-    this.invoiceForm.get('delDate').setValue(this.deliveryDate);
-
-
+    var routerHistory = localStorage.getItem('routerHistory');
+    this.router.navigate([routerHistory]);
   }
   addItemsToFacture() {
     FactureClientComponent.globalMultiSelectDT.destroy();
@@ -259,7 +268,39 @@ export class FactureClientComponent implements OnInit {
     });
 
   }
+  openClientModal(clientModal) {
+    this.modalReference = this.modalService.open(clientModal, { centered: true, ariaLabelledBy: 'modal-basic-title' });
+    this.clientForm = this.fb.group({
+      name: ['', [Validators.required,Validators.minLength(3)]],
+      phone: ['', Validators.required],
+      address: ['', Validators.required]
+    });
+    this.onClientIsExistChange();
 
+  }
+  
+  addClient() {
+    
+      this.factureClientService.addNewClient(this.clientForm.value).subscribe(Response => {
+        this.invoiceForm.get('clientName').setValue(this.clientForm.get('name').value);
+        this.invoiceForm.get('clientID').setValue(Response);
+        swal({
+          type: 'success',
+          title: 'Success',
+          text: 'Client Added Successfully',
+          showConfirmButton: false,
+          timer: 1000
+        });
+      }, error => {
+        swal({
+          type: 'error',
+          title: error.statusText,
+          text: error.message
+        });
+      });
+
+    this.modalReference.close();
+  }
   openMultiSelect(mutliSelectModal) {
 
 
@@ -348,14 +389,17 @@ export class FactureClientComponent implements OnInit {
   get delDate(){
     return this.invoiceForm.get('delDate');
   }
-  get invoiceID() {
-    return this.invoiceForm.get('invoiceID');
+  get invID() {
+    return this.invoiceForm.get('invID');
   }
   get itemID() {
     return this.invoiceForm.get('itemID');
   }
   get clientName() {
     return this.invoiceForm.get('clientName');
+  }
+  get clientID() {
+    return this.invoiceForm.get('clientID');
   }
 
   

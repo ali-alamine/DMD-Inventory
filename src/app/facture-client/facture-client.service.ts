@@ -20,4 +20,13 @@ export class FactureClientService {
   getFactureDetails(factureID):Observable<any>{
     return this.httpClient.get(this.url+"getFactureDetails", {params:{factureID:factureID}});
   }
+  editClientInvoice(invoiceData): Observable<any>{
+    return this.httpClient.post(this.url+"editClientInvoice", invoiceData);
+  }
+  addNewClient(clientData): Observable<any> {
+    return this.httpClient.post("http://localhost/DMD-Inventory/src/assets/api/clients/client", clientData);
+  }
+  searchClientName(data):Observable<any>{
+    return this.httpClient.get(this.url+"searchClientName", {params:{keyword:data}});
+  }
 }

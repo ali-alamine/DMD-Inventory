@@ -20,6 +20,9 @@
           </mat-autocomplete>
           <mat-error> Le nom du client est requis</mat-error>
         </mat-form-field>
+        <button mat-raised-button color="primary" (click)="openClientModal(clientModal)">
+            <i class="material-icons">add</i> Add Client
+          </button>
       </div>
 
       <mat-form-field class="itemName" fxFlex>
@@ -47,7 +50,8 @@
     <hr>
     <div formArrayName="itemsEdit">
         <div *ngFor="let item of itemsEditForm.controls; let i=index" [formGroupName]="i">
-          <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px"
+          *ngIf=" itemsEditForm.controls[i].get('isDeleted').value != 1">
             <mat-form-field fxFlex hidden>
               <input matInput placeholder="Item ID" formControlName="itemID" #itemID type="number">
             </mat-form-field>
@@ -142,7 +146,42 @@
   </div>
 </ng-template>
 
-
+<ng-template #clientModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add Client</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form fxLayout="column" [formGroup]="clientForm" autocomplete="off">
+        <div class="input-row" fxLayout="row">
+          <mat-form-field class="inputField" fxFlex>
+            <input matInput placeholder="Name" formControlName="name" type="text" name="nameInput" autofocus>
+            <mat-error> client name is required with minimum 3 letters</mat-error>
+            <mat-error *ngIf="isExist == true"> client exist</mat-error>
+          </mat-form-field>
+          <span *ngIf="isExist == true" color="red"> client exist!</span>
+        </div>
+        <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <mat-form-field class="inputField" fxFlex>
+            <input matInput placeholder="Phone Number" formControlName="phone" type="text">
+            <mat-error> client phone is required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <mat-form-field class="inputField" fxFlex>
+            <input matInput placeholder="Address" formControlName="address" type="text">
+            <mat-error> client address is required</mat-error>
+          </mat-form-field>
+        </div>
+        
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button mat-raised-button name="addButton" color="primary" (click)="addClient()" [disabled]="!clientForm.valid || isExist == true">Add</button>
+    </div>
+  </ng-template>
 
 <div class="table table-striped" id="printFacture" hidden>
 
