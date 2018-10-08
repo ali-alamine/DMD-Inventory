@@ -97,7 +97,6 @@ export class FactureClientComponent implements OnInit {
         this.invID.setValue(this.factureID);
         this.clientName.setValue(this.factureHeader[0]['per_name']);
         this.clientID.setValue(this.factureHeader[0]['perID']);
-        console.log(this.factureDetails)
         this.factureDetails.forEach(element => {
           const item = this.fb.group({
             ordID: [element['ordID'], Validators.required],
@@ -105,15 +104,17 @@ export class FactureClientComponent implements OnInit {
             itemName: [element['item_name']],
             isDamaged:[element['ord_item_isDamaged']],
             colisage:[element['item_packing_list']],
+            stockCrt: [element['item_crt']],
+            stockPiece: [element['item_piece']],
+            crtNoEdit: [element['ord_crt']],
+            pieceNoEdit: [element['ord_piece']],
             crt: [element['ord_crt']],
             piece: [element['ord_piece']],
             comment: [element['ord_note']],
-            // date_req: [this.factureDetails[i].ord_date_req, Validators.required],
-            // date_com: [this.factureDetails[i].ord_date_com, Validators.required],
             isDeleted: 0
           });
           this.itemsEditForm.push(item)
-          // SupplyComponent.selectedItems.push({ id: element['itemID'], name: element['item_name'], colisage:element['item_packing_list'] });
+          console.log(this.itemsEditForm.value)
         });
         this.editFactureTitle = "Edit Facture: "+this.factureHeader[0]['inv_code'];        
       }, error => {
@@ -130,6 +131,7 @@ export class FactureClientComponent implements OnInit {
 
   ngOnDestroy() {
     this._hotkeysService.reset();
+    FactureClientComponent.selectedItems = [];
   }
   onClientIsExistChange(): void {
     this.clientForm.get('name').valueChanges.subscribe(val => {
@@ -158,17 +160,73 @@ export class FactureClientComponent implements OnInit {
       })
     });    
   }
-
+  checkQuantity(i){
+    // alert(i)
+    var stockCrt = this.itemsForm.controls[i].get('stockCrt').value;
+    var stockPiece = this.itemsForm.controls[i].get('stockPiece').value;
+    var packing_list = this.itemsForm.controls[i].get('colisage').value;
+    var crt = this.itemsForm.controls[i].get('crt').value;
+    var piece = this.itemsForm.controls[i].get('piece').value;
+    console.log(crt);
+    var inputCrt= "#crt"+i;
+    var inputPiece= "#piece"+i;
+    if(crt > stockCrt){
+      $(inputCrt).addClass("text-danger");
+    } 
+    else{
+      $(inputCrt).removeClass("text-danger");
+    }  
+    if (crt != null) {
+      var remainingPiece = (stockCrt * packing_list) - (crt * packing_list);
+    } else {
+        var remainingPiece = (stockPiece * packing_list);
+    }
+    if (piece > remainingPiece) {
+        $(inputPiece).addClass("text-danger");
+    } else {
+        $(inputPiece).removeClass("text-danger");
+    }
+  }
+  checkQuantityEdit(i){
+    // alert(i)
+    var stockCrt = parseInt(this.itemsEditForm.controls[i].get('stockCrt').value);
+    var stockPiece = parseInt(this.itemsEditForm.controls[i].get('stockPiece').value);
+    var packing_list = parseInt(this.itemsEditForm.controls[i].get('colisage').value);
+    var crtNoEdit = parseInt(this.itemsEditForm.controls[i].get('crtNoEdit').value);
+    var pieceNoEdit = parseInt(this.itemsEditForm.controls[i].get('pieceNoEdit').value);
+    var crt = this.itemsEditForm.controls[i].get('crt').value;
+    var piece = this.itemsEditForm.controls[i].get('piece').value;
+    stockCrt = stockCrt + crtNoEdit ;
+    stockPiece = stockPiece + pieceNoEdit ;
+    var inputCrt= "#crtEdit"+i;
+    var inputPiece= "#pieceEdit"+i;
+    if(crt > stockCrt){
+      $(inputCrt).addClass("text-danger");
+    } 
+    else{
+      $(inputCrt).removeClass("text-danger");
+    }  
+    if (crt != null) {
+      var remainingPiece = (stockCrt * packing_list) - (crt * packing_list);
+    } else {
+        var remainingPiece = (stockPiece * packing_list);
+    }
+    if (piece > remainingPiece) {
+        $(inputPiece).addClass("text-danger");
+    } else {
+        $(inputPiece).removeClass("text-danger");
+    }
+  }
   addRow(element) {
     const item = this.fb.group({
       itemID: [element['id'], Validators.required],
       itemName: [element['name']],
-      isDamaged: [element['gate']],
+      isDamaged: [element['isDamaged']],
       colisage: [element['colisage']],
+      stockCrt: [element['crt']],
+      stockPiece: [element['piece']],
       crt:'',
       piece:'',
-      // crt: ['',[Validators.required, Validators.min(0)]],
-      // piece: ['',[Validators.required, Validators.min(0)]],
       comment: ['']
 
     });
@@ -176,29 +234,19 @@ export class FactureClientComponent implements OnInit {
   }
   deleteItemEdit(i) {
     this.itemsEditForm.controls[i].get('isDeleted').setValue(1);
-    // this.itemsEditForm.controls[i].disable(;
-    // this.itemsEditForm.removeAt(i);
-    console.log(this.itemsEditForm.value)
-    // var index = FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id','gate', id.value , itemIsDamaged.value);
-    // FactureReturnComponent.selectedItems.splice(index, 1);
   }
 
   deleteItem(i, id, itemIsDamaged) {
     this.itemsForm.removeAt(i);
-    var index = FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', 'gate', id.value, itemIsDamaged.value);
+    var index = FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', 'isDamaged', id.value, itemIsDamaged.value);
     FactureClientComponent.selectedItems.splice(index, 1);
     
   }
-
   setClientName(id, name) {
     this.invoiceForm.get('searchClient').setValue('');
     this.invoiceForm.get('clientName').setValue(name);
     this.invoiceForm.get('clientID').setValue(id);
-    console.log(this.itemsForm.value)
   }
-
-
-
   addClientInvoice(flag) {
     this.factureClientService.newClientInvoice(this.invoiceForm.value).subscribe(Response => {
       swal({
@@ -229,7 +277,6 @@ export class FactureClientComponent implements OnInit {
     if(flag == true)
     this.printFactureClient()
   }
-
   printFactureClient(){
     var printContents = document.getElementById('printFacture').innerHTML;
     var popupWin = window.open('', '_blank', 'width=800,height=600');
@@ -254,17 +301,30 @@ export class FactureClientComponent implements OnInit {
         text: error.message
       });
     });
+    while (this.itemsForm.length !== 0) {
+      this.itemsForm.removeAt(0)
+    }
+    while (this.itemsEditForm.length !== 0) {
+      this.itemsEditForm.removeAt(0)
+    }
     var routerHistory = localStorage.getItem('routerHistory');
     this.router.navigate([routerHistory]);
   }
   addItemsToFacture() {
     FactureClientComponent.globalMultiSelectDT.destroy();
     this.modalReference.close();
-    while (this.itemsForm.length !== 0) {
-      this.itemsForm.removeAt(0)
-    }
     FactureClientComponent.selectedItems.forEach(element => {
-      this.addRow(element);
+      var ID = element['id'];
+      var isDamaged = element['isDamaged'];
+      var i = FactureClientComponent.findWithAttr(this.itemsForm.value, 'itemID', 'isDamaged', ID, isDamaged);
+      if(this.itemsEditForm.length == 0){
+        if(i == -1)
+          this.addRow(element);
+      } else if(this.itemsEditForm.length != 0){
+        var i2 = FactureClientComponent.findWithAttr2(this.itemsEditForm.value, 'itemID', 'isDamaged', ID, isDamaged);
+        if( i == -1 && i2 == -1)
+            this.addRow(element);
+      }
     });
 
   }
@@ -278,7 +338,6 @@ export class FactureClientComponent implements OnInit {
     this.onClientIsExistChange();
 
   }
-  
   addClient() {
     
       this.factureClientService.addNewClient(this.clientForm.value).subscribe(Response => {
@@ -302,10 +361,7 @@ export class FactureClientComponent implements OnInit {
     this.modalReference.close();
   }
   openMultiSelect(mutliSelectModal) {
-
-
     this.modalReference = this.modalService.open(mutliSelectModal, { centered: true, size: 'lg', ariaLabelledBy: 'modal-basic-title' });
-
     var multiSelectDT = $('#stockDT').DataTable({
       responsive: false,
       paging: true,
@@ -338,10 +394,6 @@ export class FactureClientComponent implements OnInit {
       ],
       rowId: 'ID',
       "createdRow": function (row, data, index) {
-        if (FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', 'gate', data['ID'], data['item_is_damaged']) > -1) {
-          multiSelectDT.row(row).select();
-        }
-
         if (data['item_is_damaged'] == 1) {
           $(row).addClass("text-danger");
         }
@@ -354,11 +406,13 @@ export class FactureClientComponent implements OnInit {
       rows.forEach(element => {
         var ID = multiSelectDT.row(element).data()['ID'];
         var name = multiSelectDT.row(element).data()['item_name'];
-        var gate = multiSelectDT.row(element).data()['item_is_damaged'];
+        var isDamaged = multiSelectDT.row(element).data()['item_is_damaged'];
         var colisage = multiSelectDT.row(element).data()['item_packing_list'];
-
-        if (FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', 'gate', ID, gate) == -1)
-          FactureClientComponent.selectedItems.push({ id: ID, name: name, gate: gate, colisage: colisage });
+        var crt = multiSelectDT.row(element).data()['item_crt'];
+        var piece = multiSelectDT.row(element).data()['item_piece'];
+        var i = FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', 'isDamaged', ID, isDamaged);
+        if (i == -1)
+          FactureClientComponent.selectedItems.push({ id: ID, name: name, isDamaged: isDamaged, colisage: colisage,crt: crt,piece: piece});
       });
     });
 
@@ -368,9 +422,11 @@ export class FactureClientComponent implements OnInit {
       rows.forEach(element => {
         var ID = multiSelectDT.row(element).data()['ID'];
         var name = multiSelectDT.row(element).data()['item_name'];
-        var gate = multiSelectDT.row(element).data()['item_is_damaged'];
+        var isDamaged = multiSelectDT.row(element).data()['item_is_damaged'];
         var colisage = multiSelectDT.row(element).data()['item_packing_list'];
-        FactureClientComponent.selectedItems.push({ id: ID, name: name, gate: gate, colisage: colisage });
+        var crt = multiSelectDT.row(element).data()['item_crt'];
+        var piece = multiSelectDT.row(element).data()['item_piece'];
+        FactureClientComponent.selectedItems.push({ id: ID, name: name, isDamaged: isDamaged, colisage: colisage,crt: crt,piece: piece });
       });
     });
 
@@ -401,28 +457,36 @@ export class FactureClientComponent implements OnInit {
   get clientID() {
     return this.invoiceForm.get('clientID');
   }
-
-  
-
   get itemIsDamaged() {
     return this.invoiceForm.get('isDamaged');
   }
-
   static findWithAttr(array, attr, attr2, value, value2) {
+    var index = -1;
     for (var i = 0; i < array.length; i += 1) {
       if (array[i][attr] === value && array[i][attr2] === value2) {
-        return i;
+        index = i ;
       }
     }
-    return -1;
+    return index;
   }
-
+  static findWithAttr2(array, attr, attr2, value, value2) {
+    var index = -1;
+    for (var i = 0; i < array.length; i += 1) {
+      debugger
+      if (array[i][attr] === value && array[i][attr2] === value2 && array[i]['isDeleted'] === 0) {
+        index = i ;
+      }
+    }
+    return index;
+  }
 }
 
 export interface fcItem {
   id: number;
   name: string;
-  gate: boolean;
+  isDamaged: number;
   colisage: number;
+  crt: number;
+  piece: number;
 }
 

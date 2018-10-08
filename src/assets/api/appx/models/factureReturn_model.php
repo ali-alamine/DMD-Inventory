@@ -102,18 +102,12 @@ class factureReturn_model extends CI_Model
         }
     }
     public function getFactureDetails($invID){
-        // if($type=='FR'){
-            $query = $this->db->query("SELECT *,date(inv_date_req) as inv_date_req FROM order_inv  
-            INNER JOIN invoice on invID = ord_invID 
-            INNER JOIN item ON itemID = ord_itemID and item_is_damaged = ord_item_isDamaged 
-            INNER JOIN return_details on date_ordID = ordID 
-            INNER JOIN person on perID = ord_perID
-            where ord_invID = '".$invID."' and ord_isDeleted = '0' and ord_status = '1' ");
-        // } else{
-        //     $query = $this->db->query("SELECT * FROM order_inv  
-        //     INNER JOIN item ON itemID = ord_itemID
-        //     where ord_invID = '".$ID."' and ord_isDeleted = '0'");
-        // }
+        $query = $this->db->query("SELECT *,date(inv_date_req) as inv_date_req FROM order_inv  
+        INNER JOIN invoice on invID = ord_invID 
+        INNER JOIN item ON itemID = ord_itemID and item_is_damaged = ord_item_isDamaged 
+        INNER JOIN return_details on date_ordID = ordID 
+        INNER JOIN person on perID = ord_perID
+        where ord_invID = '".$invID."' and ord_isDeleted = '0' and ord_status = '1' ");
         if ($query->num_rows() > 0) {
             return $query->result_array();
         } else {

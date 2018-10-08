@@ -255,13 +255,5 @@ class facture extends REST_Controller
             $this->response("success", 200);
         }
     }
-    public function searchClientName_get(){
-        $keyword = $this->get('keyword');
-        $result = $this->facture_model->searchClientName($keyword);      
-        if ($result) {
-            $this->response($result, 200);
-
-            exit;
-        }
-    }
+    
 }

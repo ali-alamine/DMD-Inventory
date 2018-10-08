@@ -27,6 +27,6 @@ export class FactureClientService {
     return this.httpClient.post("http://localhost/DMD-Inventory/src/assets/api/clients/client", clientData);
   }
   searchClientName(data):Observable<any>{
-    return this.httpClient.get(this.url+"searchClientName", {params:{keyword:data}});
+    return this.httpClient.get("http://localhost/DMD-Inventory/src/assets/api/clients/searchClientName", {params:{keyword:data}});
   }
 }

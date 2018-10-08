@@ -29,11 +29,11 @@
         <input matInput placeholder="Nom" formControlName="clientName" type="text" name="nameInput" [readonly]="true">
       </mat-form-field>
 
-      <mat-form-field class="inputField">
+      <mat-form-field class="itemDateInputs">
         <input matInput formControlName="invoiceDate" placeholder="Date de Commande" readonly=true>
       </mat-form-field>
 
-      <mat-form-field class="inputField">
+      <mat-form-field class="itemDateInputs">
         <input appFocusDirective matInput [matDatepicker]="deliveryDate" formControlName="delDate" placeholder="Date de Livraison">
         <mat-datepicker-toggle matSuffix [for]="deliveryDate" tabIndex="-1"></mat-datepicker-toggle>
         <mat-datepicker touchUi #deliveryDate></mat-datepicker>
@@ -66,10 +66,12 @@
                 [readonly]="true">
             </mat-form-field>
             <mat-form-field fxFlex class="itemInputs">
-              <input matInput placeholder="CRT" formControlName="crt" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
+              <input matInput placeholder="CRT" formControlName="crt" type="number" min="0" id="crtEdit{{i}}"
+              onkeydown="javascript: return event.keyCode == 69 ? false : true" (change)="checkQuantityEdit(i)">
             </mat-form-field>
             <mat-form-field fxFlex class="itemInputs">
-              <input matInput placeholder="Piece" formControlName="piece" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
+              <input matInput placeholder="Piece" formControlName="piece" type="number" min="0" id="pieceEdit{{i}}"
+              onkeydown="javascript: return event.keyCode == 69 ? false : true" (change)="checkQuantityEdit(i)">
             </mat-form-field>
             <mat-form-field fxFlex class="itemName">
               <input matInput placeholder="Comment" formControlName="comment" type="text">
@@ -97,10 +99,12 @@
             [readonly]="true">
         </mat-form-field>
         <mat-form-field fxFlex class="itemInputs">
-          <input matInput placeholder="CRT" formControlName="crt" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
+          <input matInput placeholder="CRT" formControlName="crt" type="number" min="0" id="crt{{i}}"
+          onkeydown="javascript: return event.keyCode == 69 ? false : true" (change)="checkQuantity(i)">
         </mat-form-field>
         <mat-form-field fxFlex class="itemInputs">
-          <input matInput placeholder="Piece" formControlName="piece" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
+          <input matInput placeholder="Piece" formControlName="piece" type="number" min="0" id="piece{{i}}"
+          onkeydown="javascript: return event.keyCode == 69 ? false : true" (change)="checkQuantity(i)">
         </mat-form-field>
         <mat-form-field fxFlex class="itemName">
           <input matInput placeholder="Comment" formControlName="comment" type="text">
@@ -159,9 +163,9 @@
           <mat-form-field class="inputField" fxFlex>
             <input matInput placeholder="Name" formControlName="name" type="text" name="nameInput" autofocus>
             <mat-error> client name is required with minimum 3 letters</mat-error>
-            <mat-error *ngIf="isExist == true"> client exist</mat-error>
+            <!-- <mat-error *ngIf="isExist == true"> client exist</mat-error> -->
           </mat-form-field>
-          <span *ngIf="isExist == true" color="red"> client exist!</span>
+          <span *ngIf="isExist == true" style="color:red"> Client exist!</span>
         </div>
         <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field class="inputField" fxFlex>

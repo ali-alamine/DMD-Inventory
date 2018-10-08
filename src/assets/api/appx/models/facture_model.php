@@ -99,7 +99,7 @@ class facture_model extends CI_Model
 
     public function getOrderInvoiceDetails($factureID)
     {
-        $this->db->select('*');
+        $this->db->select('*,FLOOR(item_piece/item_packing_list) as item_crt');
         $this->db->from('order_inv');
         $this->db->join('item', 'item.itemID = order_inv.ord_itemID and item.item_is_damaged=ord_item_isDamaged', 'inner');
         $this->db->where('ord_invID', $factureID);
@@ -148,13 +148,5 @@ class facture_model extends CI_Model
             return false;
         }
     }
-    public function searchClientName($keyword){
-        $query = $this->db->query('SELECT perID FROM person WHERE  per_name = "' . $keyword . '" ');
-        if ($query->num_rows() > 0) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
+    
 }

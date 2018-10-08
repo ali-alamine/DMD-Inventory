@@ -44,8 +44,7 @@ class factureReturn extends REST_Controller
                 "ord_item_isDamaged" => $row['isDamaged'],
                 "ord_piece" => $row['piece'],
                 "ord_crt" => $row['crt'],
-                "ord_invID" => $invoiceID,
-                "ord_isDeleted" => 0
+                "ord_invID" => $invoiceID
             );
             $ordID = $this->factureReturn_model->addItemToInvoice($itemData);
             if ($ordID === 0) {
@@ -86,19 +85,18 @@ class factureReturn extends REST_Controller
         $clientID = $this->post('clientID');
         $invoiceItemsEdit = $this->post('itemsEdit');
         $invoiceItems = $this->post('items');
-        $invoiceCorrectDate = new DateTime($invoiceDate);
-        $invoiceCorrectDate->setTimezone(new DateTimeZone('Asia/Beirut'));
         $this->db->trans_begin();
 
-        $this->factureReturn_model->editReturnInvoice($invID,array("inv_perID" =>  $clientID, 
-        "inv_date_req" => $invoiceCorrectDate->format('Y-m-d H:i:s')));
+        $this->factureReturn_model->editReturnInvoice($invID,array("inv_perID" =>  $clientID));
         foreach ($invoiceItemsEdit as $row) {
-            $query = $this->db->query("SELECT ord_crt,ord_piece,ord_perID FROM order_inv INNER JOIN return_details on date_ordID = ordID where ordID = '".$row['ordID']."'");
+            $query = $this->db->query("SELECT ord_crt,ord_piece,ord_perID FROM order_inv 
+            INNER JOIN return_details on date_ordID = ordID where ordID = '".$row['ordID']."'");
             if ($query->num_rows() > 0) {     
                 $result = $query->result_array();
                 foreach ($result as $rowQuantity) {
                     $crt = $rowQuantity['ord_crt'];
                     $piece = $rowQuantity['ord_piece'];
+                    // $isDamaged = $rowQuantity['ord_item_isDamaged'];
                     $ord_perID = $rowQuantity['ord_perID'];
                 }
             }
@@ -131,8 +129,7 @@ class factureReturn extends REST_Controller
                     "ord_item_isDamaged" => $row['isDamaged'],
                     "ord_piece" => $row['piece'],
                     "ord_crt" => $row['crt'],
-                    "ord_invID" => $invID,
-                    "ord_isDeleted" => 0
+                    "ord_invID" => $invID
                 );
     
                 $ordID = $this->factureReturn_model->addItemToInvoice($itemData);

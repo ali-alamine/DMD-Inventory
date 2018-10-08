@@ -24,13 +24,6 @@ export class FactureReturnService {
   editReturnInvoice(invoiceData): Observable<any>{
     return this.httpClient.post(this.url+"editReturnInvoice", invoiceData);
   }
-  confirmOrder(data): Observable<any>{
-    return this.httpClient.post(this.url+"confirmOrder",data);
-
-  }
-  rejectOrder(ordID): Observable<any>{
-    return this.httpClient.get(this.url+"rejectOrder",  {params:{ordID:ordID}});
-  }
   getFactureDetails(factureID,type): Observable<any>{
     return this.httpClient.get(this.url+"getFactureDetails",  {params:{invID:factureID}});
   }

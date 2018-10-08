@@ -88,6 +88,7 @@ export class FactureReturnComponent implements OnInit {
     }
     ngOnDestroy() {
       this._hotkeysService.reset();
+      FactureReturnComponent.selectedItems = [];
     }
     getFactureDetails(FactureID){
       this.factureReturnService.getFactureDetails(FactureID,'FR').subscribe(Response => {
@@ -101,8 +102,6 @@ export class FactureReturnComponent implements OnInit {
             colisage:[this.factureDetails[i].item_packing_list],
             crt: [this.factureDetails[i].ord_crt],
             piece: [this.factureDetails[i].ord_piece],
-            // date_req: [this.factureDetails[i].ord_date_req, Validators.required],
-            // date_com: [this.factureDetails[i].ord_date_com, Validators.required],
             isDeleted: 0
           });
           this.itemsEditForm.push(item)
@@ -133,12 +132,10 @@ export class FactureReturnComponent implements OnInit {
       const item = this.fb.group({
         itemID: [element['id'], Validators.required],
         itemName: [element['name']],
-        isDamaged:[element['gate']],
+        isDamaged:[element['isDamaged']],
         colisage:[element['colisage']],
         crt: [''],
-        piece: [''],
-        // date_req: ['', Validators.required],
-        // date_com: ['', Validators.required]
+        piece: ['']
   
       });
       this.itemsForm.push(item);
@@ -147,11 +144,6 @@ export class FactureReturnComponent implements OnInit {
   
     deleteItemEdit(i) {
       this.itemsEditForm.controls[i].get('isDeleted').setValue(1);
-      // this.itemsEditForm.controls[i].disable(;
-      // this.itemsEditForm.removeAt(i);
-      console.log(this.itemsEditForm.value)
-      // var index = FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id','gate', id.value , itemIsDamaged.value);
-      // FactureReturnComponent.selectedItems.splice(index, 1);
     }
     deleteItem(i, id,itemIsDamaged) {
       this.itemsForm.removeAt(i);
@@ -165,38 +157,8 @@ export class FactureReturnComponent implements OnInit {
       this.invoiceForm.get('clientID').setValue(id);
     }
 
-    addEditReturnInvoice() {
-      if(this.factureComponent.factureID != -1){
-        // console.log(this.invoiceForm.value)
-        this.factureReturnService.editReturnInvoice(this.invoiceForm.value).subscribe(Response => {
-          // this.getOrderNoConfirm(); 
-          swal({
-            type: 'success',
-            title: 'Success',
-            text: 'Invoice Added Successfully',
-            showConfirmButton: false,
-            timer: 1000
-          });
-        }, error => {
-          swal({
-            type: 'error',
-            title: error.statusText,
-            text: error.message
-          });
-        });
-        // console.log(this.invoiceForm.value);
-        // while (this.itemsForm.length !== 0) {
-        //   this.itemsForm.removeAt(0)
-        // }
-        // FactureReturnComponent.selectedItems=[];
-        // this.invoiceForm.reset();
-        // this.myNgForm.resetForm();
-        var routerHistory = localStorage.getItem('routerHistory');
-        this.router.navigate([routerHistory]);
-      } else{
+    addReturnInvoice() {
         this.factureReturnService.newReturnInvoice(this.invoiceForm.value).subscribe(Response => {
-          // this.getOrderNoConfirm(); 
-          // alert(Response)
           swal({
             type: 'success',
             title: 'Success',
@@ -211,7 +173,6 @@ export class FactureReturnComponent implements OnInit {
             text: error.message
           });
         });
-        // console.log(this.invoiceForm.value);
         while (this.itemsForm.length !== 0) {
           this.itemsForm.removeAt(0)
         }
@@ -219,67 +180,49 @@ export class FactureReturnComponent implements OnInit {
         this.invoiceForm.reset();
         this.myNgForm.resetForm();
         this.invoiceForm.get('invoiceDate').setValue(this.deliveryDate);
-      }
     }
-
-
-    // confirmOrder(ordID,invID,crt,piece,itemID,isDamaged,packingList){
-    //   // console.log(ordID)
-    //   this.dataComfirm['ordID']= ordID;
-    //   this.dataComfirm['invID']=invID;
-    //   this.dataComfirm['crt']=crt;
-    //   this.dataComfirm['piece']=piece;
-    //   this.dataComfirm['itemID']=itemID;
-    //   this.dataComfirm['isDamaged']=isDamaged;
-    //   this.dataComfirm['packingList']=packingList;
-    //   // console.log(this.dataComfirm)
-    //   this.factureReturnService.confirmOrder(this.dataComfirm).subscribe(Response => {
-    //     // this.getOrderNoConfirm();
-    //     swal({
-    //       type: 'success',
-    //       title: 'Success',
-    //       text: 'Order Confirmer.',
-    //       showConfirmButton: false,
-    //       timer: 1000
-    //     });
-    //   }, error => {
-    //     swal({
-    //       type: 'error',
-    //       title: error.statusText,
-    //       text: error.message
-    //     });
-    //   });
-    // }
-
-    // rejectOrder(ordID){
-    //   this.factureReturnService.rejectOrder(ordID).subscribe(Response => {
-    //     // this.getOrderNoConfirm();
-    //     swal({
-    //       type: 'success',
-    //       title: 'Success',
-    //       text: 'Order Rejeter.',
-    //       showConfirmButton: false,
-    //       timer: 1000
-    //     });
-    //   }, error => {
-    //     swal({
-    //       type: 'error',
-    //       title: error.statusText,
-    //       text: error.message
-    //     });
-    //   });
-    // }
-    
+    editReturnInvoice(){
+      debugger
+        this.factureReturnService.editReturnInvoice(this.invoiceForm.value).subscribe(Response => {
+          swal({
+            type: 'success',
+            title: 'Success',
+            text: 'Invoice Added Successfully',
+            showConfirmButton: false,
+            timer: 1000
+          });
+        }, error => {
+          swal({
+            type: 'error',
+            title: error.statusText,
+            text: error.message
+          });
+        });
+        while (this.itemsForm.length !== 0) {
+          this.itemsForm.removeAt(0)
+        }
+        while (this.itemsEditForm.length !== 0) {
+          this.itemsEditForm.removeAt(0)
+        }
+        var routerHistory = localStorage.getItem('routerHistory');
+        this.router.navigate([routerHistory]);
+    }
     addItemsToFacture() {
       FactureReturnComponent.globalMultiSelectDT.destroy();
       this.modalReference.close();
-      while (this.itemsForm.length !== 0) {
-        this.itemsForm.removeAt(0)
-      }
       FactureReturnComponent.selectedItems.forEach(element => {
-        this.addRow(element);
+        var ID = element['id'];
+        var isDamaged = element['isDamaged'];
+        var i = FactureReturnComponent.findWithAttr(this.itemsForm.value, 'itemID', 'isDamaged', ID, isDamaged);
+        if(this.itemsEditForm.length == 0){
+          if(i == -1)
+            this.addRow(element);
+        } else if(this.itemsEditForm.length != 0){
+          var i2 = FactureReturnComponent.findWithAttr2(this.itemsEditForm.value, 'itemID', 'isDamaged', ID, isDamaged);
+          if( i == -1 && i2 == -1)
+              this.addRow(element);
+        }
       });
-  
     }
   
     openMultiSelect(mutliSelectModal) {
@@ -318,10 +261,6 @@ export class FactureReturnComponent implements OnInit {
         ],
         rowId: 'ID',
         "createdRow": function (row, data, index) {
-          if (FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id', 'gate', data['ID'], data['item_is_damaged']) > -1) {
-            multiSelectDT.row(row).select();
-          }
-  
           if (data['item_is_damaged'] == 1) {
             $(row).addClass("text-danger");
           }
@@ -334,11 +273,11 @@ export class FactureReturnComponent implements OnInit {
         rows.forEach(element => {
           var ID = multiSelectDT.row(element).data()['ID'];
           var name = multiSelectDT.row(element).data()['item_name'];
-          var gate = multiSelectDT.row(element).data()['item_is_damaged'];
+          var isDamaged = multiSelectDT.row(element).data()['item_is_damaged'];
           var colisage = multiSelectDT.row(element).data()['item_packing_list'];
   
-          if (FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id', 'gate', ID, gate) == -1)
-            FactureReturnComponent.selectedItems.push({ id: ID, name: name, gate: gate, colisage: colisage });
+          if (FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id', 'isDamaged', ID, isDamaged) == -1)
+            FactureReturnComponent.selectedItems.push({ id: ID, name: name, isDamaged: isDamaged, colisage: colisage });
         });
       });
   
@@ -348,9 +287,9 @@ export class FactureReturnComponent implements OnInit {
         rows.forEach(element => {
           var ID = multiSelectDT.row(element).data()['ID'];
           var name = multiSelectDT.row(element).data()['item_name'];
-          var gate = multiSelectDT.row(element).data()['item_is_damaged'];
+          var isDamaged = multiSelectDT.row(element).data()['item_is_damaged'];
           var colisage = multiSelectDT.row(element).data()['item_packing_list'];
-          FactureReturnComponent.selectedItems.push({ id: ID, name: name, gate: gate, colisage: colisage });
+          FactureReturnComponent.selectedItems.push({ id: ID, name: name, isDamaged: isDamaged, colisage: colisage });
         });
       });
   
@@ -379,12 +318,20 @@ export class FactureReturnComponent implements OnInit {
       }
       return -1;
     }
-  
+    static findWithAttr2(array, attr, attr2, value, value2) {
+      var index = -1;
+      for (var i = 0; i < array.length; i += 1) {
+        if (array[i][attr] === value && array[i][attr2] === value2 && array[i]['isDeleted'] === 0) {
+          index = i ;
+        }
+      }
+      return index;
+    }
   }
   
   export interface fcItem {
     id: number;
     name: string;
-    gate: boolean;
+    isDamaged: number;
     colisage :number;
   }

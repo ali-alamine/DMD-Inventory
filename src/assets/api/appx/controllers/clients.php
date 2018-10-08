@@ -55,5 +55,13 @@ class clients extends REST_Controller
         return $code;
     }
     
+    public function searchClientName_get(){
+        $keyword = $this->get('keyword');
+        $result = $this->clients_model->searchClientName($keyword);      
+        if ($result) {
+            $this->response($result, 200);
 
+            exit;
+        }
+    }
 }

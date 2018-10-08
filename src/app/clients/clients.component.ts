@@ -20,6 +20,7 @@ export class ClientsComponent implements OnInit {
   editedClientData = {};
   items: MenuItem[];
   private globalClientsDT;
+  isExist;
 
   constructor(private modalService: NgbModal, private fb: FormBuilder, private clientsService: ClientsService) { }
 
@@ -108,13 +109,28 @@ export class ClientsComponent implements OnInit {
       phone = ClientsComponent.selectedRowData['phone'];
       address = ClientsComponent.selectedRowData['address'];
     }
-    this.clientForm = this.fb.group({
-      name: [name, [Validators.required,Validators.minLength(3)]],
-      phone: [phone, Validators.required],
-      address: [address, Validators.required]
-    });
+      this.clientForm = this.fb.group({
+        name: [name, [Validators.required,Validators.minLength(3)]],
+        phone: [phone, Validators.required],
+        address: [address, Validators.required]
+      });
+      this.onClientIsExistChange();
+      this.isExist==false;
   }
-
+  onClientIsExistChange(): void {
+    this.clientForm.get('name').valueChanges.subscribe(val => {
+      var data = this.clientForm.get('name').value;
+      this.clientsService.searchClientName(data).subscribe(Response => {
+        console.log(Response)
+        if(Response == 1){
+          // alert('exist')
+          this.isExist = true;
+        }
+        else
+          this.isExist = false;
+      })
+    })
+  }
   addEditClient() {
     if (this.editFlag == true) {
       this.editedClientData['name'] = this.name.value;

@@ -90,8 +90,8 @@
         </div>
       </div>
   
-      <button mat-raised-button id="submit" class="addBtns" color="primary" (click)="addEditReturnInvoice()" [disabled]="!invoiceForm.valid || itemsForm.length == 0 " >Soumettre</button>
-      <button mat-raised-button id="update" class="addBtns" color="primary" (click)="addEditReturnInvoice()" [disabled]="!invoiceForm.valid || itemsEditForm.length == 0 " >Mis à Jour</button>
+      <button mat-raised-button id="submit" class="addBtns" color="primary" (click)="addReturnInvoice()" [disabled]="!invoiceForm.valid || itemsForm.length == 0 " >Soumettre</button>
+      <button mat-raised-button id="update" class="addBtns" color="primary" (click)="editReturnInvoice()" [disabled]="!invoiceForm.valid || itemsEditForm.length == 0 " >Mis à Jour</button>
     </form>
   </div>
   

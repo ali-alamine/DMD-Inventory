@@ -35,5 +35,14 @@ class clients_model extends CI_Model
         return $this->db->count_all_results();
 
     }
+    public function searchClientName($keyword){
+        $query = $this->db->query('SELECT perID FROM person WHERE  per_name = "' . $keyword . '" ');
+        if ($query->num_rows() > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
 
 }

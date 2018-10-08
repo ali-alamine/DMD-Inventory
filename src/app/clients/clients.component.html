@@ -36,6 +36,7 @@
           <input matInput placeholder="Name" formControlName="name" type="text" name="nameInput" autofocus>
           <mat-error> client name is required with minimum 3 letters</mat-error>
         </mat-form-field>
+        <span *ngIf="isExist == true && editFlag==false" style="color:red"> Client exist!</span>
       </div>
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="inputField" fxFlex>
@@ -53,6 +54,6 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button mat-raised-button name="addButton" color="primary" (click)="addEditClient()" [disabled]="!clientForm.valid">{{clientModalTitle}}</button>
+    <button mat-raised-button name="addButton" color="primary" (click)="addEditClient()" [disabled]="!clientForm.valid || isExist == true">{{clientModalTitle}}</button>
   </div>
 </ng-template>
