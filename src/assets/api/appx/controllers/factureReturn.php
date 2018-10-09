@@ -29,15 +29,19 @@ class factureReturn extends REST_Controller
         }
     }
     public function newReturnInvoice_post(){
-        $invoiceDate = $this->post('invoiceDate');
+        // $invoiceDate = $this->post('invoiceDate');
         $clientID = $this->post('clientID');
         $invoiceItems = $this->post('items');
-        $invoiceCorrectDate = new DateTime($invoiceDate);
-        $invoiceCorrectDate->setTimezone(new DateTimeZone('Asia/Beirut'));
+        
+        date_default_timezone_set("Asia/Beirut");
+        $invoiceDate=date("Y-m-d H:i:s");
+
+        // $invoiceCorrectDate = new DateTime($invoiceDate);
+        // $invoiceCorrectDate->setTimezone(new DateTimeZone('Asia/Beirut'));
         $invoiceCode = $this->generateFactureCode('FR');
         $this->db->trans_begin();
         $invoiceID = $this->factureReturn_model->addReturnInvoice(array("inv_perID" =>  $clientID, "inv_code" => $invoiceCode, 
-        "inv_type" => 'FR', "inv_date_req" => $invoiceCorrectDate->format('Y-m-d H:i:s'), "inv_status" => -1));
+        "inv_type" => 'FR', "inv_date_req" => $invoiceDate, "inv_status" => -1));
         foreach ($invoiceItems as $row) {
             $itemData = array(
                 "ord_itemID" => $row['itemID'],

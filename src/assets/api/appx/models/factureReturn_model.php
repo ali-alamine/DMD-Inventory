@@ -107,7 +107,7 @@ class factureReturn_model extends CI_Model
         INNER JOIN item ON itemID = ord_itemID and item_is_damaged = ord_item_isDamaged 
         INNER JOIN return_details on date_ordID = ordID 
         INNER JOIN person on perID = ord_perID
-        where ord_invID = '".$invID."' and ord_isDeleted = '0' and ord_status = '1' ");
+        where ord_invID = '".$invID."'");
         if ($query->num_rows() > 0) {
             return $query->result_array();
         } else {

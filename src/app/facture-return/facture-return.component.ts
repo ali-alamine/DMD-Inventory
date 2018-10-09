@@ -8,8 +8,8 @@ import { FactureReturnService } from './facture-return.service';
 import { Router } from '@angular/router';
 import { FactureComponent } from '../facture/facture.component';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
-import { DatePipe } from '../../../node_modules/@angular/common';
-import { Hotkey, HotkeysService } from '../../../node_modules/angular2-hotkeys';
+import { DatePipe } from '@angular/common';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 declare var $: any;
 
 @Component({
@@ -100,8 +100,13 @@ export class FactureReturnComponent implements OnInit {
             itemName: [this.factureDetails[i].item_name],
             isDamaged:[this.factureDetails[i].ord_item_isDamaged],
             colisage:[this.factureDetails[i].item_packing_list],
+            // stockCrt: [this.factureDetails[i].item_crt],
+            // stockPiece: [this.factureDetails[i].item_piece],
+            // crtNoEdit: [this.factureDetails[i].ord_crt],
+            // pieceNoEdit: [this.factureDetails[i].ord_piece],
             crt: [this.factureDetails[i].ord_crt],
             piece: [this.factureDetails[i].ord_piece],
+            status: [this.factureDetails[i].ord_status],
             isDeleted: 0
           });
           this.itemsEditForm.push(item)
@@ -115,6 +120,52 @@ export class FactureReturnComponent implements OnInit {
         console.log(error)
       });
     }
+    // checkQuantity(i){
+    //   var stockCrt = this.itemsForm.controls[i].get('stockCrt').value;
+    //   var stockPiece = this.itemsForm.controls[i].get('stockPiece').value;
+    //   var packing_list = this.itemsForm.controls[i].get('colisage').value;
+    //   var crt = this.itemsForm.controls[i].get('crt').value;
+    //   var piece = this.itemsForm.controls[i].get('piece').value;
+    //   var inputCrt= "#crt"+i;
+    //   var inputPiece= "#piece"+i;
+    //   if(crt > stockCrt){
+    //     $(inputCrt).addClass("text-danger");
+    //   } 
+    //   else{
+    //     $(inputCrt).removeClass("text-danger");
+    //   }  
+    //   var remainingPiece = stockPiece - (crt * packing_list);
+    //   if (piece > remainingPiece) {
+    //       $(inputPiece).addClass("text-danger");
+    //   } else {
+    //       $(inputPiece).removeClass("text-danger");
+    //   }
+    // }
+    // checkQuantityEdit(i){
+    //   var stockCrt = parseInt(this.itemsEditForm.controls[i].get('stockCrt').value);
+    //   var stockPiece = parseInt(this.itemsEditForm.controls[i].get('stockPiece').value);
+    //   var packing_list = parseInt(this.itemsEditForm.controls[i].get('colisage').value);
+    //   var crtNoEdit = parseInt(this.itemsEditForm.controls[i].get('crtNoEdit').value);
+    //   var pieceNoEdit = parseInt(this.itemsEditForm.controls[i].get('pieceNoEdit').value);
+    //   var crt = this.itemsEditForm.controls[i].get('crt').value;
+    //   var piece = this.itemsEditForm.controls[i].get('piece').value;
+    //   stockCrt = stockCrt + crtNoEdit ;
+    //   stockPiece = stockPiece + pieceNoEdit ;
+    //   var inputCrt= "#crtEdit"+i;
+    //   var inputPiece= "#pieceEdit"+i;
+    //   if(crt > stockCrt){
+    //     $(inputCrt).addClass("text-danger");
+    //   } 
+    //   else{
+    //     $(inputCrt).removeClass("text-danger");
+    //   }  
+    //   var remainingPiece = stockPiece - (crt * packing_list);
+    //   if (piece > remainingPiece) {
+    //       $(inputPiece).addClass("text-danger");
+    //   } else {
+    //       $(inputPiece).removeClass("text-danger");
+    //   }
+    // }
     onClientNameChange(): void {
       this.invoiceForm.get('searchClient').valueChanges.subscribe(val => {
         var data = this.invoiceForm.get('searchClient').value;
@@ -163,7 +214,9 @@ export class FactureReturnComponent implements OnInit {
             type: 'success',
             title: 'Success',
             text: 'Facture Retourn Code: '+Response,
-            showConfirmButton: false,
+            showConfirmButton: true,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
             timer: 4000
           });
         }, error => {

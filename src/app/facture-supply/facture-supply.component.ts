@@ -141,9 +141,11 @@ export class SupplyComponent implements OnInit {
         swal({
           type: 'success',
           title: 'Success',
-          text: 'Supply Successfully',
-          showConfirmButton: false,
-          timer: 1000
+          text: 'Facture Supply Code: '+Response,
+          showConfirmButton: true,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK',
+          timer: 4000
         });
       }, error => {
         swal({

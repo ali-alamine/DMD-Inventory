@@ -15,6 +15,7 @@ import { FactureReturnComponent } from './facture-return/facture-return.componen
 import { SettingsComponent } from './settings/settings.component';
 import { HistoryReturnComponent } from './history-return/history-return.component';
 import { HistoryTransferComponent } from './history-transfer/history-transfer.component';
+import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,13 @@ const routes: Routes = [
   },
   {
     path:"clients",component:ClientsComponent
+  },
+  {
+    path:"login",component: LoginComponent
+  },
+  
+  {
+    path:"logout",component: LoginComponent, data : {logout : 'true'}
   },
   {
     path:"history",component:HistoryComponent,  children: [

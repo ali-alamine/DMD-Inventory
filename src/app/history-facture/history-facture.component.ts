@@ -35,6 +35,9 @@ export class HistoryFactureComponent implements OnInit {
 
   ngOnInit() {
     this.getHistoryFactureDT();
+    var tableinfo = this.globalHistoryFactureDT.page.info();
+      var total = tableinfo.recordsTotal
+      console.log(tableinfo)
     this.rightClick = [
       {
         label: 'Afficher',
@@ -163,11 +166,14 @@ export class HistoryFactureComponent implements OnInit {
       $('#historyFactureDT').on('key-blur.dt', function (e, datatable, cell) {
         $(historyFactureDT.row(cell.index().row).node()).removeClass('selected');
       });
-    
+
+      
+
     } else{
       this.globalHistoryFactureDT.ajax.reload(null, false);
     }
   }
+  
   openShowDetails() {
     this.historyComponent.showFactureDetails(HistoryFactureComponent.selectedFacture);
   }

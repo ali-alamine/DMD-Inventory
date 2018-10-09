@@ -11,16 +11,20 @@ class facture extends REST_Controller
 
     public function newSupplyInvoice_post()
     {
-        $supplyDate = $this->post('supplyDate');
+        // $supplyDate = $this->post('supplyDate');
         $invoiceItems = $this->post('items');
 
-        $correctDate = new DateTime($supplyDate);
-        $correctDate->setTimezone(new DateTimeZone('Asia/Beirut'));
+        date_default_timezone_set("Asia/Beirut");
+        $supplyDate=date("Y-m-d H:i:s");
+
+        // $correctDate = new DateTime($supplyDate);
+        // $correctDate->setTimezone(new DateTimeZone('Asia/Beirut'));
 
         $invoiceCode = $this->generateFactureCode('FD');
         $this->db->trans_begin();
 
-        $invoiceID = $this->facture_model->addSupplyInvoice(array("inv_perID" => 1, "inv_code" => $invoiceCode, "inv_type" => 'FD', "inv_date_req" => $correctDate->format('Y-m-d H:i:s')));
+        $invoiceID = $this->facture_model->addSupplyInvoice(array("inv_perID" => 1, "inv_code" => $invoiceCode, "inv_type" => 'FD', 
+        "inv_date_req" => $supplyDate));
 
         foreach ($invoiceItems as $row) {
             
@@ -51,14 +55,16 @@ class facture extends REST_Controller
 
     public function newClientInvoice_post()
     {
-        $invoiceDate = $this->post('invoiceDate');
+        // $invoiceDate = $this->post('invoiceDate');
         $deliveryDate = $this->post('delDate');
         $clientID = $this->post('clientID');
 
         $invoiceItems = $this->post('items');
-
-        $invoiceCorrectDate = new DateTime($invoiceDate);
-        $invoiceCorrectDate->setTimezone(new DateTimeZone('Asia/Beirut'));
+        
+        // $invoiceCorrectDate = new DateTime($invoiceDate);
+        // $invoiceCorrectDate->setTimezone(new DateTimeZone('Asia/Beirut'));
+        date_default_timezone_set("Asia/Beirut");
+        $invoiceDate=date("Y-m-d H:i:s");
 
         $deliveryCorrectDate = new DateTime($deliveryDate);
         $deliveryCorrectDate->setTimezone(new DateTimeZone('Asia/Beirut'));
@@ -67,7 +73,8 @@ class facture extends REST_Controller
 
         $this->db->trans_begin();
 
-        $invoiceID = $this->facture_model->addClientInvoice(array("inv_perID" =>  $clientID, "inv_code" => $invoiceCode, "inv_type" => 'FC', "inv_date_req" => $invoiceCorrectDate->format('Y-m-d H:i:s'), "inv_date_del" => $deliveryCorrectDate->format('Y-m-d')));
+        $invoiceID = $this->facture_model->addClientInvoice(array("inv_perID" =>  $clientID, "inv_code" => $invoiceCode, "inv_type" => 'FC', 
+        "inv_date_req" => $invoiceDate, "inv_date_del" => $deliveryCorrectDate->format('Y-m-d')));
 
         foreach ($invoiceItems as $row) {
             if($row['crt'] == '') $row['crt']=0;
@@ -136,13 +143,13 @@ class facture extends REST_Controller
         $invoiceID = $this->post('invoiceID');
         $invoiceItems = $this->post('items');
 
-        $correctDate = new DateTime($supplyDate);
-        $correctDate->setTimezone(new DateTimeZone('Asia/Beirut'));
+        // $correctDate = new DateTime($supplyDate);
+        // $correctDate->setTimezone(new DateTimeZone('Asia/Beirut'));
 
        
         $this->db->trans_begin();
 
-        $this->facture_model->updateSupplyInvoice( $invoiceID , array("inv_date_req" => $correctDate->format('Y-m-d H:i:s')));
+        // $this->facture_model->updateSupplyInvoice( $invoiceID , array("inv_date_req" => $correctDate->format('Y-m-d H:i:s')));
 
 
         $oldInvoiceOrder = $this->facture_model->getOrderInvoiceDetails($invoiceID);

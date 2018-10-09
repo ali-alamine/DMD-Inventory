@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { HistoryComponent } from '../history/history.component';
 import { HistoryService } from '../history/history.service';
-import { NgbModal } from '../../../node_modules/@ng-bootstrap/ng-bootstrap';
-import { FormBuilder } from '../../../node_modules/@angular/forms';
-import { Router } from '../../../node_modules/@angular/router';
-import { MenuItem } from '../../../node_modules/primeng/api';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MenuItem } from 'primeng/api';
 declare var $: any;
 import swal from 'sweetalert2';
 
@@ -102,6 +102,7 @@ export class HistoryReturnComponent implements OnInit {
           "createdCell": function (td, data, rowData, row, col) {
             if ( rowData['inv_type'] == "FR") {
               $(td).html(" <span style='color: #FF0000;' >"+data+"</span> ");
+              this.lengthFR=this.lengthFR+1;
             } 
           }
         } ]
@@ -128,7 +129,10 @@ export class HistoryReturnComponent implements OnInit {
       $('#historyReturnDT').on('key-blur.dt', function (e, datatable, cell) {
         $(historyReturnDT.row(cell.index().row).node()).removeClass('selected');
       });
-    
+      var tableinfo = historyReturnDT.page.info();
+      var total = tableinfo.recordsTotal
+      console.log(tableinfo)
+      // console.log(this.lengthFR)
     } else{
       this.globalHistoryReturnDT.ajax.reload(null, false);
     }

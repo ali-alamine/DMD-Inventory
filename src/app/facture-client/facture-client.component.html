@@ -14,7 +14,7 @@
             [matAutocomplete]="auto" autofocus>
 
           <mat-autocomplete #auto="matAutocomplete">
-            <mat-option (onSelectionChange)="setClientName(option.perID,option.per_name)" *ngFor="let option of options"
+            <mat-option (onSelectionChange)="setClientName(option.perID,option.per_name,option.per_phone)" *ngFor="let option of options"
               [value]="option.name">{{option.per_name}}
               || {{option.per_code}}</mat-option>
           </mat-autocomplete>
@@ -188,27 +188,83 @@
   </ng-template>
 
 <div class="table table-striped" id="printFacture" hidden>
-
-  <h4>Client Name: {{clientName.value}}</h4>
-
-
   <table class="table table-responsive table-bordered text-center test " style="width:100%;">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>CRT</th>
-        <th>Piece</th>
-        <th>Comment</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let item of this.itemsForm.value; let i = index">
-            <td>{{item.itemName}}</td>
-            <td>{{item.crt}}</td>
-            <td>{{item.piece}}</td>
-            <td>{{item.comment}}</td>
+      <thead>
+          <tr>
+              <th colspan="10">
+                  <h3 style="vertical-align: middle;" class="text-center tableMainTitle">BON DE LIVRAISON</h3>
+                  <table style="float:left; background-color: white;" class="table-bordered text-center">
+                      <thead>
+                          <tr>
+                              <td style="padding: 3px; font-size: 13px;"><label>Nom de client </label></td>
+                              <td style="font-size: 13px;">
+                                  <label>{{p_clientName}}</label>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td style="padding: 3px; font-size: 13px;"><label>Telephone</label> </td>
+                              <td style="font-size: 13px;">
+                                  <label>{{p_client_phoneNumber}}</label>
+                              </td>
+                          </tr>
+                      </thead>
+                  </table>
+                  <table style="float:right; background-color: white;" class="table-bordered text-center">
+                      <thead>
+                          <tr>
+                              <td style="padding: 3px; font-size: 13px;"><label>CODE</label></td>
+                              <td>
+                                  <label style="font-size: 13px;">{{p_facture_code}}</label>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td style="padding: 3px; font-size: 13px;"><label>Date de Commande</label></td>
+                              <td>
+                                  <label style="font-size: 13px;">{{p_dateReq}}</label>
+                              </td>
+                          </tr>
+                      </thead>
+                  </table>
+              </th>
           </tr>
+          <tr>
+              <th style="vertical-align: middle; font-size: 13px;" class="text-center mousetrap" rowspan="2">ARTICLES</th>
+              <th style="vertical-align: middle; font-size: 13px;" class="text-center mousetrap" colspan="2">QUANTITE</th>
+              <th style="vertical-align: middle; font-size: 13px;" class="text-center mousetrap" rowspan="2">P.Unit</th>
+              <th style="vertical-align: middle; font-size: 13px;" class="text-center mousetrap" rowspan="2">Montant</th>
+          </tr>
+          <tr>
+              <th style="vertical-align: middle; font-size: 13px;" class="text-center mousetrap">CLS/CRT</th>
+              <th style="vertical-align: middle; font-size: 13px;" class="text-center mousetrap">PIECE</th>
+          </tr>
+      </thead>
+    <tbody>
+      <tr   *ngFor="let item of this.itemsForm.value; let i = index">
+          <td style="vertical-align: middle; font-size: 13px;">{{item.itemName}}</td>
+          <td style="vertical-align: middle; font-size: 13px;">{{item.crt}}</td>
+          <td style="vertical-align: middle; font-size: 13px;">{{item.piece}}</td>
+          <td style="vertical-align: middle; font-size: 13px;"></td>
+          <td style="vertical-align: middle; font-size: 13px;"></td>
+      </tr>
     </tbody>
   </table> 
-
+  <hr>
+  <div class="row">
+      <!-- </br> -->
+      <div class="col-xs-4 col-xs-offset-0">
+          <label style="font-size: 13px;">Le Responseble</label>
+          <label>----------------------</label>
+      </div>
+      <!-- <div style="position: absolute;" class="col-xs-4 col-xs-offset-4">
+          <label style="font-size: 13px;">Num de cls/crt</label>
+          <label>-----------------------</label>
+          <!-- </br> -->
+        <!--  <label style="font-size: 13px;">Num de piece</label>
+          <label>-----------------------</label>
+      </div> -->
+      <div style="position: absolute;" class="col-xs-4 col-xs-offset-8">
+          <label style="font-size: 13px;">Le Client</label>
+          <label>-----------------------</label>
+      </div>
+  </div>
 </div>

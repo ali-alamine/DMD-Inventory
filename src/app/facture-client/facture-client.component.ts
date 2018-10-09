@@ -34,7 +34,7 @@ export class FactureClientComponent implements OnInit {
   factureHeader = [];
   factureDetails = [];
   private clientForm;
-  isExist;
+  isExist; newCode;p_clientName;p_client_phoneNumber;p_dateReq;p_facture_code;
   
   constructor(private datePipe: DatePipe,
     private fb: FormBuilder,
@@ -72,6 +72,7 @@ export class FactureClientComponent implements OnInit {
       invoiceDate: [this.invoiceDate, Validators.required],
       delDate: [this.deliveryDate, Validators.required],
       clientName: ['', Validators.required],
+      clientPhone: '',
       searchClient: '',
       clientID: '',
       itemsEdit: this.fb.array([]),
@@ -161,13 +162,11 @@ export class FactureClientComponent implements OnInit {
     });    
   }
   checkQuantity(i){
-    // alert(i)
     var stockCrt = this.itemsForm.controls[i].get('stockCrt').value;
     var stockPiece = this.itemsForm.controls[i].get('stockPiece').value;
     var packing_list = this.itemsForm.controls[i].get('colisage').value;
     var crt = this.itemsForm.controls[i].get('crt').value;
     var piece = this.itemsForm.controls[i].get('piece').value;
-    console.log(crt);
     var inputCrt= "#crt"+i;
     var inputPiece= "#piece"+i;
     if(crt > stockCrt){
@@ -176,11 +175,7 @@ export class FactureClientComponent implements OnInit {
     else{
       $(inputCrt).removeClass("text-danger");
     }  
-    if (crt != null) {
-      var remainingPiece = (stockCrt * packing_list) - (crt * packing_list);
-    } else {
-        var remainingPiece = (stockPiece * packing_list);
-    }
+    var remainingPiece = stockPiece - (crt * packing_list);
     if (piece > remainingPiece) {
         $(inputPiece).addClass("text-danger");
     } else {
@@ -188,7 +183,6 @@ export class FactureClientComponent implements OnInit {
     }
   }
   checkQuantityEdit(i){
-    // alert(i)
     var stockCrt = parseInt(this.itemsEditForm.controls[i].get('stockCrt').value);
     var stockPiece = parseInt(this.itemsEditForm.controls[i].get('stockPiece').value);
     var packing_list = parseInt(this.itemsEditForm.controls[i].get('colisage').value);
@@ -206,11 +200,7 @@ export class FactureClientComponent implements OnInit {
     else{
       $(inputCrt).removeClass("text-danger");
     }  
-    if (crt != null) {
-      var remainingPiece = (stockCrt * packing_list) - (crt * packing_list);
-    } else {
-        var remainingPiece = (stockPiece * packing_list);
-    }
+    var remainingPiece = stockPiece - (crt * packing_list);
     if (piece > remainingPiece) {
         $(inputPiece).addClass("text-danger");
     } else {
@@ -242,13 +232,15 @@ export class FactureClientComponent implements OnInit {
     FactureClientComponent.selectedItems.splice(index, 1);
     
   }
-  setClientName(id, name) {
+  setClientName(id, name,phone) {
     this.invoiceForm.get('searchClient').setValue('');
     this.invoiceForm.get('clientName').setValue(name);
+    this.invoiceForm.get('clientPhone').setValue(phone);
     this.invoiceForm.get('clientID').setValue(id);
   }
   addClientInvoice(flag) {
     this.factureClientService.newClientInvoice(this.invoiceForm.value).subscribe(Response => {
+      this.newCode = Response;
       swal({
         type: 'success',
         title: 'Success',
@@ -266,18 +258,23 @@ export class FactureClientComponent implements OnInit {
       });
     });
     console.log(this.invoiceForm.value);
-    while (this.itemsForm.length !== 0) {
-      this.itemsForm.removeAt(0)
-    }
+    if(flag == true)
+      this.printFactureClient()
     FactureClientComponent.selectedItems = [];
     this.invoiceForm.reset();
     this.myNgForm.resetForm();
     this.invoiceForm.get('invoiceDate').setValue(this.invoiceDate);
     this.invoiceForm.get('delDate').setValue(this.deliveryDate);
-    if(flag == true)
-    this.printFactureClient()
+   
+    while (this.itemsForm.length !== 0) {
+      this.itemsForm.removeAt(0)
+    }
   }
   printFactureClient(){
+    this.p_clientName = this.invoiceForm.get('clientName').value;
+    this.p_client_phoneNumber = this.invoiceForm.get('clientPhone').value;
+    this.p_facture_code = this.newCode;
+    this.p_dateReq = this.invoiceForm.get('delDate').value;
     var printContents = document.getElementById('printFacture').innerHTML;
     var popupWin = window.open('', '_blank', 'width=800,height=600');
     popupWin.document.open();

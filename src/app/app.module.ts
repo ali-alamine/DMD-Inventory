@@ -42,6 +42,7 @@ import {MatBadgeModule} from '@angular/material/badge';
 import { HistoryReturnComponent } from './history-return/history-return.component';
 import {DatePipe} from '@angular/common';
 import { HistoryTransferComponent } from './history-transfer/history-transfer.component';
+import { LoginComponent } from './login/login.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,7 +61,7 @@ import { HistoryTransferComponent } from './history-transfer/history-transfer.co
     FactureReturnComponent,
     SettingsComponent,
     HistoryReturnComponent,
-    HistoryTransferComponent
+    HistoryTransferComponent,LoginComponent
   ],
   imports: [
     BrowserModule,

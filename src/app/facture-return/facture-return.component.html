@@ -35,7 +35,7 @@
       <div formArrayName="itemsEdit">
         <div *ngFor="let item of itemsEditForm.controls; let i=index" [formGroupName]="i" >
           <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px" 
-          *ngIf=" itemsEditForm.controls[i].get('isDeleted').value != 1">
+          *ngIf=" itemsEditForm.controls[i].get('isDeleted').value != 1 && itemsEditForm.controls[i].get('status').value != 0 ">
             <mat-form-field fxFlex hidden>
               <input matInput placeholder="Item ID" formControlName="itemID" #itemID type="number">
             </mat-form-field>
@@ -50,10 +50,12 @@
                 [readonly]="true">
             </mat-form-field>
             <mat-form-field fxFlex class="itemInputs">
-              <input matInput placeholder="CRT" formControlName="crt" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
+              <input matInput placeholder="CRT" formControlName="crt" type="number" min="0"
+              onkeydown="javascript: return event.keyCode == 69 ? false : true" >
             </mat-form-field>
             <mat-form-field fxFlex class="itemInputs">
-              <input matInput placeholder="Piece" formControlName="piece" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
+              <input matInput placeholder="Piece" formControlName="piece" type="number" min="0" 
+              onkeydown="javascript: return event.keyCode == 69 ? false : true" >
             </mat-form-field>
             <button mat-icon-button (click)="deleteItemEdit(i)" color="warn" tabindex="-1">
               <mat-icon aria-label="Delete Item" title="Delete Item">close</mat-icon>
@@ -78,10 +80,12 @@
                 [readonly]="true">
             </mat-form-field>
             <mat-form-field fxFlex class="itemInputs">
-              <input matInput placeholder="CRT" formControlName="crt" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
+              <input matInput placeholder="CRT" formControlName="crt" type="number" min="0"
+              onkeydown="javascript: return event.keyCode == 69 ? false : true">
             </mat-form-field>
             <mat-form-field fxFlex class="itemInputs">
-              <input matInput placeholder="Piece" formControlName="piece" type="number" min="0" onkeydown="javascript: return event.keyCode == 69 ? false : true">
+              <input matInput placeholder="Piece" formControlName="piece" type="number" min="0" 
+              onkeydown="javascript: return event.keyCode == 69 ? false : true">
             </mat-form-field>
             <button mat-icon-button (click)="deleteItem(i,itemID,isDamaged)" color="warn" tabindex="-1">
               <mat-icon aria-label="Delete Item" title="Delete Item">close</mat-icon>
