@@ -1,9 +1,7 @@
-<button hidden id="openBtn" (click)="openConnection(connModal)"></button>
-<ng-template #connModal let-c="close" let-d="dismiss">
-    <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Connexion <span style='color:red;font-size: 13px;'>{{textError}}</span></h4>
-    </div>
-    <div class="modal-body">
+
+    <div class="text-center" style="padding: 150px;">
+            <h4 class="modal-title" id="modal-basic-title">Connexion </h4>
+            <span style='color:red;font-size: 13px;'>{{textError}}</span>
         <form fxLayout="column" [formGroup]="userForm" autocomplete="off">
             <div class="input-row" fxLayout="row">
                 <mat-form-field class="inputField" fxFlex>
@@ -18,10 +16,8 @@
                     <mat-error>Mot de passe requis</mat-error>
                 </mat-form-field>
             </div>
-
+            
         </form>
-    </div>
-    <div class="modal-footer">
         <button mat-raised-button name="addButton" color="primary" (click)="setUser()" [disabled]="!userForm.valid">Connexion</button>
-    </div>
-</ng-template>
+
+        </div>

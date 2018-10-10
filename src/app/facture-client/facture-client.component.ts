@@ -34,7 +34,7 @@ export class FactureClientComponent implements OnInit {
   factureHeader = [];
   factureDetails = [];
   private clientForm;
-  isExist; newCode=-1;
+  isExist; newCode="-1";
   p_clientName; p_clientPhone; p_dateReq;
   
   constructor(private datePipe: DatePipe,
@@ -224,7 +224,6 @@ export class FactureClientComponent implements OnInit {
   deleteItemEdit(i) {
     this.itemsEditForm.controls[i].get('isDeleted').setValue(1);
   }
-
   deleteItem(i, id, itemIsDamaged) {
     this.itemsForm.removeAt(i);
     var index = FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', 'isDamaged', id.value, itemIsDamaged.value);

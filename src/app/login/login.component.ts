@@ -3,7 +3,6 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { LoginService } from './login.service';
 import { Router, ActivatedRoute } from '../../../node_modules/@angular/router';
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -33,34 +32,17 @@ export class LoginComponent implements OnInit {
         userName: ['', Validators.required],
         password: ['', Validators.required]
       });
-      let element: HTMLElement = document.getElementById('openBtn') as HTMLElement;
-      element.click();   
-      // let ngbModalOptions: NgbModalOptions = {
-      //   backdrop: 'static',
-      //   keyboard: false,
-      //   size: 'lg'
-      // };
-      // this.modalReference = this.modalService.open(this.modalName, ngbModalOptions);
     }
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
-  openConnection(connModal) {
-    let ngbModalOptions: NgbModalOptions = {
-      backdrop: 'static',
-      keyboard: false,
-      size: 'lg'
-    };
-    this.modalReference = this.modalService.open(connModal, ngbModalOptions);
-  }
   setUser() {
     this.loginService.getConnection(this.userForm.value).subscribe(response=>{
       var res = response;
       if(res == 1){
         localStorage.setItem("user", '1');
-        this.modalReference.close();
         this.router.navigate(["facture/client"]);
       } else{
         this.textError="Veuillez réessayer une autre fois";

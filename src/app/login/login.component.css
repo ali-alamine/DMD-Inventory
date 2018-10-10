@@ -1,6 +1,11 @@
 .inputField{
-    width: 100%;
-    padding: 7px;
+    width: 50%;
+    /* padding: 7px; */
+  }
+  .inputBtn{
+    padding: 20px;
+
+    float: right;
   }
   .noselect {
     -webkit-touch-callout: none;
