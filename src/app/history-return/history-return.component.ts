@@ -130,9 +130,7 @@ export class HistoryReturnComponent implements OnInit {
         $(historyReturnDT.row(cell.index().row).node()).removeClass('selected');
       });
       var tableinfo = historyReturnDT.page.info();
-      var total = tableinfo.recordsTotal
-      console.log(tableinfo)
-      // console.log(this.lengthFR)
+      var total = tableinfo.recordsTotal;
     } else{
       this.globalHistoryReturnDT.ajax.reload(null, false);
     }
@@ -168,7 +166,7 @@ export class HistoryReturnComponent implements OnInit {
       swal({
         type: 'success',
         title: 'Success',
-        text: 'Order Confirmer.',
+        text: 'Article Confirmer.',
         showConfirmButton: false,
         timer: 1000
       });
@@ -190,7 +188,7 @@ export class HistoryReturnComponent implements OnInit {
       swal({
         type: 'success',
         title: 'Success',
-        text: 'Order Rejeter.',
+        text: 'Article Rejeter.',
         showConfirmButton: false,
         timer: 1000
       });

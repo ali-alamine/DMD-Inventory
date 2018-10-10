@@ -34,7 +34,8 @@ export class FactureClientComponent implements OnInit {
   factureHeader = [];
   factureDetails = [];
   private clientForm;
-  isExist; newCode;p_clientName;p_client_phoneNumber;p_dateReq;p_facture_code;
+  isExist; newCode=-1;
+  p_clientName; p_clientPhone; p_dateReq;
   
   constructor(private datePipe: DatePipe,
     private fb: FormBuilder,
@@ -115,9 +116,8 @@ export class FactureClientComponent implements OnInit {
             isDeleted: 0
           });
           this.itemsEditForm.push(item)
-          console.log(this.itemsEditForm.value)
         });
-        this.editFactureTitle = "Edit Facture: "+this.factureHeader[0]['inv_code'];        
+        this.editFactureTitle = "Modifier Facture: "+this.factureHeader[0]['inv_code'];        
       }, error => {
         swal({
           type: 'error',
@@ -138,7 +138,6 @@ export class FactureClientComponent implements OnInit {
     this.clientForm.get('name').valueChanges.subscribe(val => {
       var data = this.clientForm.get('name').value;
       this.factureClientService.searchClientName(data).subscribe(Response => {
-        console.log(Response)
         if(Response == 1){
           // alert('exist')
           this.isExist = true;
@@ -257,9 +256,8 @@ export class FactureClientComponent implements OnInit {
         text: error.message
       });
     });
-    console.log(this.invoiceForm.value);
     if(flag == true)
-      this.printFactureClient()
+      this.printFactureClient();
     FactureClientComponent.selectedItems = [];
     this.invoiceForm.reset();
     this.myNgForm.resetForm();
@@ -271,23 +269,19 @@ export class FactureClientComponent implements OnInit {
     }
   }
   printFactureClient(){
-    this.p_clientName = this.invoiceForm.get('clientName').value;
-    this.p_client_phoneNumber = this.invoiceForm.get('clientPhone').value;
-    this.p_facture_code = this.newCode;
-    this.p_dateReq = this.invoiceForm.get('delDate').value;
-    var printContents = document.getElementById('printFacture').innerHTML;
-    var popupWin = window.open('', '_blank', 'width=800,height=600');
-    popupWin.document.open();
-    popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="../../styles.css"></head><body onload="window.print()">' + printContents + '</body></html>');
-    popupWin.document.close();
-    setTimeout(function(){ popupWin.close(); }, 1000);
+      var printContents = document.getElementById('printFacture').innerHTML;
+      var popupWin = window.open('', '_blank', 'width=800,height=600');
+      popupWin.document.open();
+      popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="../../styles.css"></head><body onload="window.print()">' + printContents + '</body></html>');
+      popupWin.document.close();
+      setTimeout(function(){ popupWin.close(); }, 1000);
   }
   editClientInvoice(){
     this.factureClientService.editClientInvoice(this.invoiceForm.value).subscribe(Response => {
       swal({
         type: 'success',
-        title: 'Success',
-        text: 'Invoice Mis a Jour Successfully',
+        title: 'Succès',
+        text: 'Mis à jour avec succés',
         showConfirmButton: false,
         timer: 1000
       });
@@ -342,8 +336,8 @@ export class FactureClientComponent implements OnInit {
         this.invoiceForm.get('clientID').setValue(Response);
         swal({
           type: 'success',
-          title: 'Success',
-          text: 'Client Added Successfully',
+          title: 'Succès',
+          text: 'Client ajouté avec succès',
           showConfirmButton: false,
           timer: 1000
         });
@@ -451,6 +445,9 @@ export class FactureClientComponent implements OnInit {
   get clientName() {
     return this.invoiceForm.get('clientName');
   }
+  get clientPhone() {
+    return this.invoiceForm.get('clientPhone');
+  }
   get clientID() {
     return this.invoiceForm.get('clientID');
   }
@@ -469,7 +466,6 @@ export class FactureClientComponent implements OnInit {
   static findWithAttr2(array, attr, attr2, value, value2) {
     var index = -1;
     for (var i = 0; i < array.length; i += 1) {
-      debugger
       if (array[i][attr] === value && array[i][attr2] === value2 && array[i]['isDeleted'] === 0) {
         index = i ;
       }

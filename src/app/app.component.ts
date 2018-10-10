@@ -15,7 +15,6 @@ export class AppComponent {
     
     if (localStorage.getItem("user") !== '1') {
       this.router.navigate(["login"]);
-       
     }
   }
   @HostListener('window:beforeunload')

@@ -58,7 +58,7 @@ export class ClientsComponent implements OnInit {
 
     this.items = [
       {
-        label: 'Edit',
+        label: 'Modifier',
         icon: 'pi pi-fw pi-pencil',
         command: (event) => {
           let element: HTMLElement = document.getElementById('editClientBtn') as HTMLElement;
@@ -101,10 +101,10 @@ export class ClientsComponent implements OnInit {
     var name = '';
     var phone = '';
     var address = '';
-    this.clientModalTitle = "Add Client";
+    this.clientModalTitle = "Ajouter Client";
 
     if (this.editFlag == true) {
-      this.clientModalTitle = "Edit Client";
+      this.clientModalTitle = "Modifier Client";
       name = ClientsComponent.selectedRowData['name'];
       phone = ClientsComponent.selectedRowData['phone'];
       address = ClientsComponent.selectedRowData['address'];
@@ -121,7 +121,6 @@ export class ClientsComponent implements OnInit {
     this.clientForm.get('name').valueChanges.subscribe(val => {
       var data = this.clientForm.get('name').value;
       this.clientsService.searchClientName(data).subscribe(Response => {
-        console.log(Response)
         if(Response == 1){
           // alert('exist')
           this.isExist = true;
@@ -137,14 +136,12 @@ export class ClientsComponent implements OnInit {
       this.editedClientData['address'] = this.address.value;
       this.editedClientData['phone'] = this.phoneNumber.value;
       this.editedClientData['ID'] = ClientsComponent.selectedClientID;
-      
-      console.log(this.editedClientData)
       this.clientsService.editClient(this.editedClientData).subscribe(Response => {
         this.globalClientsDT.ajax.reload(null, false);
         Swal({
           type: 'success',
-          title: 'Success',
-          text: 'Client Updated Successfully',
+          title: 'Succès',
+          text: 'Client mis à jour avec succès',
           showConfirmButton: false,
           timer: 1000
         });
@@ -161,8 +158,8 @@ export class ClientsComponent implements OnInit {
         this.globalClientsDT.ajax.reload(null, false);
         Swal({
           type: 'success',
-          title: 'Success',
-          text: 'Client Added Successfully',
+          title: 'Succès',
+          text: 'Client ajouté avec succès',
           showConfirmButton: false,
           timer: 1000
         });

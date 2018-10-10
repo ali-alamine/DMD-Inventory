@@ -14,7 +14,8 @@ export class LoginComponent implements OnInit {
   hide = true;
   textError;
   private sub;
-  userForm: FormGroup;
+  userForm;
+  modalName = "connModal"
 
   constructor(private modalService: NgbModal, 
     private fb: FormBuilder,
@@ -23,18 +24,23 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit() {
-    debugger
-    this.userForm = this.fb.group({
-      userName: ['', Validators.required],
-      password: ['', Validators.required]
-    });
     this.sub = this.route.data.subscribe(params => {
       if(params['logout']!== false)
         localStorage.clear();
     });
     if (localStorage.getItem("user") !== '1') {
+      this.userForm = this.fb.group({
+        userName: ['', Validators.required],
+        password: ['', Validators.required]
+      });
       let element: HTMLElement = document.getElementById('openBtn') as HTMLElement;
       element.click();   
+      // let ngbModalOptions: NgbModalOptions = {
+      //   backdrop: 'static',
+      //   keyboard: false,
+      //   size: 'lg'
+      // };
+      // this.modalReference = this.modalService.open(this.modalName, ngbModalOptions);
     }
   }
 

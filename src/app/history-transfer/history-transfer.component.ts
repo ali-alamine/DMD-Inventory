@@ -34,8 +34,8 @@ export class HistoryTransferComponent implements OnInit {
       order: [[0, 'desc']],
       columns: [
         { data: "conv_date", title: "Date" },
-        { data: "item_code", title: "Item Code" },
-        { data: "item_name", title: "Item Name" },
+        { data: "item_code", title: "Code" },
+        { data: "item_name", title: "Article" },
         { data: "conv_crt", title: "CRT" },
         { data: "conv_piece", title: "Piece" }
 

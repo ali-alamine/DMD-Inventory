@@ -36,8 +36,7 @@ export class HistoryFactureComponent implements OnInit {
   ngOnInit() {
     this.getHistoryFactureDT();
     var tableinfo = this.globalHistoryFactureDT.page.info();
-      var total = tableinfo.recordsTotal
-      console.log(tableinfo)
+      var total = tableinfo.recordsTotal;
     this.rightClick = [
       {
         label: 'Afficher',
@@ -112,11 +111,9 @@ export class HistoryFactureComponent implements OnInit {
         } ]
       });
       var selectedRowLS = localStorage.getItem('selectedRow');
-      // console.log(selectedRowLS)
       var x = localStorage.getItem('XOffset');
       var y = localStorage.getItem('YOffset');
       if (selectedRowLS !== null){
-        // debugger
         historyFactureDT.row(selectedRowLS).select();
         localStorage.removeItem('selectedRow');
       }
@@ -131,7 +128,6 @@ export class HistoryFactureComponent implements OnInit {
         HistoryFactureComponent.selectedFacture = [];
         if (type === 'row') {
           localStorage.setItem('selectedRow', indexes);
-          // console.log(localStorage.getItem('selectedRow'))
           this.selectedFactureRowData = historyFactureDT.row(indexes).data();
           HistoryFactureComponent.selectedFactureID = historyFactureDT.row(indexes).data()['invID'];
           var ID = historyFactureDT.row(indexes).data()['invID'];
@@ -207,7 +203,6 @@ export class HistoryFactureComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.historyService.deleteFacture(HistoryFactureComponent.selectedFactureID,HistoryFactureComponent.selectedFacture[0].type).subscribe(Response => {
-          // console.log(Response)
           if(Response!=0){
             this.globalHistoryFactureDT.ajax.reload(null, false);
             swal({

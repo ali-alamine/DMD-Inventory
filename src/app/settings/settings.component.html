@@ -1,9 +1,9 @@
 <div class="container-fluid">
   <button mat-raised-button color="primary" (click)="backup()">
-    <i class="material-icons">backup</i> Backup
+    <i class="material-icons">backup</i> Sauvegarde
   </button>
   <button mat-raised-button color="primary" (click)="openRestoreModal(restoreModal)">
-    <i class="material-icons">restore</i> Restore
+    <i class="material-icons">restore</i> Restaurer
   </button>
 </div>
 
@@ -14,7 +14,7 @@
 
 <ng-template #restoreModal let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Restore</h4>
+    <h4 class="modal-title" id="modal-basic-title">Restaurer</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>

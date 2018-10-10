@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <button mat-raised-button color="primary" (click)="editFlag=false;openStockModal(stockModal)">
-    <i class="material-icons">add</i> Add Item
+    <i class="material-icons">add</i> Ajouter Article
   </button>
 
   <hr>
@@ -26,7 +26,7 @@
 
 <ng-template #stockModal let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">{{stockModalTitle}} Item</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{stockModalTitle}} Article</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -35,14 +35,14 @@
     <form fxLayout="column" [formGroup]="stockForm" autocomplete="off">
       <div class="input-row" fxLayout="row">
         <mat-form-field class="inputField" fxFlex>
-          <input matInput placeholder="Item Name" formControlName="name" type="text" name="nameInput" autofocus>
-          <mat-error> item name is required with minimum 3 letters</mat-error>
+          <input matInput placeholder="Nom de l'article" formControlName="name" type="text" name="nameInput" autofocus>
+          <mat-error> Le nom de l'article est requis avec au moins 3 lettres</mat-error>
         </mat-form-field>
       </div>
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="inputField" fxFlex>
           <input matInput placeholder="Colisage" formControlName="colisage" type="number">
-          <mat-error> Colisage is required</mat-error>
+          <mat-error> Colisage est requis</mat-error>
         </mat-form-field>
       </div>
       
@@ -55,7 +55,7 @@
 
 <ng-template #transferModal let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Transfer to Damaged</h4>
+    <h4 class="modal-title" id="modal-basic-title">Transfert à endommagé</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -65,21 +65,21 @@
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="inputField" fxFlex>
           <input matInput placeholder="CRT" formControlName="crt" type="number">
-          <mat-error> must be less than crt of stock</mat-error>
+          <mat-error> Doit être inférieur au CRT du stock</mat-error>
         </mat-form-field>
       </div>
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="inputField" fxFlex>
           <input matInput placeholder="Piece" formControlName="piece" type="number">
-          <mat-error> must be less than piece of stock</mat-error>
+          <mat-error> Doit être moins qu'une pièce de stock</mat-error>
         </mat-form-field>
       </div>
       
     </form>
-    <mat-error *ngIf="maxPiece < (tCRT * tcolisage) + tPiece">u exceed the stock total   ..change it later</mat-error> 
-    <mat-error *ngIf="(tCRT * tcolisage) + tPiece == 0 ">u can not transfer 0 piece    ..change it later</mat-error> 
+    <mat-error *ngIf="maxPiece < (tCRT * tcolisage) + tPiece">vous dépassez le stock total   ..change le plus tard</mat-error> 
+    <mat-error *ngIf="(tCRT * tcolisage) + tPiece == 0 ">vous ne pouvez pas transférer 0 pièce   ..change le plus tard</mat-error> 
   </div>
   <div class="modal-footer">
-    <button mat-raised-button name="addButton" color="primary" (click)="submitTransfer()" [disabled]="!transferForm.valid || (tCRT * tcolisage) + tPiece == 0 || maxPiece < (tCRT * tcolisage) + tPiece">Transfer</button>
+    <button mat-raised-button name="addButton" color="primary" (click)="submitTransfer()" [disabled]="!transferForm.valid || (tCRT * tcolisage) + tPiece == 0 || maxPiece < (tCRT * tcolisage) + tPiece">Transfert</button>
   </div>
 </ng-template>

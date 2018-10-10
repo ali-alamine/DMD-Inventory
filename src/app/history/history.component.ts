@@ -36,12 +36,8 @@ export class HistoryComponent implements OnInit {
     var router = localStorage.getItem('routerHistory');
     if (router !== null){
       this.router.navigate([router]);
-      // if(this.historyItemsComponent.globalHistoryItemsDT!= null)
-        // this.historyItemsComponent.globalHistoryItemsDT.ajax.reload(null, false);
       localStorage.removeItem('routerHistory');
     } else{
-      // if(this.historyFactureComponent.globalHistoryFactureDT != null)
-        // this.historyFactureComponent.globalHistoryFactureDT.ajax.reload(null, false);
       this.router.navigate(["history/facture"]);
     }
     this.rightClick = [

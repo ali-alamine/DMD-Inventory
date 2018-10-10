@@ -100,10 +100,6 @@ export class FactureReturnComponent implements OnInit {
             itemName: [this.factureDetails[i].item_name],
             isDamaged:[this.factureDetails[i].ord_item_isDamaged],
             colisage:[this.factureDetails[i].item_packing_list],
-            // stockCrt: [this.factureDetails[i].item_crt],
-            // stockPiece: [this.factureDetails[i].item_piece],
-            // crtNoEdit: [this.factureDetails[i].ord_crt],
-            // pieceNoEdit: [this.factureDetails[i].ord_piece],
             crt: [this.factureDetails[i].ord_crt],
             piece: [this.factureDetails[i].ord_piece],
             status: [this.factureDetails[i].ord_status],
@@ -115,57 +111,11 @@ export class FactureReturnComponent implements OnInit {
         this.invoiceForm.get('invoiceDate').setValue(this.factureDetails[0].inv_date_req)
         this.invoiceForm.get('clientName').setValue(this.factureDetails[0].per_name)
         this.invoiceForm.get('clientID').setValue(this.factureDetails[0].perID)
-        this.editFactureTitle = "Edit Facture: "+this.factureDetails[0].inv_code;
+        this.editFactureTitle = "Modifier Facture: "+this.factureDetails[0].inv_code;
       },error => {
         console.log(error)
       });
     }
-    // checkQuantity(i){
-    //   var stockCrt = this.itemsForm.controls[i].get('stockCrt').value;
-    //   var stockPiece = this.itemsForm.controls[i].get('stockPiece').value;
-    //   var packing_list = this.itemsForm.controls[i].get('colisage').value;
-    //   var crt = this.itemsForm.controls[i].get('crt').value;
-    //   var piece = this.itemsForm.controls[i].get('piece').value;
-    //   var inputCrt= "#crt"+i;
-    //   var inputPiece= "#piece"+i;
-    //   if(crt > stockCrt){
-    //     $(inputCrt).addClass("text-danger");
-    //   } 
-    //   else{
-    //     $(inputCrt).removeClass("text-danger");
-    //   }  
-    //   var remainingPiece = stockPiece - (crt * packing_list);
-    //   if (piece > remainingPiece) {
-    //       $(inputPiece).addClass("text-danger");
-    //   } else {
-    //       $(inputPiece).removeClass("text-danger");
-    //   }
-    // }
-    // checkQuantityEdit(i){
-    //   var stockCrt = parseInt(this.itemsEditForm.controls[i].get('stockCrt').value);
-    //   var stockPiece = parseInt(this.itemsEditForm.controls[i].get('stockPiece').value);
-    //   var packing_list = parseInt(this.itemsEditForm.controls[i].get('colisage').value);
-    //   var crtNoEdit = parseInt(this.itemsEditForm.controls[i].get('crtNoEdit').value);
-    //   var pieceNoEdit = parseInt(this.itemsEditForm.controls[i].get('pieceNoEdit').value);
-    //   var crt = this.itemsEditForm.controls[i].get('crt').value;
-    //   var piece = this.itemsEditForm.controls[i].get('piece').value;
-    //   stockCrt = stockCrt + crtNoEdit ;
-    //   stockPiece = stockPiece + pieceNoEdit ;
-    //   var inputCrt= "#crtEdit"+i;
-    //   var inputPiece= "#pieceEdit"+i;
-    //   if(crt > stockCrt){
-    //     $(inputCrt).addClass("text-danger");
-    //   } 
-    //   else{
-    //     $(inputCrt).removeClass("text-danger");
-    //   }  
-    //   var remainingPiece = stockPiece - (crt * packing_list);
-    //   if (piece > remainingPiece) {
-    //       $(inputPiece).addClass("text-danger");
-    //   } else {
-    //       $(inputPiece).removeClass("text-danger");
-    //   }
-    // }
     onClientNameChange(): void {
       this.invoiceForm.get('searchClient').valueChanges.subscribe(val => {
         var data = this.invoiceForm.get('searchClient').value;
@@ -212,8 +162,8 @@ export class FactureReturnComponent implements OnInit {
         this.factureReturnService.newReturnInvoice(this.invoiceForm.value).subscribe(Response => {
           swal({
             type: 'success',
-            title: 'Success',
-            text: 'Facture Retourn Code: '+Response,
+            title: 'Succès',
+            text: 'Facture Retour Code: '+Response,
             showConfirmButton: true,
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -235,12 +185,11 @@ export class FactureReturnComponent implements OnInit {
         this.invoiceForm.get('invoiceDate').setValue(this.deliveryDate);
     }
     editReturnInvoice(){
-      debugger
         this.factureReturnService.editReturnInvoice(this.invoiceForm.value).subscribe(Response => {
           swal({
             type: 'success',
-            title: 'Success',
-            text: 'Invoice Added Successfully',
+            title: 'Succès',
+            text: 'Mis à jour avec succés',
             showConfirmButton: false,
             timer: 1000
           });

@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { StockComponent } from './stock/stock.component';
 import { ClientsComponent } from './clients/clients.component';
 import { SupplyComponent } from './facture-supply/facture-supply.component';
-import { SupplyInvoicesComponent } from './supply-invoices/supply-invoices.component';
 
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { FactureComponent } from './facture/facture.component';

@@ -21,7 +21,7 @@
           <mat-error> Le nom du client est requis</mat-error>
         </mat-form-field>
         <button mat-raised-button color="primary" (click)="openClientModal(clientModal)">
-            <i class="material-icons">add</i> Add Client
+            <i class="material-icons">add</i> Ajouter un Client
           </button>
       </div>
 
@@ -77,7 +77,7 @@
               <input matInput placeholder="Comment" formControlName="comment" type="text">
             </mat-form-field>
             <button mat-icon-button (click)="deleteItemEdit(i)" color="warn" tabindex="-1">
-              <mat-icon aria-label="Delete Item" title="Delete Item">close</mat-icon>
+              <mat-icon aria-label="Effacer l'article" title="Effacer l'article">close</mat-icon>
             </button>
           </div>
         </div>
@@ -111,7 +111,7 @@
         </mat-form-field>
 
         <button mat-icon-button (click)="deleteItem(i,itemID,isDamaged)" color="warn" tabindex="-1">
-          <mat-icon aria-label="Delete Item" title="Delete Item">close</mat-icon>
+          <mat-icon aria-label="Effacer l'article" title="Effacer l'article">close</mat-icon>
         </button>
       </div>
 
@@ -132,7 +132,7 @@
 
 <ng-template #mutliSelectModal let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Items</h4>
+    <h4 class="modal-title" id="modal-basic-title">Article</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -146,13 +146,13 @@
     </table>
   </div>
   <div class="modal-footer">
-    <button mat-raised-button (click)="addItemsToFacture()" color="primary">Add Items</button>
+    <button mat-raised-button (click)="addItemsToFacture()" color="primary">Ajouter Article</button>
   </div>
 </ng-template>
 
 <ng-template #clientModal let-c="close" let-d="dismiss">
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Add Client</h4>
+      <h4 class="modal-title" id="modal-basic-title">Ajouter un client</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -161,110 +161,90 @@
       <form fxLayout="column" [formGroup]="clientForm" autocomplete="off">
         <div class="input-row" fxLayout="row">
           <mat-form-field class="inputField" fxFlex>
-            <input matInput placeholder="Name" formControlName="name" type="text" name="nameInput" autofocus>
-            <mat-error> client name is required with minimum 3 letters</mat-error>
+            <input matInput placeholder="Nom" formControlName="name" type="text" name="nameInput" autofocus>
+            <mat-error> Le nom du client est obligatoire avec 3 lettres minimum</mat-error>
             <!-- <mat-error *ngIf="isExist == true"> client exist</mat-error> -->
           </mat-form-field>
           <span *ngIf="isExist == true" style="color:red"> Client exist!</span>
         </div>
         <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field class="inputField" fxFlex>
-            <input matInput placeholder="Phone Number" formControlName="phone" type="text">
-            <mat-error> client phone is required</mat-error>
+            <input matInput placeholder="Numéro de téléphone" formControlName="phone" type="text">
+            <mat-error> Téléphone client est obligatoire</mat-error>
           </mat-form-field>
         </div>
         <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field class="inputField" fxFlex>
-            <input matInput placeholder="Address" formControlName="address" type="text">
-            <mat-error> client address is required</mat-error>
+            <input matInput placeholder="Addresse" formControlName="address" type="text">
+            <mat-error> L'adresse du client est obligatoire</mat-error>
           </mat-form-field>
         </div>
         
       </form>
     </div>
     <div class="modal-footer">
-      <button mat-raised-button name="addButton" color="primary" (click)="addClient()" [disabled]="!clientForm.valid || isExist == true">Add</button>
+      <button mat-raised-button name="addButton" color="primary" (click)="addClient()" [disabled]="!clientForm.valid || isExist == true">Ajouter</button>
     </div>
   </ng-template>
 
 <div class="table table-striped" id="printFacture" hidden>
-  <table class="table table-responsive table-bordered text-center test " style="width:100%;">
+    <div style="float:left;">
+        <b>Nom:</b> {{clientName.value}}<br>
+        <b>Numéro de téléphone:</b> {{clientPhone.value}}<br>
+      </div>
+      <div style="float: right;">
+        <b>Date De Commande:</b> {{factureDate.value}}<br>
+        <b>Code:</b> {{newCode.value}}
+      </div>
+      <br>
+      <br>
+      <br>
+      <hr>
+    <table class="table table-responsive table-bordered text-center test " style="width:100%;  border-collapse: collapse; border: 1px solid black;">
       <thead>
-          <tr>
-              <th colspan="10">
-                  <h3 style="vertical-align: middle;" class="text-center tableMainTitle">BON DE LIVRAISON</h3>
-                  <table style="float:left; background-color: white;" class="table-bordered text-center">
-                      <thead>
-                          <tr>
-                              <td style="padding: 3px; font-size: 13px;"><label>Nom de client </label></td>
-                              <td style="font-size: 13px;">
-                                  <label>{{p_clientName}}</label>
-                              </td>
-                          </tr>
-                          <tr>
-                              <td style="padding: 3px; font-size: 13px;"><label>Telephone</label> </td>
-                              <td style="font-size: 13px;">
-                                  <label>{{p_client_phoneNumber}}</label>
-                              </td>
-                          </tr>
-                      </thead>
-                  </table>
-                  <table style="float:right; background-color: white;" class="table-bordered text-center">
-                      <thead>
-                          <tr>
-                              <td style="padding: 3px; font-size: 13px;"><label>CODE</label></td>
-                              <td>
-                                  <label style="font-size: 13px;">{{p_facture_code}}</label>
-                              </td>
-                          </tr>
-                          <tr>
-                              <td style="padding: 3px; font-size: 13px;"><label>Date de Commande</label></td>
-                              <td>
-                                  <label style="font-size: 13px;">{{p_dateReq}}</label>
-                              </td>
-                          </tr>
-                      </thead>
-                  </table>
-              </th>
+      <tr>
+      <th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">ARTICLES</th>
+      <th style="border: 1px solid black;" class="text-center mousetrap" colspan="2">QUANTITE</th>
+      <th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">P.Unit</th>
+              <th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">Montant</th>
           </tr>
           <tr>
-              <th style="vertical-align: middle; font-size: 13px;" class="text-center mousetrap" rowspan="2">ARTICLES</th>
-              <th style="vertical-align: middle; font-size: 13px;" class="text-center mousetrap" colspan="2">QUANTITE</th>
-              <th style="vertical-align: middle; font-size: 13px;" class="text-center mousetrap" rowspan="2">P.Unit</th>
-              <th style="vertical-align: middle; font-size: 13px;" class="text-center mousetrap" rowspan="2">Montant</th>
-          </tr>
-          <tr>
-              <th style="vertical-align: middle; font-size: 13px;" class="text-center mousetrap">CLS/CRT</th>
-              <th style="vertical-align: middle; font-size: 13px;" class="text-center mousetrap">PIECE</th>
+              <th style="border: 1px solid black;" class="text-center mousetrap">CLS/CRT</th>
+              <th style="border: 1px solid black;" class="text-center mousetrap">PIECE</th>
           </tr>
       </thead>
     <tbody>
-      <tr   *ngFor="let item of this.itemsForm.value; let i = index">
-          <td style="vertical-align: middle; font-size: 13px;">{{item.itemName}}</td>
-          <td style="vertical-align: middle; font-size: 13px;">{{item.crt}}</td>
-          <td style="vertical-align: middle; font-size: 13px;">{{item.piece}}</td>
-          <td style="vertical-align: middle; font-size: 13px;"></td>
-          <td style="vertical-align: middle; font-size: 13px;"></td>
+      <tr *ngFor="let item of this.itemsForm.value; let i = index" >
+          <td style="border: 1px solid black;">{{item.itemName}}</td>
+          <td style="border: 1px solid black;">{{item.crt}}</td>
+          <td style="border: 1px solid black;">{{item.piece}}</td>
+          <td style="border: 1px solid black;"></td>
+          <td style="border: 1px solid black;"></td>
       </tr>
     </tbody>
   </table> 
   <hr>
-  <div class="row">
+  <!-- <div class="row"> -->
       <!-- </br> -->
-      <div class="col-xs-4 col-xs-offset-0">
+      <div style="float:left;">
           <label style="font-size: 13px;">Le Responseble</label>
           <label>----------------------</label>
       </div>
-      <!-- <div style="position: absolute;" class="col-xs-4 col-xs-offset-4">
+      <div style="float:right;">
           <label style="font-size: 13px;">Num de cls/crt</label>
           <label>-----------------------</label>
-          <!-- </br> -->
-        <!--  <label style="font-size: 13px;">Num de piece</label>
-          <label>-----------------------</label>
-      </div> -->
-      <div style="position: absolute;" class="col-xs-4 col-xs-offset-8">
-          <label style="font-size: 13px;">Le Client</label>
+      </div>
+      <!-- </div> -->
+      <br>
+      <br>
+      <!-- <div class="row"> -->
+            <div style="float:left;">
+                <label style="font-size: 13px;">Le Client</label>
+                <label>-----------------------</label>
+            </div>
+      <div  style="float:right;">
+          <label style="font-size: 13px;">Num de piece</label>
           <label>-----------------------</label>
       </div>
-  </div>
+  <!-- </div> -->
 </div>

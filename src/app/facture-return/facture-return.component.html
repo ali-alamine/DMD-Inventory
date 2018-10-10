@@ -46,7 +46,7 @@
               <input matInput placeholder="colisage" formControlName="colisage" type="number">
             </mat-form-field>
             <mat-form-field fxFlex class="itemName" style="text-align: center;">
-              <input matInput placeholder="Name" formControlName="itemName" type="text" name="nameInput" tabIndex="-1"
+              <input matInput placeholder="Article" formControlName="itemName" type="text" name="nameInput" tabIndex="-1"
                 [readonly]="true">
             </mat-form-field>
             <mat-form-field fxFlex class="itemInputs">
@@ -58,7 +58,7 @@
               onkeydown="javascript: return event.keyCode == 69 ? false : true" >
             </mat-form-field>
             <button mat-icon-button (click)="deleteItemEdit(i)" color="warn" tabindex="-1">
-              <mat-icon aria-label="Delete Item" title="Delete Item">close</mat-icon>
+              <mat-icon aria-label="Effacer l'article" title="Effacer l'article">close</mat-icon>
             </button>
           </div>
         </div>
@@ -88,7 +88,7 @@
               onkeydown="javascript: return event.keyCode == 69 ? false : true">
             </mat-form-field>
             <button mat-icon-button (click)="deleteItem(i,itemID,isDamaged)" color="warn" tabindex="-1">
-              <mat-icon aria-label="Delete Item" title="Delete Item">close</mat-icon>
+              <mat-icon aria-label="Effacer l'article" title="Effacer l'article">close</mat-icon>
             </button>
           </div>
         </div>

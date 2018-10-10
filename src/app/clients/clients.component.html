@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <button mat-raised-button color="primary" (click)="editFlag=false;openClientModal(clientModal)">
-    <i class="material-icons">add</i> Add Client
+    <i class="material-icons">add</i> Ajouter un Client
   </button>
 
   <hr>
@@ -33,21 +33,21 @@
     <form fxLayout="column" [formGroup]="clientForm" autocomplete="off">
       <div class="input-row" fxLayout="row">
         <mat-form-field class="inputField" fxFlex>
-          <input matInput placeholder="Name" formControlName="name" type="text" name="nameInput" autofocus>
-          <mat-error> client name is required with minimum 3 letters</mat-error>
+          <input matInput placeholder="Nom" formControlName="name" type="text" name="nameInput" autofocus>
+          <mat-error> Le nom du client est obligatoire avec 3 lettres minimum</mat-error>
         </mat-form-field>
         <span *ngIf="isExist == true && editFlag==false" style="color:red"> Client exist!</span>
       </div>
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="inputField" fxFlex>
-          <input matInput placeholder="Phone Number" formControlName="phone" type="text">
-          <mat-error> client phone is required</mat-error>
+          <input matInput placeholder="Numéro de téléphone" formControlName="phone" type="text">
+          <mat-error> Téléphone client est obligatoire</mat-error>
         </mat-form-field>
       </div>
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="inputField" fxFlex>
-          <input matInput placeholder="Address" formControlName="address" type="text">
-          <mat-error> client address is required</mat-error>
+          <input matInput placeholder="Addresse" formControlName="address" type="text">
+          <mat-error> L'adresse du client est obligatoire</mat-error>
         </mat-form-field>
       </div>
       

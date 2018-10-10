@@ -11,12 +11,12 @@
             
       
               <mat-form-field class="itemName">
-                <input matInput formControlName="supplyDate" placeholder="Facture Date" readonly= true>      
+                <input matInput formControlName="supplyDate" placeholder="Date de Commande" readonly= true>      
               </mat-form-field>
 
              
               <button class="addBtns" id="multiSelectBtn" mat-raised-button color="primary" (click)="openMultiSelect(mutliSelectModal)" style="float:right">
-                <i class="material-icons">subdirectory_arrow_left</i> MultiSelect
+                <i class="material-icons">subdirectory_arrow_left</i> Sélection Multiple
               </button>
       
             </div>
@@ -32,7 +32,7 @@
                   <input matInput placeholder="colisage" formControlName="colisage" #itemID type="number">
                 </mat-form-field>
                 <mat-form-field fxFlex class="itemName" style="text-align: center;">
-                  <input matInput placeholder="Name" formControlName="itemName" type="text" name="nameInput" tabIndex="-1"
+                  <input matInput placeholder="Article" formControlName="itemName" type="text" name="nameInput" tabIndex="-1"
                     [readonly]="true">
                 </mat-form-field>
                 <mat-form-field fxFlex class="itemInputs">
@@ -46,20 +46,20 @@
                 </mat-form-field>
       
                 <button mat-icon-button (click)="deleteItem(i,itemID)" color="warn" tabindex="-1">
-                  <mat-icon aria-label="Delete Item" title="Delete Item">close</mat-icon>
+                  <mat-icon aria-label="Effacer l'article" title="Effacer l'article">close</mat-icon>
                 </button>
               </div>
             </div>
           </div>
       
-          <button mat-raised-button name="addButton" class="addBtns" color="primary" (click)="addSupplyInvoice()" [disabled]="!supplyForm.valid || itemsForm.length == 0">Submit</button>
+          <button mat-raised-button name="addButton" class="addBtns" color="primary" (click)="addSupplyInvoice()" [disabled]="!supplyForm.valid || itemsForm.length == 0">Soumettre</button>
         </form>
       </div>
       
       
       <ng-template #mutliSelectModal let-c="close" let-d="dismiss">
         <div class="modal-header">
-          <h4 class="modal-title" id="modal-basic-title">Items</h4>
+          <h4 class="modal-title" id="modal-basic-title">Article</h4>
           <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -74,6 +74,6 @@
           </table>
         </div>
         <div class="modal-footer">
-          <button mat-raised-button (click)="addItemsToFacture()" color="primary">Add Items</button>
+          <button mat-raised-button (click)="addItemsToFacture()" color="primary">Ajouter Article</button>
         </div>
       </ng-template>

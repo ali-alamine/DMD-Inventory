@@ -53,7 +53,7 @@ export class StockComponent implements OnInit {
       order: [[4, 'asc']],
       columns: [
         { data: "pck_list", title: "Colisage" },
-        { data: "name", title: "Name" },
+        { data: "name", title: "Article" },
         { data: "crt", title: "CRT" },
         { data: "piece", title: "Piece" },
         { data: "code", title: "Code"}
@@ -76,7 +76,7 @@ export class StockComponent implements OnInit {
 
     this.items = [
       {
-        label: 'Edit',
+        label: 'Modifier',
         icon: 'pi pi-fw pi-pencil',
         command: (event) => {
           let element: HTMLElement = document.getElementById('editStockBtn') as HTMLElement;
@@ -85,7 +85,7 @@ export class StockComponent implements OnInit {
 
       },
       {
-        label: 'Transfer',
+        label: 'Transfert',
         icon: 'pi pi-fw pi-clone',
         command: (event) => {
           let element: HTMLElement = document.getElementById('transferBtn') as HTMLElement;
@@ -94,7 +94,7 @@ export class StockComponent implements OnInit {
 
       },
       {
-        label: 'Delete',
+        label: 'Effacer',
         icon: 'pi pi-fw pi-times',
         command: (event) => {
           let element: HTMLElement = document.getElementById('deleteBtn') as HTMLElement;
@@ -136,10 +136,10 @@ export class StockComponent implements OnInit {
     this.modalReference = this.modalService.open(stockModal, { centered: true, ariaLabelledBy: 'modal-basic-title' });
     var name = '';
     var colisage = '';
-    this.stockModalTitle = "Add ";
+    this.stockModalTitle = "Ajouter ";
 
     if (this.editFlag == true) {
-      this.stockModalTitle = "Edit ";
+      this.stockModalTitle = "Modifier ";
       name = StockComponent.selectedRowData['name'];
       colisage = StockComponent.selectedRowData['pck_list'];
     }
@@ -165,7 +165,6 @@ export class StockComponent implements OnInit {
   }
 
   submitTransfer(){
-    console.log(this.transferForm.value);
     this.stockService.transfer(this.transferForm.value).subscribe(Response => {
       this.globalStocksDT.ajax.reload(null, false);
       Swal({
@@ -191,8 +190,6 @@ export class StockComponent implements OnInit {
       this.editedStockData['name'] = this.name.value;
       this.editedStockData['pck_list'] =  this.colisage.value;
       this.editedStockData['ID'] = StockComponent.selectedStockID;
-
-      console.log(this.editedStockData)
       this.stockService.editStockItem(this.editedStockData).subscribe(Response => {
         this.globalStocksDT.ajax.reload(null, false);
         Swal({
@@ -238,14 +235,14 @@ export class StockComponent implements OnInit {
     if(StockComponent.selectedRowData['isDamagedFlag']){
       swal({
         type: 'error',
-        title: 'you can not',
-        text: 'item has invoices'
+        title: 'vous ne pouvez pas',
+        text: "l'article a des factures"
       });
       return;
     }
 
     swal({
-      title: "delete ?" ,
+      title: "effacer ?" ,
       text: "?",
       type: 'warning',
       showCancelButton: true,
@@ -259,7 +256,7 @@ export class StockComponent implements OnInit {
           this.globalStocksDT.ajax.reload(null, false);
           swal({
             type: "success",
-            title: "success",
+            title: "Succès",
             text: "ok",
             showConfirmButton: false,
             timer: 1000
@@ -267,8 +264,8 @@ export class StockComponent implements OnInit {
         }, error => {
           swal({
             type: 'error',
-            title: 'you can not',
-            text: 'item has invoices'
+            title: 'vous ne pouvez pas',
+            text: "l'article a des factures"
           });
         });
       }

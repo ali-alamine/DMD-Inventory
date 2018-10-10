@@ -25,7 +25,6 @@ import { StockComponent } from './stock/stock.component';
 import { ClientsComponent } from './clients/clients.component';
 import { SupplyComponent } from './facture-supply/facture-supply.component';
 import {MatIconModule} from '@angular/material/icon';
-import { SupplyInvoicesComponent } from './supply-invoices/supply-invoices.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { FocusDirectiveDirective } from './focus-directive.directive';
@@ -50,7 +49,6 @@ import { LoginComponent } from './login/login.component';
     StockComponent,
     ClientsComponent,
     SupplyComponent,
-    SupplyInvoicesComponent,
     PageNotFoundComponent,
     FocusDirectiveDirective,
     FactureComponent,

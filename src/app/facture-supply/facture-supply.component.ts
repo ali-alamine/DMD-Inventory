@@ -69,7 +69,7 @@ export class SupplyComponent implements OnInit {
           this.addFactureEditRow(element);
           SupplyComponent.selectedItems.push({ id: element['itemID'], name: element['item_name'], colisage:element['item_packing_list'] });
         });
-        this.editFactureTitle = "Edit Facture: "+this.factureHeader[0]['inv_code'];        
+        this.editFactureTitle = "Modifier Facture: "+this.factureHeader[0]['inv_code'];        
       }, error => {
         swal({
           type: 'error',
@@ -123,8 +123,8 @@ export class SupplyComponent implements OnInit {
       this.supplyService.editSupplyInvoice(this.supplyForm.value).subscribe(Response => {
         swal({
           type: 'success',
-          title: 'Success',
-          text: 'updated Successfully',
+          title: 'Succès',
+          text: 'Mis à jour avec succés',
           showConfirmButton: false,
           timer: 1000
         });
@@ -140,7 +140,7 @@ export class SupplyComponent implements OnInit {
       this.supplyService.newSupplyInvoice(this.supplyForm.value).subscribe(Response => {
         swal({
           type: 'success',
-          title: 'Success',
+          title: 'Succès',
           text: 'Facture Supply Code: '+Response,
           showConfirmButton: true,
           confirmButtonColor: '#3085d6',
