@@ -37,7 +37,7 @@
         <input appFocusDirective matInput [matDatepicker]="deliveryDate" formControlName="delDate" placeholder="Date de Livraison">
         <mat-datepicker-toggle matSuffix [for]="deliveryDate" tabIndex="-1"></mat-datepicker-toggle>
         <mat-datepicker touchUi #deliveryDate></mat-datepicker>
-        <mat-error> Date de Livraison est requis</mat-error>
+        <mat-error> Date de livraison est requis</mat-error>
       </mat-form-field>
 
       <button class="addBtns" id="multiSelectBtn" mat-raised-button color="primary" (click)="openMultiSelect(mutliSelectModal)"
@@ -193,7 +193,7 @@
         <b>Numéro de téléphone:</b> {{clientPhone.value}}<br>
       </div>
       <div style="float: right;">
-        <b>Date De Commande:</b> {{factureDate.value}}<br>
+        <b>Date de Commande:</b> {{factureDate.value}}<br>
         <b>Date de Livraison:</b> {{delDate.value}}<br>
         <!-- <b>Code:</b> {{newCode.value}} -->
       </div>
