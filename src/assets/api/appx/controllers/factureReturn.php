@@ -123,7 +123,7 @@ class factureReturn extends REST_Controller
                 $this->factureReturn_model->deletedOrder($row['ordID']);
             }            
         }
-        if($invoiceItems != ''){
+        if(sizeof($invoiceItems) > 0){
             $this->factureReturn_model->updateInvoice($invID,-1);
             foreach ($invoiceItems as $row) {
                 if($row['crt'] == '') $row['crt']=0;
