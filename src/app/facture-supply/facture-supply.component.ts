@@ -5,6 +5,7 @@ import { SupplyService } from './facture-supply.service';
 import swal from 'sweetalert2';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { Router, ActivatedRoute } from '@angular/router';
+import { DatePipe } from '../../../node_modules/@angular/common';
 declare var $: any;
 @Component({
   selector: 'app-supply',
@@ -26,7 +27,7 @@ export class SupplyComponent implements OnInit {
   factureDetails = [];
   editFactureTitle="";
 
-  constructor(private fb: FormBuilder, private supplyService: SupplyService,private router: Router, private modalService: NgbModal, private _hotkeysService: HotkeysService, private route: ActivatedRoute) { 
+  constructor(private datePipe: DatePipe,private fb: FormBuilder, private supplyService: SupplyService,private router: Router, private modalService: NgbModal, private _hotkeysService: HotkeysService, private route: ActivatedRoute) { 
     this._hotkeysService.add(new Hotkey('ctrl+`', (event: KeyboardEvent): boolean => {
       let element: HTMLElement = document.getElementById('multiSelectBtn') as HTMLElement;
       element.click();
@@ -48,7 +49,8 @@ export class SupplyComponent implements OnInit {
 
   ngOnInit() {
     const currentDate = new Date();
-    var factureDate = currentDate.toISOString().substring(0, 10);
+    // var factureDate = currentDate.toISOString().substring(0, 10);
+    var factureDate = this.datePipe.transform(currentDate,"MM/d/yyyy");
     this.sub = this.route.queryParams.subscribe(params => {
       this.factureID = params['factureID'] || '-1';
     });

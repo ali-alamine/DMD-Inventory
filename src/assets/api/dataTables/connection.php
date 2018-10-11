@@ -4,7 +4,7 @@ header("Access-Control-Allow-Origin: *");
 function openConn(){
 	$servername = "localhost";
 	$username = "root";
-	$password = "";
+	$password = "root_ess";
 	$db = "dmd-inventory";
 	$conn = mysqli_connect($servername, $username, $password, $db);
 	return $conn;

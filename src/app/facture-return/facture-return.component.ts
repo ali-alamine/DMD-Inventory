@@ -66,8 +66,8 @@ export class FactureReturnComponent implements OnInit {
     ngOnInit() {
       
     const currentDate = new Date();
-     this.deliveryDate = currentDate.toISOString().substring(0, 10);
-    var s = this.datePipe.transform(currentDate,"MM/d/yyyy");
+    //  this.deliveryDate = currentDate.toISOString().substring(0, 10);
+     this.deliveryDate = this.datePipe.transform(currentDate,"MM/d/yyyy");
     
       if(this.factureComponent.factureID != -1){
         document.getElementById('submit').style.display = "none";
