@@ -33,6 +33,9 @@ export class HistoryItemsComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
+    if (localStorage.getItem("user") !== '1') {
+      this.router.navigate(["login"]);
+    }
     
       if(this.globalHistoryItemsDT!= null)
         this.globalHistoryItemsDT.ajax.reload(null, false);
