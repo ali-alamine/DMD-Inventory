@@ -132,8 +132,11 @@ export class HistoryReturnComponent implements OnInit {
       $('#historyReturnDT').on('key-blur.dt', function (e, datatable, cell) {
         $(historyReturnDT.row(cell.index().row).node()).removeClass('selected');
       });
-      var tableinfo = historyReturnDT.page.info();
-      var total = tableinfo.recordsTotal;
+      // dt.page.info().recordsDisplay
+      // var tableinfo = historyReturnDT.variations.featureVariationRecords;
+      // var tableinfo = historyReturnDT.page.records;
+      // console.log(tableinfo)
+      // var total = tableinfo.recordsTotal;
     } else{
       this.globalHistoryReturnDT.ajax.reload(null, false);
     }
@@ -165,6 +168,7 @@ export class HistoryReturnComponent implements OnInit {
       if(Response == 0) {
         this.globalHistoryReturnDT.ajax.reload(null, false);
         this.modalReference.close();
+        this.historyComponent.getCountFR();
       }
       swal({
         type: 'success',
@@ -187,6 +191,7 @@ export class HistoryReturnComponent implements OnInit {
       if(Response == 0) {
         this.globalHistoryReturnDT.ajax.reload(null, false);
         this.modalReference.close();
+        this.historyComponent.getCountFR();
       }
       swal({
         type: 'success',
@@ -219,6 +224,7 @@ export class HistoryReturnComponent implements OnInit {
       if (result.value) {
       this.historyService.confirmAll(HistoryReturnComponent.selectedFactureID).subscribe(Response => {
         this.globalHistoryReturnDT.ajax.reload(null, false);
+        this.historyComponent.getCountFR();
           swal({
             type: 'success',
             title: 'Succès',
@@ -252,6 +258,7 @@ export class HistoryReturnComponent implements OnInit {
       if (result.value) {
       this.historyService.rejectAll(HistoryReturnComponent.selectedFactureID).subscribe(Response => {
         this.globalHistoryReturnDT.ajax.reload(null, false);
+        this.historyComponent.getCountFR();
           swal({
             type: 'success',
             title: 'Succès',

@@ -38,4 +38,7 @@ export class HistoryService {
   rejectAll(invID): Observable<any>{
     return this.httpClient.get(this.url+"rejectAll",  {params:{invID:invID}});
   }
+  getCountFR(): Observable<any>{
+    return this.httpClient.get(this.url+"getCountFR");
+  }
 }

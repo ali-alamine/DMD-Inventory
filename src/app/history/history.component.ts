@@ -25,7 +25,7 @@ export class HistoryComponent implements OnInit {
   @ViewChild('showDetails')
   private showDetailsTPL : TemplateRef<any>;
   clientName; clientPhone; clientAddress; dateReq; codeFR; type;
-  
+  badgeCount: number;
 
   constructor(private historyService: HistoryService,
     private modalService: NgbModal,
@@ -36,6 +36,7 @@ export class HistoryComponent implements OnInit {
     if (localStorage.getItem("user") !== '1') {
       this.router.navigate(["login"]);
     }
+    this.getCountFR();
     var router = localStorage.getItem('routerHistory');
     if (router !== null){
       this.router.navigate([router]);
@@ -123,5 +124,9 @@ export class HistoryComponent implements OnInit {
       alert(error)
     });
   }
-
+  getCountFR(){
+    this.historyService.getCountFR().subscribe(Response => {
+      this.badgeCount=Response[0].c;
+    });
+  }
 }
