@@ -33,6 +33,9 @@ export class HistoryComponent implements OnInit {
     private fb: FormBuilder) { }
 
   ngOnInit() {
+    if (localStorage.getItem("user") !== '1') {
+      this.router.navigate(["login"]);
+    }
     var router = localStorage.getItem('routerHistory');
     if (router !== null){
       this.router.navigate([router]);

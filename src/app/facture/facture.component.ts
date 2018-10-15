@@ -26,6 +26,9 @@ export class FactureComponent implements OnInit {
     }));
   }
   ngOnInit() {
+    if (localStorage.getItem("user") !== '1') {
+      this.router.navigate(["login"]);
+    }
     this.sub = this.route.queryParams.subscribe(params => {
       this.factureID = params['factureID'] || '-1';
     });

@@ -246,18 +246,32 @@ export class FactureClientComponent implements OnInit {
     this.invoiceForm.get('clientPhone').setValue(phone);
     this.invoiceForm.get('clientID').setValue(id);
   }
-  addClientInvoice(flag) {
+  addClientInvoice() {
     this.factureClientService.newClientInvoice(this.invoiceForm.value).subscribe(Response => {
       this.newCode = Response;
       swal({
         type: 'success',
         title: 'Success',
         text: 'Facture Client Code: '+Response,
-        showConfirmButton: true,
+        showCancelButton: true,
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'OK',
-        timer: 4000
-      });
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Print',
+        cancelButtonText: 'No Print',
+      }).then((result) => {
+        if (result.value) {
+          this.printFactureClient();
+        }
+        FactureClientComponent.selectedItems = [];
+        this.invoiceForm.reset();
+        this.myNgForm.resetForm();
+        this.invoiceForm.get('invoiceDate').setValue(this.invoiceDate);
+        this.invoiceForm.get('delDate').setValue(this.deliveryDate);
+      
+        while (this.itemsForm.length !== 0) {
+          this.itemsForm.removeAt(0)
+        }
+      })
     }, error => {
       swal({
         type: 'error',
@@ -265,17 +279,6 @@ export class FactureClientComponent implements OnInit {
         text: error.message
       });
     });
-    if(flag == true)
-      this.printFactureClient();
-    FactureClientComponent.selectedItems = [];
-    this.invoiceForm.reset();
-    this.myNgForm.resetForm();
-    this.invoiceForm.get('invoiceDate').setValue(this.invoiceDate);
-    this.invoiceForm.get('delDate').setValue(this.deliveryDate);
-   
-    while (this.itemsForm.length !== 0) {
-      this.itemsForm.removeAt(0)
-    }
   }
   printFactureClient(){
       var printContents = document.getElementById('printFacture').innerHTML;

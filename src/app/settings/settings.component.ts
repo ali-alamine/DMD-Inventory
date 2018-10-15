@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SettingsService } from './settings.service';
+import { Router } from '../../../node_modules/@angular/router';
 
 @Component({
   selector: 'app-settings',
@@ -10,9 +11,15 @@ import { SettingsService } from './settings.service';
 export class SettingsComponent implements OnInit {
   modalReference: any;
   uploadedFile: any[] = [];
-  constructor(private modalService: NgbModal, private settingsService: SettingsService) { }
+  constructor(
+    private router: Router,
+    private modalService: NgbModal, 
+    private settingsService: SettingsService) { }
 
   ngOnInit() {
+    if (localStorage.getItem("user") !== '1') {
+      this.router.navigate(["login"]);
+    }
   }
 
   openRestoreModal(restoreModal) {

@@ -25,7 +25,8 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.sub = this.route.data.subscribe(params => {
       if(params['logout']!== false)
-        localStorage.clear();
+        localStorage.setItem("user", '0');
+    // localStorage.clear();
     });
     if (localStorage.getItem("user") !== '1') {
       this.userForm = this.fb.group({

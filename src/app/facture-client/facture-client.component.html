@@ -120,11 +120,11 @@
     <!-- <button mat-raised-button id="submit" class="addBtns" color="primary" (click)="addEditReturnInvoice()" [disabled]="!invoiceForm.valid || itemsForm.length == 0 " >Soumettre</button> -->
     <button mat-raised-button id="update" class="addBtns" color="primary" (click)="editClientInvoice()" [disabled]="!invoiceForm.valid || itemsEditForm.length == 0 " >Mis à Jour</button>
     <div id="submit">
-      <button mat-raised-button name="addButton" class="addBtns" color="primary" (click)="addClientInvoice(false)"
+      <button mat-raised-button name="addButton" class="addBtns" color="primary" (click)="addClientInvoice()"
         [disabled]="!invoiceForm.valid || itemsForm.length == 0">Soumettre</button>
   
-      <button mat-raised-button name="submitPrint" class="addBtns" color="primary" (click)="addClientInvoice(true)"
-        [disabled]="!invoiceForm.valid || itemsForm.length == 0">Soumettre et Imprimer</button>
+      <!-- <button mat-raised-button name="submitPrint" class="addBtns" color="primary" (click)="addClientInvoice(true)"
+        [disabled]="!invoiceForm.valid || itemsForm.length == 0">Soumettre et Imprimer</button> -->
     </div>
   </form>
 </div>
@@ -195,7 +195,8 @@
       <div style="float: right;">
         <b>Date de Commande:</b> {{factureDate.value}}<br>
         <b>Date de Livraison:</b> {{delDate.value  | date: 'dd-MM-yyyy'}}<br>
-        <!-- <b>Code:</b> {{newCode.value}} -->
+        <!-- code: {{newCode}} -->
+        <b>Code:</b> {{newCode}}
       </div>
       <br>
       <br>

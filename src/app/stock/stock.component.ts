@@ -5,6 +5,7 @@ import { StockService } from './stock.service';
 import { MenuItem } from 'primeng/api';
 import Swal from 'sweetalert2';
 import swal from 'sweetalert2';
+import { Router } from '../../../node_modules/@angular/router';
 declare var $: any;
 
 @Component({
@@ -26,9 +27,16 @@ export class StockComponent implements OnInit {
   private globalStocksDT;
 
 
-  constructor(private modalService: NgbModal,  private fb: FormBuilder,private stockService: StockService) { }
+  constructor(
+    private router: Router,
+    private modalService: NgbModal,  
+    private fb: FormBuilder,
+    private stockService: StockService) { }
 
   ngOnInit() {
+    if (localStorage.getItem("user") !== '1') {
+      this.router.navigate(["login"]);
+    }    
     var subscriberDataTable = $('#stocksDT').DataTable({
       responsive: false,
       paging: true,

@@ -64,7 +64,6 @@ export class FactureReturnComponent implements OnInit {
      }
 
     ngOnInit() {
-      
     const currentDate = new Date();
     //  this.deliveryDate = currentDate.toISOString().substring(0, 10);
      this.deliveryDate = this.datePipe.transform(currentDate,"dd-MM-yyyy");
