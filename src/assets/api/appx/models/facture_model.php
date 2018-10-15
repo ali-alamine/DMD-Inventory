@@ -85,7 +85,7 @@ class facture_model extends CI_Model
 
     public function getFactureDetails($factureID)
     {
-        $this->db->select('*,date(inv_date_req) as inv_date_req');
+        $this->db->select("*,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req");
         $this->db->from('invoice');
         $this->db->join('person', 'perID=inv_perID', 'inner');
         $this->db->where('invID', $factureID);

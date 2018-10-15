@@ -67,7 +67,7 @@ export class FactureReturnComponent implements OnInit {
       
     const currentDate = new Date();
     //  this.deliveryDate = currentDate.toISOString().substring(0, 10);
-     this.deliveryDate = this.datePipe.transform(currentDate,"MM/d/yyyy");
+     this.deliveryDate = this.datePipe.transform(currentDate,"dd-MM-yyyy");
     
       if(this.factureComponent.factureID != -1){
         document.getElementById('submit').style.display = "none";

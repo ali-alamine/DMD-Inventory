@@ -102,7 +102,7 @@ class factureReturn_model extends CI_Model
         }
     }
     public function getFactureDetails($invID){
-        $query = $this->db->query("SELECT *,date(inv_date_req) as inv_date_req FROM order_inv  
+        $query = $this->db->query("SELECT *,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req FROM order_inv  
         INNER JOIN invoice on invID = ord_invID 
         INNER JOIN item ON itemID = ord_itemID and item_is_damaged = ord_item_isDamaged 
         INNER JOIN return_details on date_ordID = ordID 

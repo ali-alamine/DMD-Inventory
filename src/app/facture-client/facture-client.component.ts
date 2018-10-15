@@ -10,10 +10,20 @@ import { Router, ActivatedRoute } from '@angular/router';
 declare var $: any;
 import { DatePipe } from '@angular/common';
 import { FactureComponent } from '../facture/facture.component';
+import { AppDateAdapter, APP_DATE_FORMATS } from '../date.adapter';
+import { DateAdapter, MAT_DATE_FORMATS } from '../../../node_modules/@angular/material';
 @Component({
   selector: 'app-facture',
   templateUrl: './facture-client.component.html',
-  styleUrls: ['./facture-client.component.css']
+  styleUrls: ['./facture-client.component.css'],
+  providers: [
+    {
+        provide: DateAdapter, useClass: AppDateAdapter
+    },
+    {
+        provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS
+    }
+    ]
 })
 
 export class FactureClientComponent implements OnInit {
@@ -67,7 +77,7 @@ export class FactureClientComponent implements OnInit {
   ngOnInit() {
     const currentDate = new Date();
     this.deliveryDate = currentDate.toISOString().substring(0, 10);
-    this.invoiceDate = this.datePipe.transform(currentDate,"MM/d/yyyy");
+    this.invoiceDate = this.datePipe.transform(currentDate,"dd-MM-yyyy");
     this.invoiceForm = this.fb.group({
       invID : [],
       invoiceDate: [this.invoiceDate, Validators.required],

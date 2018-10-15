@@ -50,7 +50,7 @@ export class SupplyComponent implements OnInit {
   ngOnInit() {
     const currentDate = new Date();
     // var factureDate = currentDate.toISOString().substring(0, 10);
-    var factureDate = this.datePipe.transform(currentDate,"MM/d/yyyy");
+    var factureDate = this.datePipe.transform(currentDate,"dd-MM-yyyy");
     this.sub = this.route.queryParams.subscribe(params => {
       this.factureID = params['factureID'] || '-1';
     });
