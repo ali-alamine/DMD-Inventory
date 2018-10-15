@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid noselect">
   <div class="factureHeader" >
       {{editFactureTitle}}
   </div>
@@ -58,13 +58,13 @@
       
       
       <ng-template #mutliSelectModal let-c="close" let-d="dismiss">
-        <div class="modal-header">
+        <div class="modal-header noselect">
           <h4 class="modal-title" id="modal-basic-title">Article</h4>
           <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body noselect">
           <table class="table table-striped table-bordered table-hover table-sm noselect " id="stockDT">
             <thead>
       
@@ -73,7 +73,7 @@
             </tbody>
           </table>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer noselect">
           <button mat-raised-button (click)="addItemsToFacture()" color="primary">Ajouter Article</button>
         </div>
       </ng-template>

@@ -64,6 +64,9 @@ export class FactureReturnComponent implements OnInit {
      }
 
     ngOnInit() {
+      if (localStorage.getItem("user") !== '1') {
+        this.router.navigate(["login"]);
+      }
     const currentDate = new Date();
     //  this.deliveryDate = currentDate.toISOString().substring(0, 10);
      this.deliveryDate = this.datePipe.transform(currentDate,"dd-MM-yyyy");

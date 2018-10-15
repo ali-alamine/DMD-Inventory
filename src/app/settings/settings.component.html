@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid noselect">
   <button mat-raised-button color="primary" (click)="backup()">
     <i class="material-icons">backup</i> Sauvegarde
   </button>
@@ -13,13 +13,13 @@
 
 
 <ng-template #restoreModal let-c="close" let-d="dismiss">
-  <div class="modal-header">
+  <div class="modal-header noselect">
     <h4 class="modal-title" id="modal-basic-title">Restaurer</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body noselect">
 
       <p-fileUpload name="uploadedFile[]" customUpload="true" (uploadHandler)="myUpload($event)" accept=".sql"
       maxFileSize="1000000" method="post" url="http://localhost/DMD-Inventory/src/assets/settings.php" >

@@ -38,6 +38,9 @@ export class HistoryReturnComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
+    if (localStorage.getItem("user") !== '1') {
+      this.router.navigate(["login"]);
+    }
     this.getHistoryReturnDT();
     this.rightClick2 = [
       {

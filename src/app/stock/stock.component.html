@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid noselect">
   <button mat-raised-button color="primary" (click)="editFlag=false;openStockModal(stockModal)">
     <i class="material-icons">add</i> Ajouter Article
   </button>
@@ -25,13 +25,13 @@
 
 
 <ng-template #stockModal let-c="close" let-d="dismiss">
-  <div class="modal-header">
+  <div class="modal-header noselect">
     <h4 class="modal-title" id="modal-basic-title">{{stockModalTitle}} Article</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body noselect">
     <form fxLayout="column" [formGroup]="stockForm" autocomplete="off">
       <div class="input-row" fxLayout="row">
         <mat-form-field class="inputField" fxFlex>
@@ -48,19 +48,19 @@
       
     </form>
   </div>
-  <div class="modal-footer">
+  <div class="modal-footer noselect">
     <button mat-raised-button name="addButton" color="primary" (click)="addEditStock()" [disabled]="!stockForm.valid">{{stockModalTitle}}</button>
   </div>
 </ng-template>
 
 <ng-template #transferModal let-c="close" let-d="dismiss">
-  <div class="modal-header">
+  <div class="modal-header noselect">
     <h4 class="modal-title" id="modal-basic-title">Transfert à endommagé</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body noselect">
     <form fxLayout="column" [formGroup]="transferForm" autocomplete="off">        
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="inputField" fxFlex>
@@ -79,7 +79,7 @@
     <mat-error *ngIf="maxPiece < (tCRT * tcolisage) + tPiece">vous dépassez le stock total   ..change le plus tard</mat-error> 
     <mat-error *ngIf="(tCRT * tcolisage) + tPiece == 0 ">vous ne pouvez pas transférer 0 pièce   ..change le plus tard</mat-error> 
   </div>
-  <div class="modal-footer">
+  <div class="modal-footer noselect">
     <button mat-raised-button name="addButton" color="primary" (click)="submitTransfer()" [disabled]="!transferForm.valid || (tCRT * tcolisage) + tPiece == 0 || maxPiece < (tCRT * tcolisage) + tPiece">Transfert</button>
   </div>
 </ng-template>

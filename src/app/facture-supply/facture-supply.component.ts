@@ -48,6 +48,9 @@ export class SupplyComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (localStorage.getItem("user") !== '1') {
+      this.router.navigate(["login"]);
+    }
     const currentDate = new Date();
     // var factureDate = currentDate.toISOString().substring(0, 10);
     var factureDate = this.datePipe.transform(currentDate,"dd-MM-yyyy");

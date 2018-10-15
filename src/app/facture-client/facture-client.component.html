@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid noselect">
   <div class="factureHeader" >
       {{editFactureTitle}}
   </div>
@@ -131,13 +131,13 @@
 
 
 <ng-template #mutliSelectModal let-c="close" let-d="dismiss">
-  <div class="modal-header">
+  <div class="modal-header noselect">
     <h4 class="modal-title" id="modal-basic-title">Article</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body noselect">
     <table class="table table-striped table-bordered table-hover table-sm noselect " id="stockDT">
       <thead>
       </thead>
@@ -145,19 +145,19 @@
       </tbody>
     </table>
   </div>
-  <div class="modal-footer">
+  <div class="modal-footer noselect">
     <button mat-raised-button (click)="addItemsToFacture()" color="primary">Ajouter Article</button>
   </div>
 </ng-template>
 
 <ng-template #clientModal let-c="close" let-d="dismiss">
-    <div class="modal-header">
+    <div class="modal-header noselect">
       <h4 class="modal-title" id="modal-basic-title">Ajouter un client</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="modal-body">
+    <div class="modal-body noselect">
       <form fxLayout="column" [formGroup]="clientForm" autocomplete="off">
         <div class="input-row" fxLayout="row">
           <mat-form-field class="inputField" fxFlex>
@@ -182,17 +182,17 @@
         
       </form>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer noselect">
       <button mat-raised-button name="addButton" color="primary" (click)="addClient()" [disabled]="!clientForm.valid || isExist == true">Ajouter</button>
     </div>
   </ng-template>
 
-<div class="table table-striped" id="printFacture" hidden>
-    <div style="float:left;">
+<div class="table table-striped noselect" id="printFacture" hidden>
+    <div style="float:left;" class="noselect">
         <b>Nom:</b> {{clientName.value}}<br>
         <b>Numéro de téléphone:</b> {{clientPhone.value}}<br>
       </div>
-      <div style="float: right;">
+      <div style="float: right;" class="noselect">
         <b>Date de Commande:</b> {{factureDate.value}}<br>
         <b>Date de Livraison:</b> {{delDate.value  | date: 'dd-MM-yyyy'}}<br>
         <!-- code: {{newCode}} -->
@@ -202,7 +202,7 @@
       <br>
       <br>
       <hr>
-    <table class="table table-responsive table-bordered text-center test " style="width:100%;  border-collapse: collapse; border: 1px solid black;">
+    <table class="table table-responsive table-bordered text-center test noselect" style="width:100%;  border-collapse: collapse; border: 1px solid black;">
       <thead>
       <tr>
       <th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">ARTICLES</th>
@@ -228,11 +228,11 @@
   <hr>
   <!-- <div class="row"> -->
       <!-- </br> -->
-      <div style="float:left;">
+      <div style="float:left;" class="noselect">
           <label style="font-size: 13px;">Le Responseble</label>
           <label>----------------------</label>
       </div>
-      <div style="float:right;">
+      <div style="float:right;" class="noselect">
           <label style="font-size: 13px;">Num de cls/crt</label>
           <label>-----------------------</label>
       </div>
@@ -240,11 +240,11 @@
       <br>
       <br>
       <!-- <div class="row"> -->
-            <div style="float:left;">
+            <div style="float:left;" class="noselect">
                 <label style="font-size: 13px;">Le Client</label>
                 <label>-----------------------</label>
             </div>
-      <div  style="float:right;">
+      <div  style="float:right;" class="noselect">
           <label style="font-size: 13px;">Num de piece</label>
           <label>-----------------------</label>
       </div>

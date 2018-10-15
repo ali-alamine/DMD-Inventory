@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '../../../node_modules/@angular/router';
 declare var $: any;
 @Component({
   selector: 'app-history-transfer',
@@ -7,9 +8,12 @@ declare var $: any;
 })
 export class HistoryTransferComponent implements OnInit {
   private globalClientsDT;
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
+    if (localStorage.getItem("user") !== '1') {
+      this.router.navigate(["login"]);
+    }
     var historyTransferDT = $('#historyTransferDT').DataTable({
       responsive: false,
       paging: true,

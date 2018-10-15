@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid noselect">
   <button mat-raised-button color="primary" (click)="editFlag=false;openClientModal(clientModal)">
     <i class="material-icons">add</i> Ajouter un Client
   </button>
@@ -22,14 +22,14 @@
 
 
 
-<ng-template #clientModal let-c="close" let-d="dismiss">
-  <div class="modal-header">
+<ng-template #clientModal let-c="close" let-d="dismiss" >
+  <div class="modal-header noselect">
     <h4 class="modal-title" id="modal-basic-title">{{clientModalTitle}}</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body noselect">
     <form fxLayout="column" [formGroup]="clientForm" autocomplete="off">
       <div class="input-row" fxLayout="row">
         <mat-form-field class="inputField" fxFlex>
@@ -53,7 +53,7 @@
       
     </form>
   </div>
-  <div class="modal-footer">
+  <div class="modal-footer noselect">
     <button mat-raised-button name="addButton" color="primary" (click)="addEditClient()" [disabled]="!clientForm.valid || isExist == true">{{clientModalTitle}}</button>
   </div>
 </ng-template>

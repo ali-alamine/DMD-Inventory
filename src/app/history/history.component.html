@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid noselect">
   <mat-button-toggle-group #group="matButtonToggleGroup" style="width:100%" value="mobileDrawer" class="center">
     <mat-button-toggle  routerLink="facture" value="historyFacture" class="historyBtns" mat-raised-button color="primary">
       <i class="material-icons">description</i>
@@ -22,13 +22,13 @@
 </div>
 <ng-template #showDetails  let-c="close" let-d="dismiss" class="showTemplate">
   <p-contextMenu [target]="contextScopeDetails" [model]="rightClick" oncontextmenu="return false;"></p-contextMenu>
-    <div class="modal-header">
+    <div class="modal-header noselect">
       <h4 class="modal-title" id="modal-basic-title">{{showDetailsCode}}</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <div class="modal-body">
+    <div class="modal-body noselect">
       <div style="float:left;" *ngIf="type == 'FC'">
         <b>Nom:</b> {{clientName}}<br>
         <b>Téléphone:</b> {{clientPhone}}<br>
@@ -51,6 +51,6 @@
       </table>
       </div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer noselect">
     </div>
 </ng-template>
