@@ -95,7 +95,7 @@ export class HistoryFactureComponent implements OnInit {
         order: [[0, 'asc']],
         columns: [
           { data: "per_name", title: "CLIENTS" },
-          { data: "inv_date_req", title: "DATE" },
+          { data: "inv_date_req", title: "DATE"},
           { data: "inv_code", title: "CODE"}
         ],
         "columnDefs": [ {
@@ -164,9 +164,7 @@ export class HistoryFactureComponent implements OnInit {
       });
       $('#historyFactureDT').on('key-blur.dt', function (e, datatable, cell) {
         $(historyFactureDT.row(cell.index().row).node()).removeClass('selected');
-      });
-
-      
+      });      
 
     } else{
       this.globalHistoryFactureDT.ajax.reload(null, false);

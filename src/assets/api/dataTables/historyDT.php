@@ -32,6 +32,23 @@ if (count($_GET['order'])) {
 }
 if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     $search = $_GET["search"]["value"];
+
+    if (substr_count($search, "-") == 1 )   {
+        $date_array = explode("-",$search); // split the array
+        $var_day = $date_array[0]; //day seqment
+        $var_month = $date_array[1]; //month segment
+        // $var_year = $date_array[2]; //year segment
+        $search = $var_month.'-'.$var_day; // join them together
+    } 
+    if(substr_count($search, "-") == 2 )   {
+        $date_array = explode("-",$search); // split the array
+        $var_day = $date_array[0]; //day seqment
+        $var_month = $date_array[1]; //month segment
+        $var_year = $date_array[2]; //year segment
+        $search = $var_year.'-'.$var_month.'-'.$var_day; // join them together
+    }
+    
+
     if($show=="facture")
         $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req  from invoice INNER JOIN person on perID= inv_perID  where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_status = '1' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     if($show=="items")
@@ -41,8 +58,8 @@ if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
         INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged  
         where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' OR inv_type like '%" . $search . "%' OR item_name like '%" . $search . "%') 
         and ord_isDeleted = '0' and inv_type != 'FR')
-    UNION
-    (select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,DATE_FORMAT(inv_date_del,'%d-%m-%Y') AS inv_date_del,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req from order_inv  
+        UNION
+        (select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,DATE_FORMAT(inv_date_del,'%d-%m-%Y') AS inv_date_del,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req from order_inv  
         INNER JOIN invoice on invID = ord_invID 
         INNER JOIN person on perID = inv_perID  
         INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged 
