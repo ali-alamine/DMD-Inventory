@@ -1,0 +1,55 @@
+<div class="container-fluid">
+  <mat-accordion id="accordionSearch">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Filter Inputs
+        </mat-panel-title>
+        <mat-panel-description>
+          Enter search criteria to filter result
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <form fxLayout="column" [formGroup]="filterForm" autocomplete="off">
+        
+        <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <mat-form-field class="inputFieldDim" fxFlex>
+            <mat-select placeholder="Facture Type" formControlName="invoiceType">
+              <mat-option value="-1">tous aw tout aw toute :p</mat-option>
+              <mat-option value="FC">Facture Client</mat-option>
+              <mat-option value="FR">Facture Retour</mat-option>
+              <mat-option value="FD">Facture Dischargement</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      
+
+        <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+          <mat-form-field class="inputField">
+            <input matInput [matDatepicker]="fromDate" placeholder="de Date" formControlName="fromDateCtrl">
+            <mat-datepicker-toggle matSuffix [for]="fromDate" tabIndex="-1"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #fromDate></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field class="inputField" class="dateFilter">
+            <input matInput [matDatepicker]="toDate" placeholder="à Date " formControlName="toDateCtrl">
+            <mat-datepicker-toggle matSuffix [for]="toDate" tabIndex="-1"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #toDate></mat-datepicker>
+          </mat-form-field>
+
+        </div>
+
+      </form>
+      <button mat-raised-button class="searchFormBtn" name="searchBtn" color="primary" [disabled]="!filterForm.valid" (click)="searchSubmit() ">Show
+        Result
+      </button>
+      <!-- <button mat-raised-button class="searchFormBtn" name="clearBtn" color="warn" (click)="clearForm()">Clear</button> -->
+    </mat-expansion-panel>
+  </mat-accordion>
+  <table class="table table-striped table-bordered table-hover table-sm noselect " id="subscribersRprtDT">
+    <thead>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div>
