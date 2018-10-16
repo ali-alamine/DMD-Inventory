@@ -15,6 +15,9 @@ import { SettingsComponent } from './settings/settings.component';
 import { HistoryReturnComponent } from './history-return/history-return.component';
 import { HistoryTransferComponent } from './history-transfer/history-transfer.component';
 import { LoginComponent } from './login/login.component';
+import { ReportsComponent } from './reports/reports.component';
+import { ReportsClientComponent } from './reports-client/reports-client.component';
+import { ReportsStockComponent } from './reports-stock/reports-stock.component';
 
 const routes: Routes = [
   {
@@ -36,7 +39,12 @@ const routes: Routes = [
   {
     path:"login",component: LoginComponent
   },
-  
+  {
+    path:"reports",component:ReportsComponent,  children: [
+      { path: 'clients',component:  ReportsClientComponent},
+      { path: 'stock',component:  ReportsStockComponent}
+    ]
+  },
   {
     path:"logout",component: LoginComponent, data : {logout : 'true'}
   },

@@ -74,6 +74,10 @@
   width: 100%;
   cursor: pointer;
 }
+
+.btn-group, .btn-group-vertical{
+  margin-bottom: 15px;
+}
 /* 
   
   .ui-contextmenu{

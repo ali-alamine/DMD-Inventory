@@ -1,0 +1,18 @@
+<div class="container-fluid noselect">
+
+  <button mat-button [matMenuTriggerFor]="clientMenu"> <i class="material-icons">person </i>Client</button>
+  <mat-menu #clientMenu="matMenu">
+    <button mat-menu-item routerLink="clients">All Clients</button>
+    <button mat-menu-item>Top Clients</button>
+  </mat-menu>
+
+  <button mat-button [matMenuTriggerFor]="menu"> <i class="material-icons">dashboard</i>Stock</button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item routerLink="stock">All Items</button>
+    <button mat-menu-item>Top Items</button>
+  </mat-menu>
+
+<hr>
+
+  <router-outlet></router-outlet>
+</div>

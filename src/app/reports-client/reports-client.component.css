@@ -1,0 +1,12 @@
+.container-fluid{
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.btn-group, .btn-group-vertical{
+    margin-bottom: 15px;
+}
+
+#clientDataTable{
+    text-align: center;
+}

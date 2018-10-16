@@ -42,6 +42,10 @@ import { HistoryReturnComponent } from './history-return/history-return.componen
 import {DatePipe} from '@angular/common';
 import { HistoryTransferComponent } from './history-transfer/history-transfer.component';
 import { LoginComponent } from './login/login.component';
+import { ReportsComponent } from './reports/reports.component';
+import { ReportsClientComponent } from './reports-client/reports-client.component';
+import {MatMenuModule} from '@angular/material/menu';
+import { ReportsStockComponent } from './reports-stock/reports-stock.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,7 +63,7 @@ import { LoginComponent } from './login/login.component';
     FactureReturnComponent,
     SettingsComponent,
     HistoryReturnComponent,
-    HistoryTransferComponent,LoginComponent
+    HistoryTransferComponent,LoginComponent, ReportsComponent, ReportsClientComponent, ReportsStockComponent
   ],
   imports: [
     BrowserModule,
@@ -90,7 +94,8 @@ import { LoginComponent } from './login/login.component';
     ChartModule,
     HotkeyModule.forRoot(),
     FileUploadModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatMenuModule
   ],
   entryComponents: [],
   providers: [DatePipe],
