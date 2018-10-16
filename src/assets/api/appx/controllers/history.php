@@ -50,7 +50,7 @@ class history extends REST_Controller
                 $this->history_model->updateStock($itemID,-$quantityToAdd,$isDamaged);
             if($type == "FC")
                 $this->history_model->updateStock($itemID,+$quantityToAdd,$isDamaged);
-            $result = $this->history_model->deleteItem($ordID);
+            $result = $this->history_model->deletedItemOrder($ordID,$type);
         }
         if ($result) {
             $this->response($result, 200);

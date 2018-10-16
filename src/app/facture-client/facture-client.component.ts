@@ -102,9 +102,8 @@ export class FactureClientComponent implements OnInit {
     }
 
     if(this.factureID != '-1'){
-      this.factureClientService.getFactureDetails(this.factureID).subscribe(Response => {        
+      this.factureClientService.getFactureDetails(this.factureID).subscribe(Response => {  
         this.factureHeader = Response[0];
-        this.factureDetails = Response[1];
         var dateReq = this.factureHeader[0]['inv_date_req'];
         var dateDel = this.factureHeader[0]['inv_date_del'];
         this.factureDate.setValue(dateReq);
@@ -112,25 +111,28 @@ export class FactureClientComponent implements OnInit {
         this.invID.setValue(this.factureID);
         this.clientName.setValue(this.factureHeader[0]['per_name']);
         this.clientID.setValue(this.factureHeader[0]['perID']);
-        this.factureDetails.forEach(element => {
-          const item = this.fb.group({
-            ordID: [element['ordID'], Validators.required],
-            itemID: [element['ord_itemID'], Validators.required],
-            itemName: [element['item_name']],
-            isDamaged:[element['ord_item_isDamaged']],
-            colisage:[element['item_packing_list']],
-            stockCrt: [element['item_crt']],
-            stockPiece: [element['item_piece']],
-            crtNoEdit: [element['ord_crt']],
-            pieceNoEdit: [element['ord_piece']],
-            crt: [element['ord_crt']],
-            piece: [element['ord_piece']],
-            comment: [element['ord_note']],
-            isDeleted: 0
-          });
-          this.itemsEditForm.push(item)
-        });
         this.editFactureTitle = "Modifier Facture: "+this.factureHeader[0]['inv_code'];        
+        if(Response[1]!=0){
+          this.factureDetails = Response[1];    
+          this.factureDetails.forEach(element => {
+            const item = this.fb.group({
+              ordID: [element['ordID'], Validators.required],
+              itemID: [element['ord_itemID'], Validators.required],
+              itemName: [element['item_name']],
+              isDamaged:[element['ord_item_isDamaged']],
+              colisage:[element['item_packing_list']],
+              stockCrt: [element['item_crt']],
+              stockPiece: [element['item_piece']],
+              crtNoEdit: [element['ord_crt']],
+              pieceNoEdit: [element['ord_piece']],
+              crt: [element['ord_crt']],
+              piece: [element['ord_piece']],
+              comment: [element['ord_note']],
+              isDeleted: 0
+            });
+            this.itemsEditForm.push(item)
+          });
+        } 
       }, error => {
         swal({
           type: 'error',

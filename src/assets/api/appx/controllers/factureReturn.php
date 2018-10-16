@@ -75,13 +75,31 @@ class factureReturn extends REST_Controller
             exit;
         }
     }
+    // public function getFactureDetails_get(){
+    //     $invID = $this->get('invID');
+    //     $result = $this->factureReturn_model->getFactureDetails($invID);      
+    //     if ($result) {
+    //         $this->response($result, 200);
+    //         exit;
+    //     }
+    // }
     public function getFactureDetails_get(){
         $invID = $this->get('invID');
-        $result = $this->factureReturn_model->getFactureDetails($invID);      
-        if ($result) {
-            $this->response($result, 200);
+        $result1 = $this->factureReturn_model->getFactureDetails($invID);
+        $result2 = $this->factureReturn_model->getOrderInvoiceDetails($invID);
+        $response = array();
+        // if($result1)
+            $response[0] = $result1;
+        // if ($result2) {
+            $response[1] = $result2;
+        if($response){
+            $this->response($response, 200);
             exit;
-        }
+        } 
+        // else {
+        //     $this->response(0, 200);
+        //     exit;
+        // }
     }
     public function editReturnInvoice_post(){
         $invoiceDate = $this->post('invoiceDate');

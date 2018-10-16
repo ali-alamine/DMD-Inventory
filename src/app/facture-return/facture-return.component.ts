@@ -33,6 +33,7 @@ export class FactureReturnComponent implements OnInit {
   dataComfirm={};
   addEditBtn;
   factureDetails;
+  factureHeader;
   editFactureTitle="";
   deliveryDate;
 
@@ -94,26 +95,29 @@ export class FactureReturnComponent implements OnInit {
     }
     getFactureDetails(FactureID){
       this.factureReturnService.getFactureDetails(FactureID,'FR').subscribe(Response => {
-        this.factureDetails = Response;
-        for (var i = 0; i < this.factureDetails.length;i++){
-          const item = this.fb.group({
-            ordID: [this.factureDetails[i].ordID, Validators.required],
-            itemID: [this.factureDetails[i].ord_itemID, Validators.required],
-            itemName: [this.factureDetails[i].item_name],
-            isDamaged:[this.factureDetails[i].ord_item_isDamaged],
-            colisage:[this.factureDetails[i].item_packing_list],
-            crt: [this.factureDetails[i].ord_crt],
-            piece: [this.factureDetails[i].ord_piece],
-            status: [this.factureDetails[i].ord_status],
-            isDeleted: 0
-          });
-          this.itemsEditForm.push(item)
-        }
+        this.factureHeader = Response[0];
         this.invoiceForm.get('invID').setValue(FactureID)
-        this.invoiceForm.get('invoiceDate').setValue(this.factureDetails[0].inv_date_req)
-        this.invoiceForm.get('clientName').setValue(this.factureDetails[0].per_name)
-        this.invoiceForm.get('clientID').setValue(this.factureDetails[0].perID)
-        this.editFactureTitle = "Modifier Facture: "+this.factureDetails[0].inv_code;
+        this.invoiceForm.get('invoiceDate').setValue(this.factureHeader[0].inv_date_req)
+        this.invoiceForm.get('clientName').setValue(this.factureHeader[0].per_name)
+        this.invoiceForm.get('clientID').setValue(this.factureHeader[0].perID)
+        this.editFactureTitle = "Modifier Facture: "+this.factureHeader[0].inv_code;
+        if(Response[1]!=0){
+          this.factureDetails = Response[1];
+          for (var i = 0; i < this.factureDetails.length;i++){
+            const item = this.fb.group({
+              ordID: [this.factureDetails[i].ordID, Validators.required],
+              itemID: [this.factureDetails[i].ord_itemID, Validators.required],
+              itemName: [this.factureDetails[i].item_name],
+              isDamaged:[this.factureDetails[i].ord_item_isDamaged],
+              colisage:[this.factureDetails[i].item_packing_list],
+              crt: [this.factureDetails[i].ord_crt],
+              piece: [this.factureDetails[i].ord_piece],
+              status: [this.factureDetails[i].ord_status],
+              isDeleted: 0
+            });
+            this.itemsEditForm.push(item)
+          }
+        }
       },error => {
         console.log(error)
       });

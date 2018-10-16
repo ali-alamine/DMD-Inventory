@@ -142,8 +142,7 @@ export class HistoryReturnComponent implements OnInit {
     }
   }
   getFactureDetail(showDetails){
-    if(showDetails!="")
-      this.modalReference = this.modalService.open(showDetails, { centered: true, ariaLabelledBy: 'modal-basic-title', size: 'lg' });
+    this.modalReference = this.modalService.open(showDetails, { centered: true, ariaLabelledBy: 'modal-basic-title', size: 'lg' });
     this.historyService.getFactureReturnDetails(HistoryReturnComponent.selectedFactureID).subscribe(Response => {
       this.factureDetails = Response;
       this.clientName = this.factureDetails[0].per_name;
@@ -155,7 +154,7 @@ export class HistoryReturnComponent implements OnInit {
       alert(error)
     });
   }
-  confirmOrder(ordID,invID,crt,piece,itemID,isDamaged,packingList){
+  confirmOrder(i,ordID,invID,crt,piece,itemID,isDamaged,packingList){
     this.dataComfirm['ordID']= ordID;
     this.dataComfirm['invID']=invID;
     this.dataComfirm['crt']=crt;
@@ -163,13 +162,13 @@ export class HistoryReturnComponent implements OnInit {
     this.dataComfirm['itemID']=itemID;
     this.dataComfirm['isDamaged']=isDamaged;
     this.dataComfirm['packingList']=packingList;
-    this.historyService.confirmOrder(this.dataComfirm).subscribe(Response => {
-      this.getFactureDetail('');
+    this.historyService.confirmOrder(this.dataComfirm).subscribe(Response => {      
+      this.factureDetails.splice(i, 1);
       if(Response == 0) {
         this.globalHistoryReturnDT.ajax.reload(null, false);
         this.modalReference.close();
         this.historyComponent.getCountFR();
-      }
+      } 
       swal({
         type: 'success',
         title: 'Success',
@@ -185,14 +184,14 @@ export class HistoryReturnComponent implements OnInit {
       });
     });
   }
-  rejectOrder(ordID,invID){
+  rejectOrder(i,ordID,invID){
     this.historyService.rejectOrder(ordID,invID).subscribe(Response => {
-      this.getFactureDetail('');
+      this.factureDetails.splice(i, 1);
       if(Response == 0) {
         this.globalHistoryReturnDT.ajax.reload(null, false);
         this.modalReference.close();
         this.historyComponent.getCountFR();
-      }
+      } 
       swal({
         type: 'success',
         title: 'Success',

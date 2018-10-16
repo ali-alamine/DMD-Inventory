@@ -64,17 +64,19 @@ export class SupplyComponent implements OnInit {
     });
     
     if(this.factureID != '-1'){
-      this.supplyService.getFactureDetails(this.factureID).subscribe(Response => {        
+      this.supplyService.getFactureDetails(this.factureID).subscribe(Response => {    
         this.factureHeader = Response[0];
-        this.factureDetails = Response[1];
         var supplyDate = this.factureHeader[0]['inv_date_req'];
         this.factureDate.setValue(supplyDate);
         this.invoiceID.setValue(this.factureID);
-        this.factureDetails.forEach(element => {
-          this.addFactureEditRow(element);
-          SupplyComponent.selectedItems.push({ id: element['itemID'], name: element['item_name'], colisage:element['item_packing_list'] });
-        });
         this.editFactureTitle = "Modifier Facture: "+this.factureHeader[0]['inv_code'];        
+        if(Response[1]!=0){
+          this.factureDetails = Response[1];
+          this.factureDetails.forEach(element => {
+            this.addFactureEditRow(element);
+            SupplyComponent.selectedItems.push({ id: element['itemID'], name: element['item_name'], colisage:element['item_packing_list'] });
+          });
+        }    
       }, error => {
         swal({
           type: 'error',

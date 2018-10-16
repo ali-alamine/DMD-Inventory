@@ -101,13 +101,41 @@ class factureReturn_model extends CI_Model
             return false;
         }
     }
-    public function getFactureDetails($invID){
-        $query = $this->db->query("SELECT *,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req FROM order_inv  
-        INNER JOIN invoice on invID = ord_invID 
-        INNER JOIN item ON itemID = ord_itemID and item_is_damaged = ord_item_isDamaged 
-        INNER JOIN return_details on date_ordID = ordID 
-        INNER JOIN person on perID = ord_perID
-        where ord_invID = '".$invID."'");
+    // public function getFactureDetails($invID){
+    //     $query = $this->db->query("SELECT *,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req FROM order_inv  
+    //     INNER JOIN invoice on invID = ord_invID 
+    //     INNER JOIN item ON itemID = ord_itemID and item_is_damaged = ord_item_isDamaged 
+    //     INNER JOIN return_details on date_ordID = ordID 
+    //     INNER JOIN person on perID = ord_perID
+    //     where ord_invID = '".$invID."'");
+    //     if ($query->num_rows() > 0) {
+    //         return $query->result_array();
+    //     } else {
+    //         return 0;
+    //     }
+    // }
+    public function getFactureDetails($invID)
+    {
+        $this->db->select("*,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req");
+        $this->db->from('invoice');
+        $this->db->join('person', 'perID=inv_perID', 'inner');
+        $this->db->where('invID', $invID);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return 0;
+        }
+    }
+    public function getOrderInvoiceDetails($invID)
+    {
+        $this->db->select('*,FLOOR(item_piece/item_packing_list) as item_crt');
+        $this->db->from('order_inv');
+        $this->db->join('item', 'item.itemID = order_inv.ord_itemID and item.item_is_damaged=ord_item_isDamaged', 'inner');
+        $this->db->join('return_details', 'ordID = date_ordID', 'inner');
+        $this->db->where('ord_invID', $invID);
+
+        $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();
         } else {

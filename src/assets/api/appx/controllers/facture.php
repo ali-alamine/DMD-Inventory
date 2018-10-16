@@ -118,13 +118,19 @@ class facture extends REST_Controller
         $factureID = $this->get('factureID');
         $result1 = $this->facture_model->getFactureDetails($factureID);
         $result2 = $this->facture_model->getOrderInvoiceDetails($factureID);
-        if ($result1 && $result2) {
-            $response = array();
+        $response = array();
+        // if($result1)
             $response[0] = $result1;
+        // if ($result2) {
             $response[1] = $result2;
+        if($response){
             $this->response($response, 200);
             exit;
-        }
+        } 
+        // else {
+        //     $this->response(0, 200);
+        //     exit;
+        // }
     }
 
     public function generateFactureCode($factureType){

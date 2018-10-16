@@ -181,7 +181,6 @@ export class HistoryFactureComponent implements OnInit {
     localStorage.setItem('YOffset', window.pageYOffset.toString());
     localStorage.setItem('routerHistory',"history/facture");
     if(HistoryFactureComponent.selectedFacture[0].type=="FR"){
-      // localStorage.setItem('routerFacture',"sell/return");
       this.router.navigate(["facture/return"], { queryParams: { factureID: HistoryFactureComponent.selectedFactureID }});
     }
     if(HistoryFactureComponent.selectedFacture[0].type=="FD"){

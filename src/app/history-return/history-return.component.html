@@ -35,17 +35,17 @@
             <tr><th>ARTICLE</th><th>CRT</th><th>PIECE</th><th>CONFIRMER</th><th>REJETER</th></tr>
           </thead>
           <tbody #contextScopeDetails>
-              <tr *ngFor="let order of factureDetails" >
+              <tr   *ngFor="let order of factureDetails; let i=index" >
                 <td>{{order.item_name}}</td>
                 <td>{{order.ord_crt}}</td>
                 <td>{{order.ord_piece}}</td>
                 <td>
-                  <button mat-raised-button matTooltip=""  (click)="confirmOrder(order.ordID,order.ord_invID,order.ord_crt,order.ord_piece,order.ord_itemID,order.ord_item_isDamaged,order.item_packing_list)" value="Confirmer" color="primary">Confirmer</button>
+                  <button mat-raised-button matTooltip=""  (click)="confirmOrder(i,order.ordID,order.ord_invID,order.ord_crt,order.ord_piece,order.ord_itemID,order.ord_item_isDamaged,order.item_packing_list)" value="Confirmer" color="primary">Confirmer</button>
                 </td>
                 <td>
-              <button mat-raised-button matTooltip="" (click)="rejectOrder(order.ordID,order.ord_invID)" value="Rejeter" color="warn">Rejeter</button>
+              <button mat-raised-button matTooltip="" (click)="rejectOrder(i,order.ordID,order.ord_invID)" value="Rejeter" color="warn">Rejeter</button>
                </td>
-              </tr>
+            </tr>
           </tbody>
         </table>
         </div>

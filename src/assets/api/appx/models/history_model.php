@@ -10,11 +10,11 @@ class history_model extends CI_Model
             $query = $this->db->query("SELECT * FROM order_inv  
             INNER JOIN item ON itemID = ord_itemID and item_is_damaged = ord_item_isDamaged
             INNER JOIN return_details on date_ordID = ordID
-            where ord_invID = '".$ID."' and ord_isDeleted = '0' and ord_status = '1' ");
+            where ord_invID = '".$ID."' and ord_status = '1' ");
         } else{
             $query = $this->db->query("SELECT * FROM order_inv  
             INNER JOIN item ON itemID = ord_itemID and item_is_damaged = ord_item_isDamaged
-            where ord_invID = '".$ID."' and ord_isDeleted = '0'");
+            where ord_invID = '".$ID."'");
         }
         if ($query->num_rows() > 0) {
             return $query->result_array();
@@ -24,31 +24,9 @@ class history_model extends CI_Model
     }
     public function deleteFacture($invID)
     {
-        $this->db->set('inv_status', -1);
+        $this->db->set('inv_status', 0);
         $this->db->where('invID', $invID);        
         if ($this->db->update('invoice')) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    public function deleteItem($ordID)
-    {
-        // $this->db->where('date_ordID', $ordID);
-        // if ($this->db->delete('return_details')) {
-        //     $this->db->where('ordID', $ordID);
-        //     if ($this->db->delete('order_inv')) {
-        //         return true;
-        //     } else {
-        //         return false;
-        //     }
-        // } else {
-        //     return false;
-        // }
-
-        $this->db->set('ord_isDeleted', 1);
-        $this->db->where('ordID', $ordID);        
-        if ($this->db->update('order_inv')) {
             return true;
         } else {
             return false;
@@ -87,15 +65,9 @@ class history_model extends CI_Model
         }
     }
     public function getOrderDetails($ordID){
-        // if($type=='FR'){
-            $query = $this->db->query("SELECT * FROM order_inv  
-            INNER JOIN item ON itemID = ord_itemID and item_is_damaged = ord_item_isDamaged
-            where ordID = '".$ordID."' ");
-        // } else{
-        //     $query = $this->db->query("SELECT * FROM order_inv  
-        //     INNER JOIN item ON itemID = ord_itemID and item_is_damaged = ord_item_isDamaged
-        //     where ord_invID = '".$ID."' and ord_isDeleted = '0'");
-        // }
+        $query = $this->db->query("SELECT * FROM order_inv  
+        INNER JOIN item ON itemID = ord_itemID and item_is_damaged = ord_item_isDamaged
+        where ordID = '".$ordID."' ");
         if ($query->num_rows() > 0) {
             return $query->result_array();
         } else {
@@ -112,6 +84,28 @@ class history_model extends CI_Model
             return false;
         }
     }
+    public function deletedItemOrder($ordID,$type){
+        if($type=="FR"){
+            $this->db->where('date_ordID', $ordID);
+            if ($this->db->delete('return_details')) {
+                $this->db->where('ordID', $ordID);
+                if ($this->db->delete('order_inv')) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else{
+            $this->db->where('ordID', $ordID);
+            if ($this->db->delete('order_inv')) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
     public function deletedOrder($ordID){
         $this->db->where('date_ordID', $ordID);
         if ($this->db->delete('return_details')) {
@@ -124,6 +118,7 @@ class history_model extends CI_Model
         } else {
             return false;
         }
+       
     }
     public function getOrderNoConfirm()
     {
