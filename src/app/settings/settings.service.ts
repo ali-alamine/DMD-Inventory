@@ -26,5 +26,12 @@ export class SettingsService {
       alert('Please disable your Pop-up blocker and try again.');
     }
   }
+  getUser(): Observable<any> {
+    return this.httpClient.get("http://localhost/DMD-Inventory/src/assets/api/login/getUser");
+
+  }
+  editUser(user): Observable<any> {
+    return this.httpClient.put("http://localhost/DMD-Inventory/src/assets/api/login/editUser", user);
+  }
 
 }

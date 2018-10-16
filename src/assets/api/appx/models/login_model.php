@@ -20,4 +20,24 @@ public function getConnection($userName,$password)
         }
 
     }
+    public function getUser(){
+        $this->db->select('*');
+        $this->db->from('user');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return 0;
+        }
+    }
+    public function update($id, $data)
+    {
+        $this->db->where('userID', $id);
+        if ($this->db->update('user', $data)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 }

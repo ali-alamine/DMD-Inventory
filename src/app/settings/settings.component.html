@@ -5,12 +5,10 @@
   <button mat-raised-button color="primary" (click)="openRestoreModal(restoreModal)">
     <i class="material-icons">restore</i> Restaurer
   </button>
+  <button mat-raised-button color="primary" (click)="openEditUserModal(editUserModal)">
+    <i class="material-icons">restore</i> Modifier l'utilisateur
+  </button>
 </div>
-
-
-
-
-
 
 <ng-template #restoreModal let-c="close" let-d="dismiss">
   <div class="modal-header noselect">
@@ -33,8 +31,37 @@
    
 
   </div>
-  
 </ng-template>
+
+<ng-template #editUserModal let-c="close" let-d="dismiss">
+    <div class="modal-header noselect">
+      <h4 class="modal-title" id="modal-basic-title">Modifier l'utilisateur</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body noselect">
+      <form fxLayout="column" [formGroup]="userForm" autocomplete="off">        
+          <div class="input-row" fxLayout="row">
+              <mat-form-field class="inputField" fxFlex>
+                  <input matInput placeholder="Nom d'utilisateur" formControlName="userName" type="text" name="nameInput" [appFocusDirective]="true">
+                  <mat-error>Nom d'utilisateur est nécessaire</mat-error>
+              </mat-form-field>
+          </div>
+          <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+              <mat-form-field class="inputField" fxFlex>
+                  <input matInput placeholder="Mot de passe" formControlName="password" [type]="hide ? 'password' : 'text'">
+                  <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+                  <mat-error>Mot de passe requis</mat-error>
+              </mat-form-field>
+          </div>
+        
+      </form>
+     </div>
+    <div class="modal-footer noselect">
+      <button mat-raised-button name="addButton" color="primary" (click)="editUser()" [disabled]="!userForm.valid ">Mise à jour</button>
+    </div>
+  </ng-template>
 
 
 

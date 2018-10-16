@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit {
       } else{
         this.textError="Veuillez réessayer une autre fois";
         this.userForm.reset();
+        document.getElementById('userName').focus();
       }
 
     })

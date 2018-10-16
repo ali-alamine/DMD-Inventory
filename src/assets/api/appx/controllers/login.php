@@ -17,5 +17,26 @@ class login extends REST_Controller
             exit;
         }
     }
+    public function getUser_get()
+    {
+        $result = $this->login_model->getUser();
+        if ($result) {
+            $this->response($result, 200);
+            exit;
+        }
+    }
+    public function editUser_put(){
+        $userID = $this->put('userID');
+        $userName = $this->put('userName');
+        $password = $this->put('password');
+
+        $result = $this->login_model->update($userID, array("user_name" => $userName, "user_password" => $password));
+        if ($result === 0) {
+            $this->response("user information could not be saved. Try again.", 404);
+        } else {
+            $this->response("success", 200);
+        }
+
+    }
 
 }

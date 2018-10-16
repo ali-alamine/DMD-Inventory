@@ -5,13 +5,13 @@
         <form fxLayout="column" [formGroup]="userForm" autocomplete="off">
             <div class="input-row" fxLayout="row">
                 <mat-form-field class="inputField" fxFlex>
-                    <input matInput placeholder="Nom d'Utilisateur" formControlName="userName" type="text" name="nameInput" [appFocusDirective]="true">
+                    <input matInput placeholder="Nom d'utilisateur" id="userName" formControlName="userName" type="text" name="nameInput" [appFocusDirective]="true">
                     <mat-error>Nom d'utilisateur est nécessaire</mat-error>
                 </mat-form-field>
             </div>
             <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                 <mat-form-field class="inputField" fxFlex>
-                    <input matInput placeholder="Mot de Passe" formControlName="password" [type]="hide ? 'password' : 'text'">
+                    <input matInput placeholder="Mot de passe" formControlName="password" [type]="hide ? 'password' : 'text'">
                     <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
                     <mat-error>Mot de passe requis</mat-error>
                 </mat-form-field>
