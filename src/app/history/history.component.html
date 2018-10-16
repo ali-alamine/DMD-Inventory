@@ -9,8 +9,9 @@
       ARTICLE
     </mat-button-toggle>
     <mat-button-toggle routerLink="return" value="historyReturn" class="historyBtns" mat-raised-button color="primary">
-    <i class="material-icons">get_app</i>RETOUR <span *ngIf="badgeCount > 0" class="matBadge" style="color :red;">( {{badgeCount}} )</span>
-    <!-- <span matBadge="" matBadgeOverlap="false">RETOUR</span> -->
+    <i class="material-icons">get_app</i>RETOUR
+    <!-- RETOUR <span  class="matBadge" style="color :red;">( {{badgeCount}} )</span> -->
+    <span *ngIf="badgeCount > 0" matBadge="{{badgeCount}}" matBadgeOverlap="false"></span>
     <!-- <span>RETOUR</span> -->
   </mat-button-toggle>
   <mat-button-toggle  routerLink="transfer" value="transferHistory" class="historyBtns" mat-raised-button color="primary">

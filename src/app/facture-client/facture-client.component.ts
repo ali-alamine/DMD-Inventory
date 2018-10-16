@@ -46,6 +46,7 @@ export class FactureClientComponent implements OnInit {
   private clientForm;
   isExist; newCode="-1";
   p_clientName; p_clientPhone; p_dateReq;
+  lengthDeleted = 0;
   
   constructor(private datePipe: DatePipe,
     private fb: FormBuilder,
@@ -131,7 +132,9 @@ export class FactureClientComponent implements OnInit {
               isDeleted: 0
             });
             this.itemsEditForm.push(item)
+            this.lengthDeleted ++ ;
           });
+
         } 
       }, error => {
         swal({
@@ -172,6 +175,7 @@ export class FactureClientComponent implements OnInit {
       }
       this.factureClientService.searchClient(data).subscribe(Response => {
         this.options = Response;
+        document.getElementById("delDate").focus();
       })
     });    
   }
@@ -238,6 +242,7 @@ export class FactureClientComponent implements OnInit {
   }
   deleteItemEdit(i) {
     this.itemsEditForm.controls[i].get('isDeleted').setValue(1);
+    this.lengthDeleted -- ;
   }
   deleteItem(i, id, itemIsDamaged) {
     this.itemsForm.removeAt(i);
@@ -367,6 +372,7 @@ export class FactureClientComponent implements OnInit {
       });
 
     this.modalReference.close();
+    document.getElementById("delDate").focus();
   }
   openMultiSelect(mutliSelectModal) {
     this.modalReference = this.modalService.open(mutliSelectModal, { centered: true, size: 'lg', ariaLabelledBy: 'modal-basic-title' });

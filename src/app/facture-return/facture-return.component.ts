@@ -36,6 +36,7 @@ export class FactureReturnComponent implements OnInit {
   factureHeader;
   editFactureTitle="";
   deliveryDate;
+  lengthDeleted = 0;
 
   constructor(private datePipe: DatePipe,
     private router: Router,private fb: FormBuilder,
@@ -115,7 +116,8 @@ export class FactureReturnComponent implements OnInit {
               status: [this.factureDetails[i].ord_status],
               isDeleted: 0
             });
-            this.itemsEditForm.push(item)
+            this.itemsEditForm.push(item);
+            this.lengthDeleted ++ ;
           }
         }
       },error => {
@@ -151,6 +153,7 @@ export class FactureReturnComponent implements OnInit {
   
     deleteItemEdit(i) {
       this.itemsEditForm.controls[i].get('isDeleted').setValue(1);
+      this.lengthDeleted -- ;
     }
     deleteItem(i, id,itemIsDamaged) {
       this.itemsForm.removeAt(i);

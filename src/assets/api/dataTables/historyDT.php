@@ -13,8 +13,8 @@ if($show=="items")
     INNER JOIN person on perID = inv_perID  
     INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged  
     where  ord_isDeleted = '0' and inv_type != 'FR')
-UNION
-(SELECT COUNT(ordID) as exp FROM order_inv INNER JOIN invoice on invID = ord_invID 
+ UNION
+ (SELECT COUNT(ordID) as exp FROM order_inv INNER JOIN invoice on invID = ord_invID 
     INNER JOIN person on perID = inv_perID  
     INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged 
     INNER JOIN return_details on ordID = date_ordID 
@@ -23,8 +23,8 @@ if($show=="return")
     $rowsCount = mysqli_fetch_assoc(mysqli_query(openConn(), "SELECT COUNT(invID) as exp FROM invoice INNER JOIN person on perID= inv_perID where inv_type = 'FR' and inv_status='-1'"))['exp'];
 if (count($_GET['order'])) {
     $orderBy = $_GET['columns'][$_GET['order'][0]['column']]['data'];
-    // if ($orderBy == 'invID') {
-    //     $orderBy = 'IID';
+    // if ($orderBy == 'inv_date_req') {
+    //     $orderBy = 'DATETIME(inv_date_req)';
     // }
 
     $orderDir = $_GET['order'][0]['dir'];
