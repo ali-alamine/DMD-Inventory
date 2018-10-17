@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
+import { ReportsService } from '../reports/reports.service';
 declare var $: any;
 @Component({
   selector: 'app-reports-invoice',
@@ -15,8 +16,10 @@ export class ReportsInvoiceComponent implements OnInit {
 
   private static fromDate;
   private static toDate;
+  options: any[];
+  static clientID: any;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private reportService:ReportsService) { }
 
   ngOnInit() {
     var subscriberDataTable = $('#subscribersRprtDT').DataTable({
@@ -60,6 +63,7 @@ export class ReportsInvoiceComponent implements OnInit {
         data: function ( d ) {
           return $.extend( {}, d, {
             "invoiceType": ReportsInvoiceComponent.invoiceType,            
+            "clientID": ReportsInvoiceComponent.clientID,            
             "fromDate":ReportsInvoiceComponent.fromDate,
             "toDate":ReportsInvoiceComponent.toDate
           } );
@@ -72,15 +76,20 @@ export class ReportsInvoiceComponent implements OnInit {
         // { data: "invID", title: "invID" },
         { data: "inv_code", title: "Code" },
         { data: "inv_type", title: "Type" },
-        { data: "inv_date_req", title: "Date de Commande" }
+        { data: "inv_date_req", title: "Date de Commande" },
+        { data: "per_name", title: "Name" }
       ]
     });
     ReportsInvoiceComponent.globalDataTable=subscriberDataTable;
     this.filterForm = this.fb.group({
+      searchClient:[''],
+      clientID: [''],
       invoiceType: ['-1'],
       fromDateCtrl:[],
       toDateCtrl:[],
     });
+
+    this.onClientNameChange();
   }
 
   searchSubmit(){
@@ -105,7 +114,26 @@ export class ReportsInvoiceComponent implements OnInit {
       ReportsInvoiceComponent.toDate="";
     }
     ReportsInvoiceComponent.invoiceType=this.filterForm.get('invoiceType').value;
+    ReportsInvoiceComponent.clientID=this.filterForm.get('clientID').value;
     ReportsInvoiceComponent.globalDataTable.ajax.reload();
+  }
+
+  onClientNameChange(): void {
+    this.filterForm.get('searchClient').valueChanges.subscribe(val => {
+      var data = this.filterForm.get('searchClient').value;
+      if (data == "") {
+        this.options = [];
+        return;
+      }
+      this.reportService.searchClient(data).subscribe(Response => {
+        this.options = Response;
+      })
+    });    
+  }
+
+  setClientName(id, clientName) {
+    this.filterForm.get('searchClient').setValue(clientName);
+    this.filterForm.get('clientID').setValue(id);
   }
 
 }

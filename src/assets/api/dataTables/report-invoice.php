@@ -17,6 +17,12 @@ if (isset($_GET['invoiceType']) && $_GET['invoiceType'] != "-1") {
 
 }
 
+if (isset($_GET['clientID']) && $_GET['clientID'] != "-1") {
+    $clientID = $_GET['clientID'];
+    $condition = $condition . " AND inv_perID = " . $clientID." ";
+
+}
+
 
 
 if (isset($_GET['fromDate']) && isset($_GET['toDate']) && $_GET['fromDate'] != "") {
@@ -34,11 +40,11 @@ if (count($_GET['order'])) {
 if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     $search = $_GET["search"]["value"];
 
-    $getAllFactureQuery = "select * invoice  where name like '%" . $search . "%' OR phone like '%" . $search . "%' OR address like '%" . $search . "%' OR subscriber_detail.profile like '%" . $search . "%' OR exp_date like '%" . $search . "%' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+    // $getAllFactureQuery = "select * invoice  where name like '%" . $search . "%' OR phone like '%" . $search . "%' OR address like '%" . $search . "%' OR subscriber_detail.profile like '%" . $search . "%' OR exp_date like '%" . $search . "%' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
 } else {
 
-    $getAllFactureQuery = " select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req from invoice " . $condition . " " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+    $getAllFactureQuery = " select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req from invoice inner join person on invoice.inv_perID = person.perID " . $condition . " " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
 }
 
@@ -55,6 +61,7 @@ if ($getAllFactureQuerySQL) {
             }
             $jsonData = $jsonData . '{"invID":"' . $row['invID'] . '",';
             $jsonData = $jsonData . '"inv_code":"' . $row['inv_code'] . '",';
+            $jsonData = $jsonData . '"per_name":"' . $row['per_name'] . '",';
             $jsonData = $jsonData . '"inv_type":"' . $row['inv_type'] . '",';
             $jsonData = $jsonData . '"inv_date_req":"' . $row['inv_date_req'] . '"}';
         }

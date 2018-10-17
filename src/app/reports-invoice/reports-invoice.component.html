@@ -11,7 +11,20 @@
       </mat-expansion-panel-header>
 
       <form fxLayout="column" [formGroup]="filterForm" autocomplete="off">
-        
+        <mat-form-field class="searchClient" fxFlex>
+
+          <input matInput placeholder="Rechercher le Nom du Client" formControlName="searchClient" type="text" name="nameInput"
+            [matAutocomplete]="auto" autofocus>
+
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option (onSelectionChange)="setClientName(-1,'All Clients')" [value]="-1">All Clients</mat-option>
+            <mat-option (onSelectionChange)="setClientName(option.perID,option.per_name)" *ngFor="let option of options" [value]="option.per_name">{{option.per_name}}
+              || {{option.per_code}}</mat-option>
+          </mat-autocomplete>
+
+        </mat-form-field>
+
+
         <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field class="inputFieldDim" fxFlex>
             <mat-select placeholder="Facture Type" formControlName="invoiceType">
@@ -22,7 +35,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-      
+
 
         <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field class="inputField">
@@ -40,7 +53,8 @@
         </div>
 
       </form>
-      <button mat-raised-button class="searchFormBtn" name="searchBtn" color="primary" [disabled]="!filterForm.valid" (click)="searchSubmit() ">Show
+      <button mat-raised-button class="searchFormBtn" name="searchBtn" color="primary" [disabled]="!filterForm.valid"
+        (click)="searchSubmit() ">Show
         Result
       </button>
       <!-- <button mat-raised-button class="searchFormBtn" name="clearBtn" color="warn" (click)="clearForm()">Clear</button> -->
