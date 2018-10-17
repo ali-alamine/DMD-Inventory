@@ -8,9 +8,6 @@ $start = (isset($_GET['start'])) ? intval($_GET['start']) : 0;
 $orderString = "";
 
 $condition = "WHERE 1 ";
-
-
-
 if (isset($_GET['invoiceType']) && $_GET['invoiceType'] != "-1") {
     $invoiceType = $_GET['invoiceType'];
     $condition = $condition . " AND inv_type='" . $invoiceType."' ";
@@ -22,8 +19,6 @@ if (isset($_GET['clientID']) && $_GET['clientID'] != "-1") {
     $condition = $condition . " AND inv_perID = " . $clientID." ";
 
 }
-
-
 
 if (isset($_GET['fromDate']) && isset($_GET['toDate']) && $_GET['fromDate'] != "") {
     $fromDate = $_GET['fromDate'];

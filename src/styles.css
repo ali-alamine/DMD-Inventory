@@ -81,6 +81,14 @@
 .btn-group, .btn-group-vertical{
   margin-bottom: 15px;
 }
+
+
+.test123{
+  border: 0px !important;
+  text-align: center !important;
+  width: 100% !important;
+  color: red;
+}
 /* 
   
   .ui-contextmenu{

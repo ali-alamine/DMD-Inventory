@@ -2,9 +2,9 @@
   <button mat-raised-button color="primary" (click)="backup()">
     <i class="material-icons">backup</i> Sauvegarde
   </button>
-  <button mat-raised-button color="primary" (click)="openRestoreModal(restoreModal)">
+  <!-- <button mat-raised-button color="primary" (click)="openRestoreModal(restoreModal)">
     <i class="material-icons">restore</i> Restaurer
-  </button>
+  </button> -->
   <button mat-raised-button color="primary" (click)="openEditUserModal(editUserModal)">
     <i class="material-icons">restore</i> Modifier l'utilisateur
   </button>
@@ -26,9 +26,7 @@
           <li *ngFor="let file of uploadedFile">{{file.name}} - {{file.size}} bytes</li>
         </ul>
       </ng-template>
-      </p-fileUpload>
-
-   
+      </p-fileUpload>   
 
   </div>
 </ng-template>

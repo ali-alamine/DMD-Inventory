@@ -94,13 +94,13 @@ export class HistoryItemsComponent implements OnInit {
         },
         order: [[0, 'asc']],
         columns: [
-          { data: "inv_code", title: "CODE" },
-          { data: "inv_type", title: "TYPE" },
+          { data: "inv_code", title: "Code" },
+          { data: "inv_type", title: "Type" },
           { data: "item_name", title: "Article" },
           { data: "ord_crt", title: "CRT" },
-          { data: "ord_piece", title: "PIECE" },
-          { data: "inv_date_req", title: "DATE" },
-          { data: "per_name", title: "CLIENT" }
+          { data: "ord_piece", title: "Piece" },
+          { data: "inv_date_req", title: "Date" },
+          { data: "per_name", title: "Client" }
 
         ],
         "columnDefs": [ {

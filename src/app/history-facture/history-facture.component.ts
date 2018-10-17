@@ -94,9 +94,9 @@ export class HistoryFactureComponent implements OnInit {
         },
         order: [[0, 'asc']],
         columns: [
-          { data: "per_name", title: "CLIENTS" },
-          { data: "inv_date_req", title: "DATE"},
-          { data: "inv_code", title: "CODE"}
+          { data: "per_name", title: "Client" },
+          { data: "inv_date_req", title: "Date"},
+          { data: "inv_code", title: "Code"}
         ],
         "columnDefs": [ {
           "targets": 2,

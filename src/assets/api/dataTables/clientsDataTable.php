@@ -9,6 +9,35 @@ $orderString = "";
 
 $rowsCount = mysqli_fetch_assoc(mysqli_query(openConn(), "SELECT COUNT(perID) as exp FROM person where per_isClient=1 and per_isActivated=1"))['exp'];
 
+
+$condition = "WHERE 1 ";
+
+if (isset($_GET['nameSearch']) && $_GET['nameSearch'] != "") {
+    $nameSearch = $_GET['nameSearch'];
+    $condition = $condition . " AND per_name LIKE '%" . $nameSearch."%' ";
+
+}
+
+if (isset($_GET['codeSearch']) && $_GET['codeSearch'] != "") {
+    $codeSearch = $_GET['codeSearch'];
+    $condition = $condition . " AND per_code LIKE '%" . $codeSearch."%' ";
+
+}
+
+if (isset($_GET['phoneSearch']) && $_GET['phoneSearch'] != "") {
+    $phoneSearch = $_GET['phoneSearch'];
+    $condition = $condition . " AND per_phone LIKE '%" . $phoneSearch."%' ";
+
+}
+
+if (isset($_GET['addressSearch']) && $_GET['addressSearch'] != "") {
+    $addressSearch = $_GET['addressSearch'];
+    $condition = $condition . " AND per_address LIKE '%" . $addressSearch."%' ";
+
+}
+
+
+
 if (count($_GET['order'])) {
     $orderBy = $_GET['columns'][$_GET['order'][0]['column']]['data'];
     if ($orderBy == 'ID') {
@@ -38,7 +67,7 @@ if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
 
 } 
 else {
-    $getAllFactureQuery = "select * from person  where per_isClient = 1 and per_isActivated = 1 " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+    $getAllFactureQuery = "select * from person ".$condition." and per_isClient = 1 and per_isActivated = 1 " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
 }
 
