@@ -22,7 +22,7 @@ export class ReportsInvoiceComponent implements OnInit {
   constructor(private fb: FormBuilder, private reportService:ReportsService) { }
 
   ngOnInit() {
-    var subscriberDataTable = $('#subscribersRprtDT').DataTable({
+    var subscriberDataTable = $('#invoiceReportDT').DataTable({
       responsive: false,
       dom: 'Bfrtip',
       buttons: [
@@ -53,9 +53,7 @@ export class ReportsInvoiceComponent implements OnInit {
       searching: false,
       stateSave: false,
       fixedHeader: true,
-      select: {
-        "style": "multi"
-      },
+      select: true ,
       lengthMenu: [[  100, 200, 400,800,1600], [ 100, 200, 400,800,1600]],
       ajax: {
         type: "get",

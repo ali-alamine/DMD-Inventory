@@ -57,6 +57,9 @@
 #creditInvoicesDT tbody tr.selected,
 #supplyInvoicesDT tbody tr.selected,
 #invoicePaymentsDT tbody tr.selected,
+#clientReportDataTable tbody tr.selected,
+#invoiceReportDT tbody tr.selected,
+#stockReportDT tbody tr.selected,
 #clientsDT tbody tr.selected {
   color: white !important;
   background-color: #778899 !important;

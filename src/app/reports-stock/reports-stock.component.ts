@@ -17,7 +17,7 @@ export class ReportsStockComponent implements OnInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-    var stockDT = $('#stockDT').DataTable({
+    var stockDT = $('#stockReportDT').DataTable({
       responsive: true,
       dom: 'Bfrtip',
       buttons: [
@@ -57,9 +57,7 @@ export class ReportsStockComponent implements OnInit {
       searching: false,
       stateSave: false,
       fixedHeader: true,
-      select: {
-        "style": "multi"
-      },
+      select: true,
       lengthMenu: [[ 100, 200, 400,800], [ 100, 200, 400,800]],
       ajax: {
         type: "get",

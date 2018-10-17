@@ -11,7 +11,7 @@ export class ReportsClientComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    var clientDataTable = $('#clientDataTable').DataTable({
+    var clientDataTable = $('#clientReportDataTable').DataTable({
       responsive: true,
       dom: 'Bfrtip',
       buttons: [
