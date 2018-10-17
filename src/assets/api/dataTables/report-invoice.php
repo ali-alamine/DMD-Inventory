@@ -38,7 +38,7 @@ if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
 
 } else {
 
-    $getAllFactureQuery = " select * from invoice " . $condition . " " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+    $getAllFactureQuery = " select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req from invoice " . $condition . " " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
 }
 

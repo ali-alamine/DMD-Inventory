@@ -5,3 +5,7 @@ mat-button-toggle {
   font-style: bold;
   text-align: center;
 }
+
+button{
+  width: 15%;
+}

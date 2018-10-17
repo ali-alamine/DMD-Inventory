@@ -26,5 +26,9 @@ export class StockService {
     return this.httpClient.get(this.url+"deleteStockItem", {params:{ID:data}});
   }
 
+  itemChart(data): Observable<any>{
+    return this.httpClient.get(this.url+"itemChart", {params:{itemID:data}});
+  }
+  
   
 }

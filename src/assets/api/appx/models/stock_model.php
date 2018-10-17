@@ -88,4 +88,26 @@ class stock_model extends CI_Model
 
     }
 
+   
+
+       
+
+    public function itemChartFC($itemID){
+        $query = $this->db->query("select DATE_FORMAT(inv_date_req,'%Y-%m') as month, sum(`ord_piece`+(`ord_crt`*item.item_packing_list)) as quan from order_inv inner join invoice on order_inv.ord_invID = invoice.invID inner join item on order_inv.ord_itemID = item.itemID and order_inv.ord_item_isDamaged = item.item_is_damaged where invoice.inv_type = 'FC' and `ord_itemID` = ".$itemID." GROUP BY DATE_FORMAT(inv_date_req,'%Y-%m')");
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return 0;
+        }
+    }
+
+    public function itemChartFD($itemID){
+        $query = $this->db->query("select DATE_FORMAT(inv_date_req,'%Y-%m') as month, sum(`ord_piece`+(`ord_crt`*item.item_packing_list)) as quan from order_inv inner join invoice on order_inv.ord_invID = invoice.invID inner join item on order_inv.ord_itemID = item.itemID and order_inv.ord_item_isDamaged = item.item_is_damaged where invoice.inv_type = 'FD' and `ord_itemID` = ".$itemID." GROUP BY DATE_FORMAT(inv_date_req,'%Y-%m')");
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return 0;
+        }
+    }
+
 }

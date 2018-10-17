@@ -25,7 +25,7 @@ export class ReportsInvoiceComponent implements OnInit {
       buttons: [
         {
             extend: 'print',
-            messageTop: 'Subscribers Report',
+            messageTop: 'Facture Rapport',
             text: 'Print all',
             exportOptions: {
                 columns: ':visible',
@@ -39,7 +39,8 @@ export class ReportsInvoiceComponent implements OnInit {
           extend: 'print',
           text: 'Print selected'
       },
-      'pageLength'
+      'pageLength',
+      'excel'
     ],
       paging: true,
       pagingType: "full_numbers",
@@ -52,7 +53,7 @@ export class ReportsInvoiceComponent implements OnInit {
       select: {
         "style": "multi"
       },
-      lengthMenu: [[ 25, 50, 100, 200, 400,800,1600], [25, 50, 100, 200, 400,800,1600]],
+      lengthMenu: [[  100, 200, 400,800,1600], [ 100, 200, 400,800,1600]],
       ajax: {
         type: "get",
         url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/report-invoice.php",
@@ -68,10 +69,10 @@ export class ReportsInvoiceComponent implements OnInit {
       },
       order: [[0, 'asc']],
       columns: [
-        { data: "invID", title: "invID" },
-        { data: "inv_code", title: "inv_code" },
-        { data: "inv_type", title: "inv_type" },
-        { data: "inv_date_req", title: "inv_date_req" }
+        // { data: "invID", title: "invID" },
+        { data: "inv_code", title: "Code" },
+        { data: "inv_type", title: "Type" },
+        { data: "inv_date_req", title: "Date de Commande" }
       ]
     });
     ReportsInvoiceComponent.globalDataTable=subscriberDataTable;

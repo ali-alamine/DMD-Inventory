@@ -47,6 +47,8 @@ import { ReportsClientComponent } from './reports-client/reports-client.componen
 import {MatMenuModule} from '@angular/material/menu';
 import { ReportsStockComponent } from './reports-stock/reports-stock.component';
 import { ReportsInvoiceComponent } from './reports-invoice/reports-invoice.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
