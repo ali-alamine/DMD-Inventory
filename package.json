@@ -1,5 +1,5 @@
 {
-  "name": "DMD-Inventory",
+  "name": "dmd-inventory",
   "version": "0.0.0",
   "main": "main.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "electron": "electron .",
-    "electron-build": "ng build --base-href ./ && electron ."
+    "electron-build": "ng build --prod  && electron ."
   },
   "private": true,
   "dependencies": {
@@ -54,8 +54,8 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
     "codelyzer": "~4.2.1",
-    "electron": "^3.0.0",
-    "electron-packager": "^12.1.2",
+    "electron": "^3.0.4",
+    "electron-packager": "^12.2.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "^3.0.0",

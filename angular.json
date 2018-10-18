@@ -31,6 +31,7 @@
               "node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css"
             ],
             "scripts": [
+              "src/jqueryfix.js",
               "node_modules/chart.js/dist/Chart.bundle.js",           
               "node_modules/jquery/dist/jquery.min.js",              
               "node_modules/datatables.net/js/jquery.dataTables.js",
