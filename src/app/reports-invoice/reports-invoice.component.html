@@ -3,10 +3,10 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Filter Inputs
+          critères de filtrage
         </mat-panel-title>
         <mat-panel-description>
-          Enter search criteria to filter result
+          Entrez les critères de recherche pour filtrer les résultats
         </mat-panel-description>
       </mat-expansion-panel-header>
 
@@ -18,7 +18,8 @@
 
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option (onSelectionChange)="setClientName(-1,'All Clients')" [value]="-1">All Clients</mat-option>
-            <mat-option (onSelectionChange)="setClientName(option.perID,option.per_name)" *ngFor="let option of options" [value]="option.per_name">{{option.per_name}}
+            <mat-option (onSelectionChange)="setClientName(option.perID,option.per_name)" *ngFor="let option of options"
+              [value]="option.per_name">{{option.per_name}}
               || {{option.per_code}}</mat-option>
           </mat-autocomplete>
 
@@ -27,8 +28,8 @@
 
         <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field class="inputFieldDim" fxFlex>
-            <mat-select placeholder="Facture Type" formControlName="invoiceType">
-              <mat-option value="-1">tous aw tout aw toute :p</mat-option>
+            <mat-select placeholder="Type de Facture" formControlName="invoiceType">
+              <mat-option value="-1">Toutes les Factures</mat-option>
               <mat-option value="FC">Facture Client</mat-option>
               <mat-option value="FR">Facture Retour</mat-option>
               <mat-option value="FD">Facture Dischargement</mat-option>
@@ -54,9 +55,7 @@
 
       </form>
       <button mat-raised-button class="searchFormBtn" name="searchBtn" color="primary" [disabled]="!filterForm.valid"
-        (click)="searchSubmit() ">Show
-        Result
-      </button>
+        (click)="searchSubmit() ">Afficher le résultat</button>
       <!-- <button mat-raised-button class="searchFormBtn" name="clearBtn" color="warn" (click)="clearForm()">Clear</button> -->
     </mat-expansion-panel>
   </mat-accordion>

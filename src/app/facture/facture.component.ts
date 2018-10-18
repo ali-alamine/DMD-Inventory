@@ -11,7 +11,7 @@ export class FactureComponent implements OnInit {
   private sub;
   factureID;
 
-  constructor(private router: Router, private _hotkeysService: HotkeysService, private route: ActivatedRoute) {
+  constructor(public router: Router, private _hotkeysService: HotkeysService, private route: ActivatedRoute) {
     this._hotkeysService.add(new Hotkey('ctrl+z', (event: KeyboardEvent): boolean => {
       this.router.navigate(["facture/supply"]);
       return false;
@@ -34,6 +34,8 @@ export class FactureComponent implements OnInit {
     });
     if(this.factureID == '-1')
       this.router.navigate(["facture/client"]);
+
+      
 
   }
 

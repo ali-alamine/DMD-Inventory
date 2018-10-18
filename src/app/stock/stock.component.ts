@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { FormBuilder, Validators, FormControl } from "@angular/forms";
 import { StockService } from "./stock.service";
@@ -13,7 +13,10 @@ declare var $: any;
   templateUrl: "./stock.component.html",
   styleUrls: ["./stock.component.css"]
 })
-export class StockComponent implements OnInit {
+export class StockComponent implements OnInit, OnDestroy {
+  ngOnDestroy(): void {
+    this.globalStocksDT.fixedHeader.disable();
+  }
   modalReference: any;
   private stockForm;
   private transferForm;

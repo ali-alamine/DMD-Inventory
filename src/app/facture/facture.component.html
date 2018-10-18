@@ -1,16 +1,16 @@
 <div class="container-fluid noselect">
   <mat-button-toggle-group #group="matButtonToggleGroup" style="width:100%" value="client" class="center">
-    <mat-button-toggle routerLink="client" value="client" mat-raised-button color="primary">
+    <mat-button-toggle [class.mat-button-toggle-checked]="router.url == '/facture/client'" routerLink="client" value="client" mat-raised-button color="primary">
       <i class="material-icons">person</i>
       Facture Client
     </mat-button-toggle>
     
-    <mat-button-toggle routerLink="supply" value="supply" mat-raised-button color="primary">
+    <mat-button-toggle [class.mat-button-toggle-checked]="router.url == '/facture/supply'" routerLink="supply" value="supply" mat-raised-button color="primary">
       <i class="material-icons">local_shipping</i>
       Stock Entrée
     </mat-button-toggle>
 
-    <mat-button-toggle routerLink="return" value="return" mat-raised-button color="primary">
+    <mat-button-toggle [class.mat-button-toggle-checked]="router.url == '/facture/return'" routerLink="return" value="return" mat-raised-button color="primary">
       <i class="material-icons">settings_backup_restore</i>
       Retour
     </mat-button-toggle>

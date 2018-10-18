@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ElementRef } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { FormBuilder, Validators, FormControl } from "@angular/forms";
 import { ClientsService } from "./clients.service";
@@ -6,6 +6,9 @@ import { MenuItem } from "primeng/api";
 import Swal from "sweetalert2";
 import { Router } from "../../../node_modules/@angular/router";
 declare var $: any;
+
+
+
 @Component({
   selector: "app-clients",
   templateUrl: "./clients.component.html",
@@ -32,7 +35,8 @@ export class ClientsComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private fb: FormBuilder,
     private clientsService: ClientsService,
-    private router: Router
+    private router: Router,
+    private elRef:ElementRef
   ) {}
 
   ngOnInit() {
@@ -146,6 +150,24 @@ export class ClientsComponent implements OnInit, OnDestroy {
     ClientsComponent.phoneSearch = "";
     ClientsComponent.addressSearch = "";
     ClientsComponent.codeSearch = "";
+
+    // var fixedHeaderEle = document.getElementsByClassName('fixedHeader');
+    // angular.element(fixedHeaderEle).remove();
+    // var fixedFooterEle = document.getElementsByClassName('fixedFooter');
+    // angular.element(fixedFooterEle).remove();
+    
+
+    // let element = this.elRef.nativeElement.getElementsByClassName('fixedHeader-floating');
+    // let elem = document.getElementsByClassName("fixedHeader-floating");
+    
+    // console.log(element);
+    // console.log(elem);
+
+    
+    // elem.style.display = element.style.display === 'none' ? 'block' : 'none';
+
+    ClientsComponent.globalClientsDT.fixedHeader.disable();
+
   }
 
   openClientModal(clientModal) {
@@ -172,6 +194,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
     this.onClientIsExistChange();
     this.isExist == false;
   }
+
   onClientIsExistChange(): void {
     this.clientForm.get("name").valueChanges.subscribe(val => {
       var data = this.clientForm.get("name").value;
@@ -183,6 +206,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
       });
     });
   }
+
   addEditClient() {
     if (this.editFlag == true) {
       this.editedClientData["name"] = this.name.value;
