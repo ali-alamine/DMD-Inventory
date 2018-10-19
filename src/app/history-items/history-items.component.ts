@@ -59,18 +59,18 @@ export class HistoryItemsComponent implements OnInit {
         }
       },
       {
-        label: 'Supprimé',
-        icon: 'pi pi-fw pi-times',
+        label: 'Imprimer la facture',
+        icon: 'pi pi-fw pi-print',
         command: (event) => {
-          let element: HTMLElement = document.getElementById('deletedBtn') as HTMLElement;
+          let element: HTMLElement = document.getElementById('printBtn') as HTMLElement;
           element.click();
         }
       },
       {
-        label: 'Print',
-        icon: 'pi pi-fw pi-print',
+        label: 'Supprimé',
+        icon: 'pi pi-fw pi-times',
         command: (event) => {
-          let element: HTMLElement = document.getElementById('printBtn') as HTMLElement;
+          let element: HTMLElement = document.getElementById('deletedBtn') as HTMLElement;
           element.click();
         }
       }

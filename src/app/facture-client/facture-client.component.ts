@@ -266,8 +266,8 @@ export class FactureClientComponent implements OnInit {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Print',
-        cancelButtonText: 'No Print',
+        confirmButtonText: 'Imprimer',
+        cancelButtonText: 'Non imprimer',
       }).then((result) => {
         if (result.value) {
           this.printFactureClient();
