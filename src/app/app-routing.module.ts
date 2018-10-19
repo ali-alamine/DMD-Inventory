@@ -19,6 +19,7 @@ import { ReportsComponent } from './reports/reports.component';
 import { ReportsClientComponent } from './reports-client/reports-client.component';
 import { ReportsStockComponent } from './reports-stock/reports-stock.component';
 import { ReportsInvoiceComponent } from './reports-invoice/reports-invoice.component';
+import { ReportsInvoiceItemsComponent } from './reports-invoice-items/reports-invoice-items.component';
 
 const routes: Routes = [
   {
@@ -44,7 +45,8 @@ const routes: Routes = [
     path:"reports",component:ReportsComponent,  children: [
       { path: 'clients',component:  ReportsClientComponent},
       { path: 'stock',component:  ReportsStockComponent},
-      { path: 'invoices',component: ReportsInvoiceComponent}
+      { path: 'invoices',component: ReportsInvoiceComponent},
+      { path: 'items',component: ReportsInvoiceItemsComponent}
     ]
   },
   {

@@ -79,7 +79,7 @@ export class StockComponent implements OnInit, OnDestroy {
         {
           targets: 1,
           createdCell: function(td, cellData, rowData, row, col) {
-            if (rowData["isDamagedFlag"]) {
+            if (rowData["isDamagedFlag"] && rowData["pieceD"] != 0 && rowData["crtD"] != 0 ) {
               $(td).html(
                 cellData +
                   " <i style='float:right; color: #FF0000;' md-18 class='material-icons'>new_releases</i> "
@@ -89,7 +89,7 @@ export class StockComponent implements OnInit, OnDestroy {
         }
       ],
       createdRow: function(row, data, index) {
-        if (data["isDamagedFlag"] == 1) {
+        if (data["isDamagedFlag"] == 1 && data["pieceD"] != 0 && data["crtD"] != 0) {
           $(row).addClass("text-danger");
           $(row).attr(
             "title",

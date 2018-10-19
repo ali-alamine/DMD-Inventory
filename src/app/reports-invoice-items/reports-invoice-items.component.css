@@ -1,0 +1,20 @@
+#accordionSearch {
+    margin: 15px;
+  }
+  .searchFormBtn {
+    margin: 10px;
+  }
+  
+  .dateFilter {
+    margin-left: 10px;
+  }
+  
+  #invoiceItemReportDT {
+    text-align: center;
+  }
+  
+  .container-fluid {
+    margin-bottom: 25px;
+    margin-top: 25px;
+  }
+  

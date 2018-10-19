@@ -47,6 +47,7 @@ import { ReportsClientComponent } from './reports-client/reports-client.componen
 import {MatMenuModule} from '@angular/material/menu';
 import { ReportsStockComponent } from './reports-stock/reports-stock.component';
 import { ReportsInvoiceComponent } from './reports-invoice/reports-invoice.component';
+import { ReportsInvoiceItemsComponent } from './reports-invoice-items/reports-invoice-items.component';
 
 
 @NgModule({
@@ -66,7 +67,7 @@ import { ReportsInvoiceComponent } from './reports-invoice/reports-invoice.compo
     FactureReturnComponent,
     SettingsComponent,
     HistoryReturnComponent,
-    HistoryTransferComponent,LoginComponent, ReportsComponent, ReportsClientComponent, ReportsStockComponent, ReportsInvoiceComponent
+    HistoryTransferComponent,LoginComponent, ReportsComponent, ReportsClientComponent, ReportsStockComponent, ReportsInvoiceComponent, ReportsInvoiceItemsComponent
   ],
   imports: [
     BrowserModule,

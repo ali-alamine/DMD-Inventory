@@ -3,12 +3,13 @@ import { FormBuilder, Validators } from "@angular/forms";
 import { formatDate } from "@angular/common";
 import { ReportsService } from "../reports/reports.service";
 declare var $: any;
+
 @Component({
-  selector: "app-reports-invoice",
-  templateUrl: "./reports-invoice.component.html",
-  styleUrls: ["./reports-invoice.component.css"]
+  selector: "app-reports-invoice-items",
+  templateUrl: "./reports-invoice-items.component.html",
+  styleUrls: ["./reports-invoice-items.component.css"]
 })
-export class ReportsInvoiceComponent implements OnInit {
+export class ReportsInvoiceItemsComponent implements OnInit {
   panelOpenState = false;
   filterForm;
   private static globalDataTable;
@@ -18,11 +19,10 @@ export class ReportsInvoiceComponent implements OnInit {
   private static toDate;
   options: any[];
   static clientID: any;
-
   constructor(private fb: FormBuilder, private reportService: ReportsService) {}
 
   ngOnInit() {
-    var subscriberDataTable = $("#invoiceReportDT").DataTable({
+    var reportInvItemDT = $("#invoiceItemReportDT").DataTable({
       responsive: false,
       dom: "Bfrtip",
       buttons: [
@@ -42,20 +42,20 @@ export class ReportsInvoiceComponent implements OnInit {
           text: "Imprimer sélectionné"
         },
         {
-          extend: 'colvis',
-          text: 'visibilité des colonnes'
-      },
+          extend: "colvis",
+          text: "visibilité des colonnes"
+        },
         "pageLength",
         "excel"
       ],
       language: {
         buttons: {
-            pageLength: {
-                _: "Afficher %d éléments",
-                '-1': "Tout afficher"
-            }
+          pageLength: {
+            _: "Afficher %d éléments",
+            "-1": "Tout afficher"
+          }
         }
-    },
+      },
       paging: true,
       pagingType: "full_numbers",
       serverSide: true,
@@ -69,13 +69,13 @@ export class ReportsInvoiceComponent implements OnInit {
       ajax: {
         type: "get",
         url:
-          "http://localhost/DMD-Inventory/src/assets/api/dataTables/report-invoice.php",
+          "http://localhost/DMD-Inventory/src/assets/api/dataTables/report-invoice-items.php",
         data: function(d) {
           return $.extend({}, d, {
-            invoiceType: ReportsInvoiceComponent.invoiceType,
-            clientID: ReportsInvoiceComponent.clientID,
-            fromDate: ReportsInvoiceComponent.fromDate,
-            toDate: ReportsInvoiceComponent.toDate
+            invoiceType: ReportsInvoiceItemsComponent.invoiceType,
+            clientID: ReportsInvoiceItemsComponent.clientID,
+            fromDate: ReportsInvoiceItemsComponent.fromDate,
+            toDate: ReportsInvoiceItemsComponent.toDate
           });
         },
         cache: true,
@@ -86,11 +86,14 @@ export class ReportsInvoiceComponent implements OnInit {
         // { data: "invID", title: "invID" },
         { data: "inv_code", title: "Code" },
         { data: "inv_type", title: "Type" },
-        { data: "inv_date_req", title: "Date de Commande" },
-        { data: "per_name", title: "Name" }
+        { data: "item_name", title: "Article" },
+        { data: "ord_crt", title: "CRT" },
+        { data: "ord_piece", title: "Piece" },
+        { data: "inv_date_req", title: "Date" },
+        { data: "per_name", title: "Client" }
       ]
     });
-    ReportsInvoiceComponent.globalDataTable = subscriberDataTable;
+    ReportsInvoiceItemsComponent.globalDataTable = reportInvItemDT;
     this.filterForm = this.fb.group({
       searchClient: [""],
       clientID: [""],
@@ -103,17 +106,17 @@ export class ReportsInvoiceComponent implements OnInit {
   }
 
   searchSubmit() {
-    console.log(this.filterForm.value);
+    // console.log(this.filterForm.value);
     if (
       this.filterForm.get("fromDateCtrl").value != null &&
       this.filterForm.get("toDateCtrl").value != null
     ) {
-      ReportsInvoiceComponent.fromDate = formatDate(
+      ReportsInvoiceItemsComponent.fromDate = formatDate(
         this.filterForm.get("fromDateCtrl").value,
         "yyyy-MM-dd",
         "en"
       );
-      ReportsInvoiceComponent.toDate = formatDate(
+      ReportsInvoiceItemsComponent.toDate = formatDate(
         this.filterForm.get("toDateCtrl").value,
         "yyyy-MM-dd",
         "en"
@@ -123,45 +126,47 @@ export class ReportsInvoiceComponent implements OnInit {
       this.filterForm.get("toDateCtrl").value != null
     ) {
       if (this.filterForm.get("fromDateCtrl").value != null) {
-        ReportsInvoiceComponent.fromDate = formatDate(
+        ReportsInvoiceItemsComponent.fromDate = formatDate(
           this.filterForm.get("fromDateCtrl").value,
           "yyyy-MM-dd",
           "en"
         );
-        ReportsInvoiceComponent.toDate = formatDate(
+        ReportsInvoiceItemsComponent.toDate = formatDate(
           this.filterForm.get("fromDateCtrl").value,
           "yyyy-MM-dd",
           "en"
         );
       } else {
-        ReportsInvoiceComponent.fromDate = formatDate(
+        ReportsInvoiceItemsComponent.fromDate = formatDate(
           this.filterForm.get("toDateCtrl").value,
           "yyyy-MM-dd",
           "en"
         );
-        ReportsInvoiceComponent.toDate = formatDate(
+        ReportsInvoiceItemsComponent.toDate = formatDate(
           this.filterForm.get("toDateCtrl").value,
           "yyyy-MM-dd",
           "en"
         );
       }
     } else {
-      ReportsInvoiceComponent.fromDate = "";
-      ReportsInvoiceComponent.toDate = "";
+      ReportsInvoiceItemsComponent.fromDate = "";
+      ReportsInvoiceItemsComponent.toDate = "";
     }
-    ReportsInvoiceComponent.invoiceType = this.filterForm.get(
+    ReportsInvoiceItemsComponent.invoiceType = this.filterForm.get(
       "invoiceType"
     ).value;
-    ReportsInvoiceComponent.clientID = this.filterForm.get("clientID").value;
-    ReportsInvoiceComponent.globalDataTable.ajax.reload();
+    ReportsInvoiceItemsComponent.clientID = this.filterForm.get(
+      "clientID"
+    ).value;
+    ReportsInvoiceItemsComponent.globalDataTable.ajax.reload();
   }
 
   onClientNameChange(): void {
     this.filterForm.get("searchClient").valueChanges.subscribe(val => {
       var data = this.filterForm.get("searchClient").value;
       if (data == "") {
-        this.options = [];
         this.filterForm.get("clientID").setValue(-1);
+        this.options = [];
         return;
       }
       this.reportService.searchClient(data).subscribe(Response => {

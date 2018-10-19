@@ -14,7 +14,7 @@ if (isset($_GET['invoiceType']) && $_GET['invoiceType'] != "-1") {
 
 }
 
-if (isset($_GET['clientID']) && $_GET['clientID'] != "-1") {
+if (isset($_GET['clientID']) && $_GET['clientID'] != "-1" && $_GET['clientID'] != "") {
     $clientID = $_GET['clientID'];
     $condition = $condition . " AND inv_perID = " . $clientID." ";
 

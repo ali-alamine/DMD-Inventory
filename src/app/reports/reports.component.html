@@ -1,22 +1,23 @@
 <div class="container-fluid noselect">
 
-  <button class="MenuBtn" mat-button [matMenuTriggerFor]="clientMenu"> <i class="material-icons">person </i>Client</button>
-  <mat-menu #clientMenu="matMenu">
-    <button mat-menu-item routerLink="clients">All Clients</button>
-    <button mat-menu-item>Top Clients</button>
-  </mat-menu>
+  <button class="MenuBtn" mat-button routerLink="clients" ><i class="material-icons">person </i>Client</button>
+  <!-- <mat-menu #clientMenu="matMenu"> -->
+    <!-- <button mat-menu-item >All Clients</button> -->
+    <!-- <button mat-menu-item>Top Clients</button> -->
+  <!-- </mat-menu> -->
 
-  <button class="MenuBtn" mat-button [matMenuTriggerFor]="stockMenu"> <i class="material-icons">dashboard</i>Stock</button>
-  <mat-menu #stockMenu="matMenu">
-    <button mat-menu-item routerLink="stock">All Items</button>
-    <button mat-menu-item>Top Items</button>
-  </mat-menu>
+  <button class="MenuBtn" mat-button routerLink="stock"> <i class="material-icons">dashboard</i>Stock</button>
+  <!-- <mat-menu #stockMenu="matMenu"> -->
+    <!-- <button mat-menu-item >All Items</button> -->
+    <!-- <button mat-menu-item>Top Items</button> -->
+  <!-- </mat-menu> -->
 
   <button class="MenuBtn" mat-button [matMenuTriggerFor]="invoiceMenu"> <i class="material-icons">receipt</i>Facture</button>
   <mat-menu #invoiceMenu="matMenu">
     <button mat-menu-item routerLink="invoices">Facture</button>
+    <button mat-menu-item routerLink="items">Articles</button>
   </mat-menu>
-<hr>
+  <hr>
 
   <router-outlet></router-outlet>
 </div>
