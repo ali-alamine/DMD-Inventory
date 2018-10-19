@@ -34,9 +34,9 @@ export class HistoryFactureComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    if (localStorage.getItem("user") !== '1') {
-      this.router.navigate(["login"]);
-    }
+    // if (localStorage.getItem("user") !== '1') {
+    //   this.router.navigate(["login"]);
+    // }
     this.getHistoryFactureDT();
     var tableinfo = this.globalHistoryFactureDT.page.info();
       var total = tableinfo.recordsTotal;
@@ -62,6 +62,14 @@ export class HistoryFactureComponent implements OnInit {
         icon: 'pi pi-fw pi-times',
         command: (event) => {
           let element: HTMLElement = document.getElementById('deletedBtn') as HTMLElement;
+          element.click();
+        }
+      },
+      {
+        label: 'Print',
+        icon: 'pi pi-fw pi-print',
+        command: (event) => {
+          let element: HTMLElement = document.getElementById('printBtn') as HTMLElement;
           element.click();
         }
       }
@@ -173,6 +181,9 @@ export class HistoryFactureComponent implements OnInit {
   
   openShowDetails() {
     this.historyComponent.showFactureDetails(HistoryFactureComponent.selectedFacture);
+  }
+  printFacture() {
+    this.historyComponent.printFacture(HistoryFactureComponent.selectedFacture);
   }
   editFacture(){
     localStorage.setItem('XOffset', window.pageXOffset.toString());

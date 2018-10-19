@@ -50,16 +50,16 @@ if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     
 
     if($show=="facture")
-        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req  from invoice INNER JOIN person on perID= inv_perID  where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_status = '1' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req  from invoice INNER JOIN person on perID= inv_perID  where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_status = '1' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     if($show=="items")
-        $getAllFactureQuery = "(select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,DATE_FORMAT(inv_date_del,'%d-%m-%Y') AS inv_date_del,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req from order_inv  
+        $getAllFactureQuery = "(select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,DATE_FORMAT(inv_date_del,'%d-%m-%Y %H:%i') AS inv_date_del,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req from order_inv  
         INNER JOIN invoice on invID = ord_invID 
         INNER JOIN person on perID = inv_perID  
         INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged  
         where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' OR inv_type like '%" . $search . "%' OR item_name like '%" . $search . "%') 
         and ord_isDeleted = '0' and inv_type != 'FR')
         UNION
-        (select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,DATE_FORMAT(inv_date_del,'%d-%m-%Y') AS inv_date_del,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req from order_inv  
+        (select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,DATE_FORMAT(inv_date_del,'%d-%m-%Y %H:%i') AS inv_date_del,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req from order_inv  
         INNER JOIN invoice on invID = ord_invID 
         INNER JOIN person on perID = inv_perID  
         INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged 
@@ -68,19 +68,19 @@ if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
         and ord_isDeleted = '0' and inv_type = 'FR' and ord_status = 1) 
         " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     if($show=="return")
-        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req from invoice INNER JOIN person on perID= inv_perID where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_type = 'FR' and inv_status='-1' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req from invoice INNER JOIN person on perID= inv_perID where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_type = 'FR' and inv_status='-1' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
      
 } else {
     if($show=="facture")
-        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req from invoice INNER JOIN person on perID= inv_perID where  inv_status = '1'  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req from invoice INNER JOIN person on perID= inv_perID where  inv_status = '1'  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     if($show=="items")
-        $getAllFactureQuery = "(select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,DATE_FORMAT(inv_date_del,'%d-%m-%Y') AS inv_date_del,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req from order_inv  
+        $getAllFactureQuery = "(select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,DATE_FORMAT(inv_date_del,'%d-%m-%Y %H:%i') AS inv_date_del,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req from order_inv  
         INNER JOIN invoice on invID = ord_invID 
         INNER JOIN person on perID = inv_perID  
         INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged  
         where  ord_isDeleted = '0' and inv_type != 'FR')
     UNION
-    (select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,DATE_FORMAT(inv_date_del,'%d-%m-%Y') AS inv_date_del,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req from order_inv  
+    (select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,DATE_FORMAT(inv_date_del,'%d-%m-%Y %H:%i') AS inv_date_del,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req from order_inv  
         INNER JOIN invoice on invID = ord_invID 
         INNER JOIN person on perID = inv_perID  
         INNER JOIN item on itemID = ord_itemID and item_is_damaged = ord_item_isDamaged 
@@ -88,7 +88,7 @@ if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
         where  ord_isDeleted = '0' and inv_type = 'FR' and ord_status = 1) 
         " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     if($show=="return")
-        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req from invoice INNER JOIN person on perID= inv_perID where inv_type = 'FR' and inv_status='-1'  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req from invoice INNER JOIN person on perID= inv_perID where inv_type = 'FR' and inv_status='-1'  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
      
 }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, NgZone } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder } from '@angular/forms';
@@ -24,13 +24,24 @@ export class HistoryComponent implements OnInit {
   private globalHistoryFactureDetailsDT;
   @ViewChild('showDetails')
   private showDetailsTPL : TemplateRef<any>;
-  clientName; clientPhone; clientAddress; dateReq; codeFR; type;
+  clientName; clientPhone; clientAddress; dateReq; code; type;
   badgeCount: number;
+  // private zone: NgZone;
 
   constructor(private historyService: HistoryService,
     private modalService: NgbModal,
     private router: Router, 
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private zone: NgZone) { 
+      zone.runOutsideAngular(() => {
+      // this.printPage();
+      // setInterval(() => {
+        // this.time = Date.now();
+
+        // lc.tick(); // comment this line and "time" will stop updating
+      // }, 1000);
+    }) 
+  }
 
   ngOnInit() {
     if (localStorage.getItem("user") !== '1') {
@@ -73,7 +84,7 @@ export class HistoryComponent implements OnInit {
       this.clientPhone = facture[0].phone;
       this.clientAddress = facture[0].address;
       this.dateReq = facture[0].date_req;
-      this.codeFR = facture[0].code;
+      this.code = facture[0].code;
       this.type = facture[0].type;
       if(facture[0].type=="FD"){
         this.showDetailsCode="Afficher les détails du facture Déchargement" ;
@@ -128,5 +139,37 @@ export class HistoryComponent implements OnInit {
     this.historyService.getCountFR().subscribe(Response => {
       this.badgeCount=Response[0].c;
     });
+  }
+
+  printFacture(facture) {
+    this.historyService.getFactureDetails(facture[0].ID,facture[0].type).subscribe(Response => {
+      this.clientName = facture[0].clientName;
+      this.clientPhone = facture[0].phone;
+      this.clientAddress = facture[0].address;
+      this.dateReq = facture[0].date_req;
+      this.code = facture[0].code;
+      this.type = facture[0].type;
+      this.zone.run(() => {
+        // this.factureDetails;
+        this.factureDetails = Response;
+      });
+      this.printPage();
+    }, error => {
+      alert(error)
+    });
+
+}
+// run(fn, applyThis, applyArgs) {
+//   return this._inner.run(fn, applyThis, applyArgs);
+// }
+printPage(){
+  console.log(this.factureDetails)
+  // console.log($('#printFacture').html())
+  var printContents = document.getElementById('printFacture').innerHTML;
+  var popupWin = window.open('', '_blank', 'width=800,height=600');
+  popupWin.document.open();
+  popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="../../styles.css"></head><body onload="window.print()">' + printContents + '</body></html>');
+  popupWin.document.close();
+  setTimeout(function(){ popupWin.close(); }, 1000);
   }
 }

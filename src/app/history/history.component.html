@@ -37,7 +37,7 @@
       </div>
       <div style="float: right;">
         <b>Date De Commande:</b> {{dateReq}}<br>
-        <b>Code:</b> {{codeFR}}
+        <b>Code:</b> {{code}}
       </div>
       <br>
       <br>
@@ -55,3 +55,72 @@
     <div class="modal-footer noselect">
     </div>
 </ng-template>
+
+<div class="table table-striped noselect" id="printFacture" hidden>
+  <div style="float:left;" *ngIf="type == 'FC'">
+    <b>Nom:</b> {{clientName}}<br>
+    <b>Téléphone:</b> {{clientPhone}}<br>
+    <b>Adresse:</b> {{clientAddress}}
+  </div>
+  <div style="float: right;">
+    <b>Date De Commande:</b> {{dateReq}}<br>
+    <b>Code:</b> {{code}}
+  </div>
+  <br>
+  <br>
+  <br>
+  <hr>
+    <!-- <table class="table table-striped table-bordered table-hover table-sm noselect " id="detailFactureDT">
+      <thead>
+      </thead>
+      <tbody #contextScopeDetails>
+      </tbody>
+    </table> -->
+  <table class="table table-responsive table-bordered text-center test noselect" style="width:100%;  border-collapse: collapse; border: 1px solid black;">
+    <thead>
+    <tr>
+    <th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">ARTICLES</th>
+    <th style="border: 1px solid black;" class="text-center mousetrap" colspan="2">QUANTITE</th>
+    <th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">P.Unit</th>
+            <th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">Montant</th>
+        </tr>
+        <tr>
+            <th style="border: 1px solid black;" class="text-center mousetrap">CLS/CRT</th>
+            <th style="border: 1px solid black;" class="text-center mousetrap">PIECE</th>
+        </tr>
+    </thead>
+  <tbody>
+    <tr *ngFor="let item of this.factureDetails; let i = index" >
+        <td style="border: 1px solid black;">{{item.item_name}}</td>
+        <td style="border: 1px solid black;">{{item.ord_crt}}</td>
+        <td style="border: 1px solid black;">{{item.ord_piece}}</td>
+        <td style="border: 1px solid black;"></td>
+        <td style="border: 1px solid black;"></td>
+    </tr>
+  </tbody>
+</table> 
+<hr>
+<!-- <div class="row"> -->
+    <!-- </br> -->
+    <div style="float:left;" class="noselect">
+        <label style="font-size: 13px;">Le Responseble</label>
+        <label>----------------------</label>
+    </div>
+    <div style="float:right;" class="noselect">
+        <label style="font-size: 13px;">Num de cls/crt</label>
+        <label>-----------------------</label>
+    </div>
+    <!-- </div> -->
+    <br>
+    <br>
+    <!-- <div class="row"> -->
+          <div style="float:left;" class="noselect">
+              <label style="font-size: 13px;">Le Client</label>
+              <label>-----------------------</label>
+          </div>
+    <div  style="float:right;" class="noselect">
+        <label style="font-size: 13px;">Num de piece</label>
+        <label>-----------------------</label>
+    </div>
+<!-- </div> -->
+</div>

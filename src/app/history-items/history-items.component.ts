@@ -65,6 +65,14 @@ export class HistoryItemsComponent implements OnInit {
           let element: HTMLElement = document.getElementById('deletedBtn') as HTMLElement;
           element.click();
         }
+      },
+      {
+        label: 'Print',
+        icon: 'pi pi-fw pi-print',
+        command: (event) => {
+          let element: HTMLElement = document.getElementById('printBtn') as HTMLElement;
+          element.click();
+        }
       }
     ];
   }
@@ -206,6 +214,9 @@ export class HistoryItemsComponent implements OnInit {
       this.router.navigate(["facture/supply"], { queryParams: { factureID: HistoryItemsComponent.selectedFactureID }});
     if(HistoryItemsComponent.selectedFacture[0].type=="FC")
       this.router.navigate(["facture/client"], { queryParams: { factureID: HistoryItemsComponent.selectedFactureID }});
+  }
+  printFacture() {
+    this.historyComponent.printFacture(HistoryItemsComponent.selectedFacture);
   }
   deleteItem(){
     var title = "Supprimer Article";

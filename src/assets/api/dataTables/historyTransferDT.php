@@ -19,11 +19,11 @@ if (count($_GET['order'])) {
 if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     $search = $_GET["search"]["value"];
 
-    $getAllFactureQuery = "select *,DATE_FORMAT(conv_date,'%d-%m-%Y') AS conv_date from convt inner join item on convt.conv_itemID = item.itemID  where item_is_damaged = 0 and ( conv_date like '%" . $search . "%' OR item_name like '%" . $search . "%' OR item_code like '%" . $search . "%' ) " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+    $getAllFactureQuery = "select *,DATE_FORMAT(conv_date,'%d-%m-%Y %H:%i') AS conv_date from convt inner join item on convt.conv_itemID = item.itemID  where item_is_damaged = 0 and ( conv_date like '%" . $search . "%' OR item_name like '%" . $search . "%' OR item_code like '%" . $search . "%' ) " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
 } 
 else {
-    $getAllFactureQuery = "select *,DATE_FORMAT(conv_date,'%d-%m-%Y') AS conv_date from convt inner join item on convt.conv_itemID = item.itemID where item_is_damaged = 0  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+    $getAllFactureQuery = "select *,DATE_FORMAT(conv_date,'%d-%m-%Y %H:%i') AS conv_date from convt inner join item on convt.conv_itemID = item.itemID where item_is_damaged = 0  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
 }
 
