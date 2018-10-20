@@ -57,7 +57,7 @@ export class SettingsComponent implements OnInit {
       Swal({
         type: 'success',
         title: 'Succès',
-        text: 'Utilisateur mis à jour avec succès',
+        text: "Modifier l'utilisateur",
         showConfirmButton: false,
         timer: 1000
       });

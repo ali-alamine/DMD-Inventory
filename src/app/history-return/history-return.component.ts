@@ -172,7 +172,7 @@ export class HistoryReturnComponent implements OnInit {
       swal({
         type: 'success',
         title: 'Success',
-        text: 'Article Confirmer.',
+        text: 'Article confirmer.',
         showConfirmButton: false,
         timer: 1000
       });
@@ -195,7 +195,7 @@ export class HistoryReturnComponent implements OnInit {
       swal({
         type: 'success',
         title: 'Success',
-        text: 'Article Rejeter.',
+        text: 'Article rejeter.',
         showConfirmButton: false,
         timer: 1000
       });
@@ -209,7 +209,7 @@ export class HistoryReturnComponent implements OnInit {
   }
   confirmAll(){
     var title = "Confirmer Article";
-    var text = "Vous voulez vraiment Confirmer toutes les Articles de cette Facture!"
+    var text = "Vous voulez vraiment confirmer toutes les Articles de cette Facture!"
     swal({
       title: title,
       html: text,
@@ -217,8 +217,8 @@ export class HistoryReturnComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes!',
-      cancelButtonText: 'No',
+      confirmButtonText: 'Oui!',
+      cancelButtonText: 'Non',
     }).then((result) => {
       if (result.value) {
       this.historyService.confirmAll(HistoryReturnComponent.selectedFactureID).subscribe(Response => {
@@ -227,7 +227,7 @@ export class HistoryReturnComponent implements OnInit {
           swal({
             type: 'success',
             title: 'Succès',
-            text: "La Facture est Confirmer.",
+            text: "La Facture est confirmer.",
             showConfirmButton: false,
             timer: 1000
           });
@@ -243,7 +243,7 @@ export class HistoryReturnComponent implements OnInit {
   }
   rejectAll(){
     var title = "Rejeter Article";
-    var text = "Vous voulez vraiment Rejeter toutes les Articles de cette Facture!"
+    var text = "Vous voulez vraiment rejeter toutes les Articles de cette Facture!"
     swal({
       title: title,
       html: text,
@@ -251,8 +251,8 @@ export class HistoryReturnComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes!',
-      cancelButtonText: 'No',
+      confirmButtonText: 'Oui!',
+      cancelButtonText: 'Non',
     }).then((result) => {
       if (result.value) {
       this.historyService.rejectAll(HistoryReturnComponent.selectedFactureID).subscribe(Response => {
@@ -261,7 +261,7 @@ export class HistoryReturnComponent implements OnInit {
           swal({
             type: 'success',
             title: 'Succès',
-            text: "La Facture est Rejeter.",
+            text: "La Facture est rejeter.",
             showConfirmButton: false,
             timer: 1000
           });

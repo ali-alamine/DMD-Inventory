@@ -157,7 +157,6 @@ export class FactureClientComponent implements OnInit {
       var data = this.clientForm.get('name').value;
       this.factureClientService.searchClientName(data).subscribe(Response => {
         if(Response == 1){
-          // alert('exist')
           this.isExist = true;
         }
         else
@@ -248,6 +247,8 @@ export class FactureClientComponent implements OnInit {
     this.itemsForm.removeAt(i);
     var index = FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', 'isDamaged', id.value, itemIsDamaged.value);
     FactureClientComponent.selectedItems.splice(index, 1);
+    // if(i!=0)
+      setTimeout(function(){ document.getElementById("crt0").focus();},200)
     
   }
   setClientName(id, name,phone) {
@@ -259,15 +260,17 @@ export class FactureClientComponent implements OnInit {
   addClientInvoice() {
     this.factureClientService.newClientInvoice(this.invoiceForm.value).subscribe(Response => {
       this.newCode = Response;
+      var msg = 'Facture Client Code: '+Response;
+      msg = msg +'<br/> Vous voulez imprimer?';
       swal({
         type: 'success',
         title: 'Success',
-        text: 'Facture Client Code: '+Response,
+        html: msg,
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Imprimer',
-        cancelButtonText: 'Non imprimer',
+        confirmButtonText: 'Oui',
+        cancelButtonText: 'Non',
       }).then((result) => {
         if (result.value) {
           this.printFactureClient();
@@ -303,7 +306,7 @@ export class FactureClientComponent implements OnInit {
       swal({
         type: 'success',
         title: 'Succès',
-        text: 'Mis à jour avec succés',
+        text: 'Modifier facture client',
         showConfirmButton: false,
         timer: 1000
       });
@@ -332,14 +335,14 @@ export class FactureClientComponent implements OnInit {
       var i = FactureClientComponent.findWithAttr(this.itemsForm.value, 'itemID', 'isDamaged', ID, isDamaged);
       if(this.itemsEditForm.length == 0){
         if(i == -1)
-          this.addRow(element);
+        this.addRow(element);
       } else if(this.itemsEditForm.length != 0){
         var i2 = FactureClientComponent.findWithAttr2(this.itemsEditForm.value, 'itemID', 'isDamaged', ID, isDamaged);
         if( i == -1 && i2 == -1)
-            this.addRow(element);
+        this.addRow(element);
       }
     });
-
+    setTimeout(function(){ document.getElementById("crt0").focus();},200)
   }
   openClientModal(clientModal) {
     this.modalReference = this.modalService.open(clientModal, { centered: true, ariaLabelledBy: 'modal-basic-title' });
@@ -360,7 +363,7 @@ export class FactureClientComponent implements OnInit {
         swal({
           type: 'success',
           title: 'Succès',
-          text: 'Client ajouté avec succès',
+          text: 'Ajouter client',
           showConfirmButton: false,
           timer: 1000
         });

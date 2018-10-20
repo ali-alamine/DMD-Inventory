@@ -159,6 +159,7 @@ export class FactureReturnComponent implements OnInit {
       this.itemsForm.removeAt(i);
       var index = FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id','gate', id.value , itemIsDamaged.value);
       FactureReturnComponent.selectedItems.splice(index, 1);
+      setTimeout(function(){ document.getElementById("crt0").focus();},200)
     }
   
     test(id, name) {
@@ -172,11 +173,11 @@ export class FactureReturnComponent implements OnInit {
           swal({
             type: 'success',
             title: 'Succès',
-            text: 'Facture Retour Code: '+Response,
+            text: 'Facture retour Code: '+Response,
             showConfirmButton: true,
             confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-            timer: 4000
+            confirmButtonText: 'Oui',
+            timer: 2000
           });
         }, error => {
           swal({
@@ -198,7 +199,7 @@ export class FactureReturnComponent implements OnInit {
           swal({
             type: 'success',
             title: 'Succès',
-            text: 'Mis à jour avec succés',
+            text: 'Modifier facture retour',
             showConfirmButton: false,
             timer: 1000
           });
@@ -234,6 +235,7 @@ export class FactureReturnComponent implements OnInit {
               this.addRow(element);
         }
       });
+      setTimeout(function(){ document.getElementById("crt0").focus();},200)
     }
   
     openMultiSelect(mutliSelectModal) {

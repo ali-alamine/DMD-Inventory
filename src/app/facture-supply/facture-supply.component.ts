@@ -122,6 +122,7 @@ export class SupplyComponent implements OnInit {
     this.itemsForm.removeAt(i);
     var index = SupplyComponent.findWithAttr(SupplyComponent.selectedItems, 'id', id.value);
     SupplyComponent.selectedItems.splice(index, 1);
+    setTimeout(function(){ document.getElementById("crt0").focus();},200)
   }
 
   addSupplyInvoice() {
@@ -131,7 +132,7 @@ export class SupplyComponent implements OnInit {
         swal({
           type: 'success',
           title: 'Succès',
-          text: 'Mis à jour avec succés',
+          text: 'Modifier facture entrée ',
           showConfirmButton: false,
           timer: 1000
         });
@@ -150,11 +151,11 @@ export class SupplyComponent implements OnInit {
         swal({
           type: 'success',
           title: 'Succès',
-          text: 'Facture Supply Code: '+Response,
+          text: 'Facture entrée Code: '+Response,
           showConfirmButton: true,
           confirmButtonColor: '#3085d6',
-          confirmButtonText: 'OK',
-          timer: 4000
+          confirmButtonText: 'Oui',
+            timer: 2000
         });
       }, error => {
         swal({
@@ -171,7 +172,7 @@ export class SupplyComponent implements OnInit {
     this.supplyForm.reset();
     this.myNgForm.resetForm();
     const currentDate = new Date();
-    var factureDate = currentDate.toISOString().substring(0, 10);
+    var factureDate = this.datePipe.transform(currentDate,"dd-MM-yyyy");
     this.factureDate.setValue(factureDate);
   }
 
@@ -183,6 +184,7 @@ export class SupplyComponent implements OnInit {
       if(SupplyComponent.findWithAttr(this.itemsForm.value, 'itemID', ID) == -1)
       this.addRow(element);
     });
+    setTimeout(function(){ document.getElementById("crt0").focus();},200)
   }
 
   openMultiSelect(mutliSelectModal) {

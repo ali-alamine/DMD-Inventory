@@ -4,7 +4,6 @@ import { FormBuilder, Validators, FormControl } from "@angular/forms";
 import { StockService } from "./stock.service";
 import { MenuItem } from "primeng/api";
 import Swal from "sweetalert2";
-import swal from "sweetalert2";
 import { Router } from "../../../node_modules/@angular/router";
 declare var $: any;
 
@@ -282,7 +281,7 @@ export class StockComponent implements OnInit, OnDestroy {
 
   deleteItem() {
     if (StockComponent.selectedRowData["isDamagedFlag"]) {
-      swal({
+      Swal({
         type: "error",
         title: "Attention",
         text: "Cette article contient des gâter",
@@ -291,9 +290,9 @@ export class StockComponent implements OnInit, OnDestroy {
       return;
     }
 
-    swal({
+    Swal({
       title: "Supprimer",
-      text: "vous voulez vraiment supprimer?",
+      text: "Vous voulez vraiment supprimer?",
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
@@ -307,16 +306,15 @@ export class StockComponent implements OnInit, OnDestroy {
           .subscribe(
             Response => {
               this.globalStocksDT.ajax.reload(null, false);
-              swal({
+              Swal({
                 type: "success",
                 title: "Succès",
-                // text: "ok",
                 showConfirmButton: false,
                 timer: 1000
               });
             },
             error => {
-              swal({
+              Swal({
                 type: "error",
                 title: "Attention",
                 text: "Cetts article se trouve dans des factures",

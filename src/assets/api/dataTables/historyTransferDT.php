@@ -19,6 +19,21 @@ if (count($_GET['order'])) {
 if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     $search = $_GET["search"]["value"];
 
+    if (substr_count($search, "-") == 1 )   {
+        $date_array = explode("-",$search); // split the array
+        $var_day = $date_array[0]; //day seqment
+        $var_month = $date_array[1]; //month segment
+        // $var_year = $date_array[2]; //year segment
+        $search = $var_month.'-'.$var_day; // join them together
+    } 
+    if(substr_count($search, "-") == 2 )   {
+        $date_array = explode("-",$search); // split the array
+        $var_day = $date_array[0]; //day seqment
+        $var_month = $date_array[1]; //month segment
+        $var_year = $date_array[2]; //year segment
+        $search = $var_year.'-'.$var_month.'-'.$var_day; // join them together
+    }
+
     $getAllFactureQuery = "select *,DATE_FORMAT(conv_date,'%d-%m-%Y %H:%i') AS conv_date from convt inner join item on convt.conv_itemID = item.itemID  where item_is_damaged = 0 and ( conv_date like '%" . $search . "%' OR item_name like '%" . $search . "%' OR item_code like '%" . $search . "%' ) " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
 } 

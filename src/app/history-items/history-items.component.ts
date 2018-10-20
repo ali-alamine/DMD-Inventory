@@ -21,10 +21,18 @@ export class HistoryItemsComponent implements OnInit {
   static selectedFactureID;
   static selectedOrdID;
   rightClick: MenuItem[];
-  globalHistoryItemsDT;
+  static globalHistoryItemsDT;
   private globalHistoryItemsDetailsDT;
   private itemsForm;
   static selectedFacture = new Array();
+  
+  static articleSearch = "";
+  static clientSearch = "";
+  static codeSearch = "";
+  static dateSearch = "";
+  static typeSearch = "";
+  static crtSearch = "";
+  static pieceSearch = "";
 
   constructor(private historyComponent : HistoryComponent,
     private histoeyService: HistoryService,
@@ -37,8 +45,8 @@ export class HistoryItemsComponent implements OnInit {
       this.router.navigate(["login"]);
     }
     
-      if(this.globalHistoryItemsDT!= null)
-        this.globalHistoryItemsDT.ajax.reload(null, false);
+      if(HistoryItemsComponent.globalHistoryItemsDT!= null)
+      HistoryItemsComponent.globalHistoryItemsDT.ajax.reload(null, false);
     this.getHistoryItemsDT();
 
     this.rightClick = [
@@ -77,27 +85,60 @@ export class HistoryItemsComponent implements OnInit {
     ];
   }
   getHistoryItemsDT(){
-    if(this.globalHistoryItemsDT==null){
+    $("#historyItemsDT thead tr")
+    .clone(true)
+    .appendTo("#historyItemsDT thead");
+  $("#historyItemsDT thead tr:eq(1) th").each(function(i) {
+    var title = $(this).text();
+    $(this).html(
+      '<input class="test123" type="text" placeholder="Search ' +
+        title +
+        '" />'
+    );
+    // debugger
+    $("input", this).on("keyup change", function() {
+      if (i == 0) HistoryItemsComponent.codeSearch = this.value;
+      else if (i == 1) HistoryItemsComponent.typeSearch = this.value;
+      else if (i == 2) HistoryItemsComponent.articleSearch = this.value;
+      else if (i == 3) HistoryItemsComponent.crtSearch = this.value;
+      else if (i == 4) HistoryItemsComponent.pieceSearch = this.value;
+      else if (i == 5) HistoryItemsComponent.dateSearch = this.value;
+      else if (i == 6) HistoryItemsComponent.clientSearch = this.value;
+      HistoryItemsComponent.globalHistoryItemsDT.ajax.reload();
+    });
+  });
+  
+    // if(HistoryItemsComponent.globalHistoryItemsDT==null){
       var historyItemsDT = $('#historyItemsDT').DataTable({
-        buttons: ["print"],
         responsive: false,
+        orderCellsTop: true,
         paging: true,
         pagingType: "full_numbers",
         serverSide: true,
         processing: true,
+        searching: false,
         ordering: true,
-        stateSave: true,      
-        autoWidth: true,
+        stateSave: false,
+        fixedHeader: true,
         select: {
-          "style": "single"
+          style: "single"
         },
-        searching: true,
-        lengthMenu: [[50, 100, 150, 200, 300], [50, 100, 150, 200, 300]],
+        lengthMenu: [[25, 50, 100, 150, 200, 300], [25, 50, 100, 150, 200, 300]],
         ajax: {
-          type: "get",
-          url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/historyDT.php",
-          data:{"show":"items"},
-          cache: false,
+        type: "get",
+          url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/historyItemsDT.php",
+          data: function(d) {
+            return $.extend({}, d, {
+              articleSearch: HistoryItemsComponent.articleSearch,
+              dateSearch: HistoryItemsComponent.dateSearch,
+              codeSearch: HistoryItemsComponent.codeSearch,
+              crtSearch: HistoryItemsComponent.crtSearch,
+              pieceSearch: HistoryItemsComponent.pieceSearch,
+              clientSearch: HistoryItemsComponent.clientSearch,
+              typeSearch: HistoryItemsComponent.typeSearch
+            });
+          },
+          cache: true,
           async: true
         },
         order: [[0, 'asc']],
@@ -162,7 +203,7 @@ export class HistoryItemsComponent implements OnInit {
         localStorage.removeItem('XOffset');
         localStorage.removeItem('YOffset');
       }
-      this.globalHistoryItemsDT = historyItemsDT;
+      HistoryItemsComponent.globalHistoryItemsDT = historyItemsDT;
       historyItemsDT.on('select', function (e, dt, type, indexes) {
         HistoryItemsComponent.selectedFacture = [];
         if (type === 'row') {
@@ -197,9 +238,19 @@ export class HistoryItemsComponent implements OnInit {
       $('#historyItemsDT').on('key-blur.dt', function (e, datatable, cell) {
         $(historyItemsDT.row(cell.index().row).node()).removeClass('selected');
       });
-    } else{
-      this.globalHistoryItemsDT.ajax.reload(null, false);
-    }
+    // } else{
+    //   HistoryItemsComponent.globalHistoryItemsDT.ajax.reload(null, false);
+    // }
+  }
+  ngOnDestroy() {
+    HistoryItemsComponent.clientSearch="";
+    HistoryItemsComponent.articleSearch="";
+    HistoryItemsComponent.crtSearch="";
+    HistoryItemsComponent.pieceSearch="";
+    HistoryItemsComponent.typeSearch="";
+    HistoryItemsComponent.codeSearch="";
+    HistoryItemsComponent.dateSearch="";
+    HistoryItemsComponent.globalHistoryItemsDT.fixedHeader.disable();
   }
   openShowDetails() {
     this.historyComponent.showFactureDetails(HistoryItemsComponent.selectedFacture);
@@ -228,16 +279,16 @@ export class HistoryItemsComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes!',
-      cancelButtonText: 'No',
+      confirmButtonText: 'Oui!',
+      cancelButtonText: 'Non',
     }).then((result) => {
       if (result.value) {
         this.histoeyService.deleteItem(HistoryItemsComponent.selectedOrdID,HistoryItemsComponent.selectedFacture[0].type).subscribe(Response => {
-          this.globalHistoryItemsDT.ajax.reload(null, false);
+          HistoryItemsComponent.globalHistoryItemsDT.ajax.reload(null, false);
           swal({
             type: 'success',
             title: 'Succès',
-            text: "L' article est bien supprimer du facture.",
+            text: "L'article est bien supprimer du facture.",
             showConfirmButton: false,
             timer: 1000
           });

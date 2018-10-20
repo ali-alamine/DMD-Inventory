@@ -1,11 +1,9 @@
-import { Component, OnInit, ViewChild, TemplateRef, NgZone } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder } from '@angular/forms';
 import { HistoryService } from './history.service';
 import { MenuItem } from 'primeng/api';
-import { HistoryItemsComponent } from '../history-items/history-items.component';
-import { HistoryFactureComponent } from '../history-facture/history-facture.component';
 declare var $: any;
 
 @Component({
@@ -26,21 +24,11 @@ export class HistoryComponent implements OnInit {
   private showDetailsTPL : TemplateRef<any>;
   clientName; clientPhone; clientAddress; dateReq; code; type;
   badgeCount: number;
-  // private zone: NgZone;
 
   constructor(private historyService: HistoryService,
     private modalService: NgbModal,
     private router: Router, 
-    private fb: FormBuilder,
-    private zone: NgZone) { 
-      zone.runOutsideAngular(() => {
-      // this.printPage();
-      // setInterval(() => {
-        // this.time = Date.now();
-
-        // lc.tick(); // comment this line and "time" will stop updating
-      // }, 1000);
-    }) 
+    private fb: FormBuilder) {  
   }
 
   ngOnInit() {
