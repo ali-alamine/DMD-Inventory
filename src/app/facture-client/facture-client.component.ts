@@ -174,8 +174,8 @@ export class FactureClientComponent implements OnInit {
         return;
       }
       this.factureClientService.searchClient(data).subscribe(Response => {
-        this.options = Response;
         document.getElementById("delDate").focus();
+        this.options = Response;
       })
     });    
   }
@@ -307,6 +307,8 @@ export class FactureClientComponent implements OnInit {
         showConfirmButton: false,
         timer: 1000
       });
+      var routerHistory = localStorage.getItem('routerHistory');
+      this.router.navigate([routerHistory]);
     }, error => {
       swal({
         type: 'error',
@@ -320,8 +322,6 @@ export class FactureClientComponent implements OnInit {
     while (this.itemsEditForm.length !== 0) {
       this.itemsEditForm.removeAt(0)
     }
-    var routerHistory = localStorage.getItem('routerHistory');
-    this.router.navigate([routerHistory]);
   }
   addItemsToFacture() {
     FactureClientComponent.globalMultiSelectDT.destroy();
@@ -353,9 +353,10 @@ export class FactureClientComponent implements OnInit {
   }
   addClient() {
     
-      this.factureClientService.addNewClient(this.clientForm.value).subscribe(Response => {
-        this.invoiceForm.get('clientName').setValue(this.clientForm.get('name').value);
-        this.invoiceForm.get('clientID').setValue(Response);
+    this.factureClientService.addNewClient(this.clientForm.value).subscribe(Response => {
+      this.invoiceForm.get('clientName').setValue(this.clientForm.get('name').value);
+      this.invoiceForm.get('clientID').setValue(Response);
+      document.getElementById("delDate").focus();
         swal({
           type: 'success',
           title: 'Succès',
@@ -372,7 +373,6 @@ export class FactureClientComponent implements OnInit {
       });
 
     this.modalReference.close();
-    document.getElementById("delDate").focus();
   }
   openMultiSelect(mutliSelectModal) {
     this.modalReference = this.modalService.open(mutliSelectModal, { centered: true, size: 'lg', ariaLabelledBy: 'modal-basic-title' });

@@ -202,6 +202,8 @@ export class FactureReturnComponent implements OnInit {
             showConfirmButton: false,
             timer: 1000
           });
+          var routerHistory = localStorage.getItem('routerHistory');
+          this.router.navigate([routerHistory]);
         }, error => {
           swal({
             type: 'error',
@@ -215,8 +217,6 @@ export class FactureReturnComponent implements OnInit {
         while (this.itemsEditForm.length !== 0) {
           this.itemsEditForm.removeAt(0)
         }
-        var routerHistory = localStorage.getItem('routerHistory');
-        this.router.navigate([routerHistory]);
     }
     addItemsToFacture() {
       FactureReturnComponent.globalMultiSelectDT.destroy();

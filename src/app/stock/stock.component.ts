@@ -79,7 +79,7 @@ export class StockComponent implements OnInit, OnDestroy {
         {
           targets: 1,
           createdCell: function(td, cellData, rowData, row, col) {
-            if (rowData["isDamagedFlag"] && rowData["pieceD"] != 0 && rowData["crtD"] != 0 ) {
+            if (rowData["isDamagedFlag"] && (rowData["pieceD"] != 0 || rowData["crtD"] != 0) ) {
               $(td).html(
                 cellData +
                   " <i style='float:right; color: #FF0000;' md-18 class='material-icons'>new_releases</i> "
@@ -89,7 +89,7 @@ export class StockComponent implements OnInit, OnDestroy {
         }
       ],
       createdRow: function(row, data, index) {
-        if (data["isDamagedFlag"] == 1 && data["pieceD"] != 0 && data["crtD"] != 0) {
+        if (data["isDamagedFlag"] == 1 && (data["pieceD"] != 0 || data["crtD"] != 0)) {
           $(row).addClass("text-danger");
           $(row).attr(
             "title",
@@ -121,7 +121,7 @@ export class StockComponent implements OnInit, OnDestroy {
         }
       },
       {
-        label: "Effacer",
+        label: "Supprimer",
         icon: "pi pi-fw pi-times",
         command: event => {
           let element: HTMLElement = document.getElementById(
@@ -131,7 +131,7 @@ export class StockComponent implements OnInit, OnDestroy {
         }
       },
       {
-        label: "Chart",
+        label: "Graphe",
         icon: "pi pi-fw pi-calendar",
         command: event => {
           let element: HTMLElement = document.getElementById(
@@ -213,8 +213,8 @@ export class StockComponent implements OnInit, OnDestroy {
         this.globalStocksDT.ajax.reload(null, false);
         Swal({
           type: "success",
-          title: "Success",
-          text: "damaged items transfered Successfully",
+          title: "Succès",
+          text: "Transférer une article gâter",
           showConfirmButton: false,
           timer: 1000
         });
@@ -241,8 +241,8 @@ export class StockComponent implements OnInit, OnDestroy {
           this.globalStocksDT.ajax.reload(null, false);
           Swal({
             type: "success",
-            title: "Success",
-            text: "Item Updated Successfully",
+            title: "Succès",
+            text: "Modifier une article ",
             showConfirmButton: false,
             timer: 1000
           });
@@ -261,8 +261,8 @@ export class StockComponent implements OnInit, OnDestroy {
           this.globalStocksDT.ajax.reload(null, false);
           Swal({
             type: "success",
-            title: "Success",
-            text: "Item Added Successfully",
+            title: "Succès",
+            text: "Ajouter une article",
             showConfirmButton: false,
             timer: 1000
           });
@@ -284,21 +284,22 @@ export class StockComponent implements OnInit, OnDestroy {
     if (StockComponent.selectedRowData["isDamagedFlag"]) {
       swal({
         type: "error",
-        title: "vous ne pouvez pas",
-        text: "l'article a des factures"
-      });
+        title: "Attention",
+        text: "Cette article contient des gâter",
+        confirmButtonText: "Oui",
+    });
       return;
     }
 
     swal({
-      title: "effacer ?",
-      text: "?",
+      title: "Supprimer",
+      text: "vous voulez vraiment supprimer?",
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes!",
-      cancelButtonText: "No"
+      confirmButtonText: "Oui!",
+      cancelButtonText: "Non"
     }).then(result => {
       if (result.value) {
         this.stockService
@@ -309,7 +310,7 @@ export class StockComponent implements OnInit, OnDestroy {
               swal({
                 type: "success",
                 title: "Succès",
-                text: "ok",
+                // text: "ok",
                 showConfirmButton: false,
                 timer: 1000
               });
@@ -317,8 +318,9 @@ export class StockComponent implements OnInit, OnDestroy {
             error => {
               swal({
                 type: "error",
-                title: "vous ne pouvez pas",
-                text: "l'article a des factures"
+                title: "Attention",
+                text: "Cetts article se trouve dans des factures",
+                confirmButtonText: "Oui",
               });
             }
           );

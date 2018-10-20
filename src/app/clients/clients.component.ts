@@ -113,7 +113,17 @@ export class ClientsComponent implements OnInit, OnDestroy {
           ) as HTMLElement;
           element.click();
         }
-      }
+      },
+      {
+        label: "Supprimer",
+        icon: "pi pi-fw pi-times",
+        command: event => {
+          let element: HTMLElement = document.getElementById(
+            "deleteBtn"
+          ) as HTMLElement;
+          element.click();
+        }
+      },
     ];
     ClientsComponent.globalClientsDT = subscriberDataTable;
 
@@ -219,7 +229,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
           Swal({
             type: "success",
             title: "Succès",
-            text: "Client mis à jour avec succès",
+            text: "Modifier client",
             showConfirmButton: false,
             timer: 1000
           });
@@ -239,7 +249,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
           Swal({
             type: "success",
             title: "Succès",
-            text: "Client ajouté avec succès",
+            text: "Ajouter client",
             showConfirmButton: false,
             timer: 1000
           });
@@ -256,7 +266,43 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
     this.modalReference.close();
   }
-
+  deleteClient() {
+    // console.log(ClientsComponent.selectedClientID)
+    Swal({
+      title: "Supprimer",
+      text: "vous voulez vraiment supprimer?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Oui!",
+      cancelButtonText: "Non"
+    }).then(result => {
+      if (result.value) {
+        this.clientsService
+          .deleteClient(ClientsComponent.selectedClientID)
+          .subscribe(
+            Response => {
+              ClientsComponent.globalClientsDT.ajax.reload(null, false);
+              Swal({
+                type: "success",
+                title: "Succès",
+                showConfirmButton: false,
+                timer: 1000
+              });
+            },
+            error => {
+              Swal({
+                type: "error",
+                title: "Attention",
+                text: "Ce client se trouve dans des factures",
+                confirmButtonText: "Oui",
+    });
+            }
+          );
+      }
+    });
+  }
   get name() {
     return this.clientForm.get("name");
   }

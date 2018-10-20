@@ -135,6 +135,8 @@ export class SupplyComponent implements OnInit {
           showConfirmButton: false,
           timer: 1000
         });
+        var routerHistory = localStorage.getItem('routerHistory');
+        this.router.navigate([routerHistory]);
       }, error => {
         swal({
           type: 'error',

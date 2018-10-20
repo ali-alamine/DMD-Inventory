@@ -26,6 +26,9 @@ export class HistoryFactureComponent implements OnInit {
   globalHistoryFactureDT;
   private itemsForm;
   static selectedFacture = new Array();
+  static nameSearch = "";
+  static codeSearch = "";
+  static dateSearch = "";
 
   constructor(private historyComponent : HistoryComponent,
     private historyService: HistoryService,
@@ -38,8 +41,6 @@ export class HistoryFactureComponent implements OnInit {
       this.router.navigate(["login"]);
     }
     this.getHistoryFactureDT();
-    var tableinfo = this.globalHistoryFactureDT.page.info();
-      var total = tableinfo.recordsTotal;
     this.rightClick = [
       {
         label: 'Afficher',
@@ -78,6 +79,26 @@ export class HistoryFactureComponent implements OnInit {
   }
   getHistoryFactureDT(){
     if(this.globalHistoryFactureDT==null){
+      // debugger
+    $("#historyFactureDT thead tr")
+    .clone(true)
+    .appendTo("#historyFactureDT thead");
+  $("#historyFactureDT thead tr:eq(1) th").each(function(i) {
+    var title = $(this).text();
+    $(this).html(
+      '<input class="test123" type="text" placeholder="Search ' +
+        title +
+        '" />'
+    );
+
+    $("input", this).on("keyup change", function() {
+      if (i == 0) HistoryFactureComponent.nameSearch = this.value;
+      else if (i == 1) HistoryFactureComponent.dateSearch = this.value;
+      else if (i == 2) HistoryFactureComponent.codeSearch = this.value;
+      this.globalHistoryFactureDT.ajax.reload();
+    });
+  });
+
       var historyFactureDT = $('#historyFactureDT').DataTable({
         buttons: ["print"],
         responsive: false,
@@ -96,7 +117,15 @@ export class HistoryFactureComponent implements OnInit {
         ajax: {
           type: "get",
           url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/historyDT.php",
-          data:{"show":"facture"},
+          data: function(d) {
+            return $.extend({}, d, {
+              show: "facture",
+              nameSearch: HistoryFactureComponent.nameSearch,
+              dateSearch: HistoryFactureComponent.nameSearch,
+              codeSearch: HistoryFactureComponent.nameSearch
+            });
+          },
+          // data:{"show":"facture"},
           cache: false,
           async: true
         },
@@ -178,7 +207,29 @@ export class HistoryFactureComponent implements OnInit {
       this.globalHistoryFactureDT.ajax.reload(null, false);
     }
   }
-  
+  ngOnDestroy() {
+    HistoryFactureComponent.nameSearch="";
+    HistoryFactureComponent.nameSearch="";
+    HistoryFactureComponent.nameSearch="";
+
+    // var fixedHeaderEle = document.getElementsByClassName('fixedHeader');
+    // angular.element(fixedHeaderEle).remove();
+    // var fixedFooterEle = document.getElementsByClassName('fixedFooter');
+    // angular.element(fixedFooterEle).remove();
+    
+
+    // let element = this.elRef.nativeElement.getElementsByClassName('fixedHeader-floating');
+    // let elem = document.getElementsByClassName("fixedHeader-floating");
+    
+    // console.log(element);
+    // console.log(elem);
+
+    
+    // elem.style.display = element.style.display === 'none' ? 'block' : 'none';
+
+    this.globalHistoryFactureDT.fixedHeader.disable();
+
+  }
   openShowDetails() {
     this.historyComponent.showFactureDetails(HistoryFactureComponent.selectedFacture);
   }

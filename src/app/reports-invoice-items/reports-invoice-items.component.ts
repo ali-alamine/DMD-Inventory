@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { formatDate } from "@angular/common";
 import { ReportsService } from "../reports/reports.service";
+import { Router } from "../../../node_modules/@angular/router";
 declare var $: any;
 
 @Component({
@@ -19,9 +20,12 @@ export class ReportsInvoiceItemsComponent implements OnInit {
   private static toDate;
   options: any[];
   static clientID: any;
-  constructor(private fb: FormBuilder, private reportService: ReportsService) {}
+  constructor(private fb: FormBuilder, private reportService: ReportsService,private router: Router) {}
 
   ngOnInit() {
+    if (localStorage.getItem("user") !== '1') {
+      this.router.navigate(["login"]);
+    }
     var reportInvItemDT = $("#invoiceItemReportDT").DataTable({
       responsive: false,
       dom: "Bfrtip",
