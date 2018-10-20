@@ -34,9 +34,9 @@ export class HistoryFactureComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    // if (localStorage.getItem("user") !== '1') {
-    //   this.router.navigate(["login"]);
-    // }
+    if (localStorage.getItem("user") !== '1') {
+      this.router.navigate(["login"]);
+    }
     this.getHistoryFactureDT();
     var tableinfo = this.globalHistoryFactureDT.page.info();
       var total = tableinfo.recordsTotal;
