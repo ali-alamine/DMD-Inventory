@@ -58,7 +58,7 @@ export class HistoryFactureComponent implements OnInit {
         }
       },
       {
-        label: 'Imprimer la facture',
+        label: 'Imprimer',
         icon: 'pi pi-fw pi-print',
         command: (event) => {
           let element: HTMLElement = document.getElementById('printBtn') as HTMLElement;

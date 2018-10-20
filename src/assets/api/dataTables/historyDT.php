@@ -23,9 +23,9 @@ if($show=="return")
     $rowsCount = mysqli_fetch_assoc(mysqli_query(openConn(), "SELECT COUNT(invID) as exp FROM invoice INNER JOIN person on perID= inv_perID where inv_type = 'FR' and inv_status='-1'"))['exp'];
 if (count($_GET['order'])) {
     $orderBy = $_GET['columns'][$_GET['order'][0]['column']]['data'];
-    // if ($orderBy == 'inv_date_req') {
-    //     $orderBy = 'DATETIME(inv_date_req)';
-    // }
+    if ($orderBy == 'inv_date_req') {
+        $orderBy = 'DATE_FORMAT(inv_date_req,"%Y-%m-%d %H:%i")';
+    }
 
     $orderDir = $_GET['order'][0]['dir'];
     $orderString = " ORDER BY " . $orderBy . " " . $orderDir;

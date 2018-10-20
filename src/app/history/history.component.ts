@@ -143,17 +143,19 @@ export class HistoryComponent implements OnInit {
 
   printFacture(facture) {
     this.historyService.getFactureDetails(facture[0].ID,facture[0].type).subscribe(Response => {
+      this.factureDetails = Response;
+      console.log(this.factureDetails)
       this.clientName = facture[0].clientName;
       this.clientPhone = facture[0].phone;
       this.clientAddress = facture[0].address;
       this.dateReq = facture[0].date_req;
       this.code = facture[0].code;
       this.type = facture[0].type;
-      this.zone.run(() => {
+      // this.zone.run(() => {
         // this.factureDetails;
-        this.factureDetails = Response;
-      });
-      this.printPage();
+      // });
+      if(this.factureDetails!= null)
+        this.printPage();
     }, error => {
       alert(error)
     });
@@ -163,12 +165,82 @@ export class HistoryComponent implements OnInit {
 //   return this._inner.run(fn, applyThis, applyArgs);
 // }
 printPage(){
-  console.log(this.factureDetails)
   // console.log($('#printFacture').html())
-  var printContents = document.getElementById('printFacture').innerHTML;
+  // var printContents = document.getElementById('printFacture').innerHTML;
+
+  var html='';
+  if(this.type == "FC"){
+    html = html + '<div class="table table-striped noselect" id="printFacture">'+
+    '<div style="float:left;">'+
+      '<b>Nom:</b> '+this.clientName+'<br>'+
+      '<b>Téléphone:</b> '+this.clientPhone+'<br>'+
+      '<b>Adresse:</b> '+this.clientAddress+
+    '</div>'+
+    '<div style="float: right;">'+
+      '<b>Date De Commande:</b> '+this.dateReq+'<br>'+
+      '<b>Code:</b> '+this.code+
+    '</div>'+
+    '<br><br><br><hr>';
+  } else{
+    html = html + '<div class="table table-striped noselect" id="printFacture">'+
+    '<div style="float: right;">'+
+      '<b>Date De Commande:</b> '+this.dateReq+'<br>'+
+      '<b>Code:</b> '+this.code+
+    '</div>'+
+    '<br><br><br><hr>';
+  }
+  html = html +'<table class="table table-responsive table-bordered text-center test noselect" style="width:100%;  border-collapse: collapse; border: 1px solid black;">'+
+                '<thead>'+
+                '<tr>'+
+                '<th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">ARTICLES</th>'+
+                '<th style="border: 1px solid black;" class="text-center mousetrap" colspan="2">QUANTITE</th>'+
+                '<th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">P.Unit</th>'+
+                        '<th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">Montant</th>'+
+                    '</tr>'+
+                    '<tr>'+
+                        '<th style="border: 1px solid black;" class="text-center mousetrap">CLS/CRT</th>'+
+                        '<th style="border: 1px solid black;" class="text-center mousetrap">PIECE</th>'+
+                    '</tr>'+
+                '</thead>'+
+              '<tbody>';
+// console.log(this.factureDetails.length)
+this.factureDetails.forEach(element => {
+  html = html + '<tr><td style="border: 1px solid black;">'+element.item_name+'</td>'+
+                '<td style="border: 1px solid black;">'+element.ord_crt+'</td>'+
+                '<td style="border: 1px solid black;">'+element.ord_piece+'</td>'+
+                '<td style="border: 1px solid black;"></td>'+
+                '<td style="border: 1px solid black;"></td></tr>';
+  // this.addFactureEditRow(element);
+  // SupplyComponent.selectedItems.push({ id: element['itemID'], name: element['item_name'], colisage:element['item_packing_list'] });
+});
+// for(var i = 0 ; i< this.factureDetails.lengthChange; i++){
+
+// }
+html =html +'</tbody>'+
+            '</table>'+ 
+            '<hr>'+
+            '<div style="float:left;" class="noselect">'+
+            '<label style="font-size: 13px;">Le Responseble</label>'+
+            '<label>----------------------</label>'+
+            '</div>'+
+            '<div style="float:right;" class="noselect">'+
+            '<label style="font-size: 13px;">Num de cls/crt</label>'+
+            '<label>-----------------------</label>'+
+            '</div>'+
+            '<br>'+
+            '<br>'+
+            '<div style="float:left;" class="noselect">'+
+                  '<label style="font-size: 13px;">Le Client</label>'+
+                  '<label>-----------------------</label>'+
+              '</div>'+
+            '<div  style="float:right;" class="noselect">'+
+            '<label style="font-size: 13px;">Num de piece</label>'+
+            '<label>-----------------------</label>'+
+            '</div>'+
+            '</div></div>';
   var popupWin = window.open('', '_blank', 'width=800,height=600');
   popupWin.document.open();
-  popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="../../styles.css"></head><body onload="window.print()">' + printContents + '</body></html>');
+  popupWin.document.write('<html><body onload="window.print()">'+ html +'</body></html>');
   popupWin.document.close();
   setTimeout(function(){ popupWin.close(); }, 1000);
   }
