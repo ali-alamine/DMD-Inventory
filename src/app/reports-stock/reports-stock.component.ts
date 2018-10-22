@@ -22,33 +22,62 @@ export class ReportsStockComponent implements OnInit {
       dom: 'Bfrtip',
       buttons: [
         {
-            extend: 'print',
-            messageTop: 'Subscribers Report',
-            text: 'Print all',
-            exportOptions: {
-                columns: ':visible',
-                modifier: {
-                  selected: null
-              }
+          extend: "print",
+          messageTop: "Stock Rapport",
+          text: "Imprimer",
+          exportOptions: {
+            columns: ":visible",
+            modifier: {
+              selected: null
             }
+          }
         },
-        'colvis',
         {
-          extend: 'print',
-          text: 'Print selected'
+          extend: "print",
+          text: "Imprimer sélectionné"
+        },
+        {
+          extend: "colvis",
+          text: "visibilité des colonnes"
+        },
+        "pageLength",
+        "excel"
+      ],
+      language: {
+        "sProcessing":     "Traitement en cours...",
+        "sSearch":         "Rechercher&nbsp;:",
+        "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+        "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+        "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+        "sInfoPostFix":    "",
+        "sLoadingRecords": "Chargement en cours...",
+        "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+        "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+        "oPaginate": {
+            "sFirst":      "Premier",
+            "sPrevious":   "Pr&eacute;c&eacute;dent",
+            "sNext":       "Suivant",
+            "sLast":       "Dernier"
+        },
+        "oAria": {
+            "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+            "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+        },
+        "select": {
+                "rows": {
+                    _: "%d lignes séléctionnées",
+                    0: "Aucune ligne séléctionnée",
+                    1: "1 ligne séléctionnée"
+                } 
+        },
+        buttons: {
+          pageLength: {
+            _: "Afficher %d éléments",
+            "-1": "Tout afficher"
+          }
+        }
       },
-      'pageLength',
-      'excel'
-      // ,
-      // {
-      //   extend: 'pdf',
-      //   customize: function (doc) {
-      //     doc.content[1].table.alignment = 'center';
-      //     doc.content[1].table.widths = 
-      //         Array(doc.content[1].table.body[0].length + 1).join('*').split('');
-      //   }
-      // }
-    ],
       paging: true,
       pagingType: "full_numbers",
       serverSide: true,
@@ -73,11 +102,11 @@ export class ReportsStockComponent implements OnInit {
       },
       order: [[0, 'asc']],
       columns: [
-        { data: "item_name", title: "name" },
-        { data: "item_is_damaged", title: "gate" },
-        { data: "item_code", title: "code" },
-        { data: "item_packing_list", title: "colisage" },
-        { data: "item_piece", title: "piece" },
+        { data: "item_name", title: "Article" },
+        // { data: "item_is_damaged", title: "Gâte" },
+        { data: "item_code", title: "Code" },
+        { data: "item_packing_list", title: "Colisage" },
+        { data: "item_piece", title: "Piece" },
         { data: "crt", title: "CRT" }
 
       ]

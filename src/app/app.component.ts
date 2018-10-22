@@ -23,12 +23,12 @@ export class AppComponent {
       }
   });
     
-  //   if (localStorage.getItem("user") !== '1')
-  //     this.router.navigate(["login"]);
-  // }
-  // @HostListener('window:beforeunload')
-  // destroyLocalStorage() {
-  //       localStorage.setItem("user", '0');
-  //       // localStorage.clear();
+    if (localStorage.getItem("user") !== '1')
+      this.router.navigate(["login"]);
+  }
+  @HostListener('window:beforeunload')
+  destroyLocalStorage() {
+        localStorage.setItem("user", '0');
+        // localStorage.clear();
   }
 }

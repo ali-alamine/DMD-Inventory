@@ -77,8 +77,8 @@
       </div>
 
     </form>
-    <mat-error *ngIf="maxPiece < (tCRT * tcolisage) + tPiece">vous dépassez le stock total ..change le plus tard</mat-error>
-    <mat-error *ngIf="(tCRT * tcolisage) + tPiece == 0 ">vous ne pouvez pas transférer 0 pièce ..change le plus tard</mat-error>
+    <mat-error *ngIf="maxPiece < (tCRT * tcolisage) + tPiece">vous dépassez le stock total</mat-error>
+    <mat-error *ngIf="(tCRT * tcolisage) + tPiece == 0 ">vous ne pouvez pas transférer 0 pièce</mat-error>
   </div>
   <div class="modal-footer noselect">
     <button mat-raised-button name="addButton" color="primary" (click)="submitTransfer()" [disabled]="!transferForm.valid || (tCRT * tcolisage) + tPiece == 0 || maxPiece < (tCRT * tcolisage) + tPiece">Transfert</button>
