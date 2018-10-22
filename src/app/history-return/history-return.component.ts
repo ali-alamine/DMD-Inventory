@@ -149,8 +149,11 @@ export class HistoryReturnComponent implements OnInit {
           HistoryReturnComponent.selectedFactureDate = historyReturnDT.row(indexes).data()['inv_date_req'];
 
         }
+        else if (type === 'column') {
+          HistoryReturnComponent.selectedFactureID =-1;
+        }
       });
-      $('#historyFactureDT tbody').on('mousedown', 'tr', function (event) {
+      $('#historyReturnDT tbody').on('mousedown', 'tr', function (event) {
         if (event.which == 3) {
           historyReturnDT.row(this).select();
         }
@@ -161,11 +164,6 @@ export class HistoryReturnComponent implements OnInit {
       $('#historyReturnDT').on('key-blur.dt', function (e, datatable, cell) {
         $(historyReturnDT.row(cell.index().row).node()).removeClass('selected');
       });
-      // dt.page.info().recordsDisplay
-      // var tableinfo = historyReturnDT.variations.featureVariationRecords;
-      // var tableinfo = historyReturnDT.page.records;
-      // console.log(tableinfo)
-      // var total = tableinfo.recordsTotal;
     } else{
       this.globalHistoryReturnDT.ajax.reload(null, false);
     }
@@ -200,7 +198,7 @@ export class HistoryReturnComponent implements OnInit {
       } 
       swal({
         type: 'success',
-        title: 'Success',
+        title: 'Succès',
         text: 'Article confirmer.',
         showConfirmButton: false,
         timer: 1000
@@ -223,7 +221,7 @@ export class HistoryReturnComponent implements OnInit {
       } 
       swal({
         type: 'success',
-        title: 'Success',
+        title: 'Succès',
         text: 'Article rejeter.',
         showConfirmButton: false,
         timer: 1000
@@ -238,7 +236,7 @@ export class HistoryReturnComponent implements OnInit {
   }
   confirmAll(){
     var title = "Confirmer Article";
-    var text = "Vous voulez vraiment confirmer toutes les Articles de cette Facture!"
+    var text = "Vous voulez vraiment confirmer toutes les articles de cette facture!"
     swal({
       title: title,
       html: text,
@@ -256,7 +254,7 @@ export class HistoryReturnComponent implements OnInit {
           swal({
             type: 'success',
             title: 'Succès',
-            text: "La Facture est confirmer.",
+            text: "Toutes les articles sont confirmés.",
             showConfirmButton: false,
             timer: 1000
           });
@@ -272,7 +270,7 @@ export class HistoryReturnComponent implements OnInit {
   }
   rejectAll(){
     var title = "Rejeter Article";
-    var text = "Vous voulez vraiment rejeter toutes les Articles de cette Facture!"
+    var text = "Vous voulez vraiment rejeter toutes les articles de cette facture!"
     swal({
       title: title,
       html: text,
@@ -290,7 +288,7 @@ export class HistoryReturnComponent implements OnInit {
           swal({
             type: 'success',
             title: 'Succès',
-            text: "La Facture est rejeter.",
+            text: "Toutes les articles sont rejetés.",
             showConfirmButton: false,
             timer: 1000
           });
