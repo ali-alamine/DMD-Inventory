@@ -66,23 +66,24 @@ if (isset($_GET['dateSearch']) && $_GET['dateSearch'] != "") {
         $var_year = $date_array[2]; //year segment
         $dateSearch = $var_year.'-'.$var_month.'-'.$var_day; // join them together
     }
-    $condition = $condition . " AND DATE_FORMAT(inv_date_req,'%Y-%m-%d %H:%i') LIKE '%" . $dateSearch."%' ";
+    $condition = $condition . " AND inv_date_req LIKE '%" . $dateSearch."%' ";
 
 }
 
 
 if (count($_GET['order'])) {
     $orderBy = $_GET['columns'][$_GET['order'][0]['column']]['data'];
-    if ($orderBy == 'inv_date_req') {
-        $orderBy = 'DATE_FORMAT(inv_date_req,"%Y-%m-%d %H:%i")';
-    }
+    // if ($orderBy == 'inv_date_req') {
+        
+    //     $orderBy = 'DATE_FORMAT(inv_date_req,"Y-m-d H:i")';
+    // }
 
     $orderDir = $_GET['order'][0]['dir'];
     $orderString = " ORDER BY " . $orderBy . " " . $orderDir;
 }
 $getAllFactureQuery = "(select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,
-DATE_FORMAT(inv_date_del,'%d-%m-%Y %H:%i') AS inv_date_del,
-DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req
+inv_date_del,
+inv_date_req
 from order_inv  
         INNER JOIN invoice on invID = ord_invID 
         INNER JOIN person on perID = inv_perID  
@@ -90,8 +91,8 @@ from order_inv
         " . $condition . " and ord_isDeleted = '0' and inv_type != 'FR')
     UNION
     (select ordID,invID,ord_crt,ord_piece,item_name,per_name,per_phone,per_address,inv_code,inv_type,
-    DATE_FORMAT(inv_date_del,'%d-%m-%Y %H:%i') AS inv_date_del,
-    DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req 
+    inv_date_del,
+    inv_date_req 
     from order_inv  
         INNER JOIN invoice on invID = ord_invID 
         INNER JOIN person on perID = inv_perID  
@@ -120,7 +121,7 @@ if ($getAllFactureQuerySQL) {
             $jsonData = $jsonData . '"inv_code":"' . $row['inv_code'] . '",';
             $jsonData = $jsonData . '"inv_type":"' . $row['inv_type'] . '",';
             $jsonData = $jsonData . '"inv_date_del":"' . $row['inv_date_del'] . '",';
-            $jsonData = $jsonData . '"inv_date_req":"' . $row['inv_date_req'] . '"}';
+            $jsonData = $jsonData . '"inv_date_req":"' .  date('d-m-Y H:i',strtotime($row['inv_date_req'])) . '"}';
         }
 
     }
