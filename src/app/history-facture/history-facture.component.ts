@@ -23,9 +23,12 @@ export class HistoryFactureComponent implements OnInit {
   private selectedFactureRowData;
   static selectedFactureID;
   rightClick: MenuItem[];
-  globalHistoryFactureDT;
+  static globalHistoryFactureDT;
   private itemsForm;
   static selectedFacture = new Array();
+  static nameSearch = "";
+  static codeSearch = "";
+  static dateSearch = "";
 
   constructor(private historyComponent : HistoryComponent,
     private historyService: HistoryService,
@@ -38,8 +41,6 @@ export class HistoryFactureComponent implements OnInit {
       this.router.navigate(["login"]);
     }
     this.getHistoryFactureDT();
-    var tableinfo = this.globalHistoryFactureDT.page.info();
-      var total = tableinfo.recordsTotal;
     this.rightClick = [
       {
         label: 'Afficher',
@@ -58,7 +59,7 @@ export class HistoryFactureComponent implements OnInit {
         }
       },
       {
-        label: 'Imprimer la facture',
+        label: 'Imprimer',
         icon: 'pi pi-fw pi-print',
         command: (event) => {
           let element: HTMLElement = document.getElementById('printBtn') as HTMLElement;
@@ -77,34 +78,60 @@ export class HistoryFactureComponent implements OnInit {
     
   }
   getHistoryFactureDT(){
-    if(this.globalHistoryFactureDT==null){
+    $("#historyFactureDT thead tr")
+    .clone(true)
+    .appendTo("#historyFactureDT thead");
+  $("#historyFactureDT thead tr:eq(1) th").each(function(i) {
+    var title = $(this).text();
+    $(this).html(
+      '<input class="test123" type="text" placeholder="Rechercher ' +
+        title +
+        '" />'
+    );
+    $("input", this).on("keyup change", function() {
+      if (i == 0) HistoryFactureComponent.nameSearch = this.value;
+      else if (i == 1) HistoryFactureComponent.dateSearch = this.value;
+      else if (i == 2) HistoryFactureComponent.codeSearch = this.value;
+      HistoryFactureComponent.globalHistoryFactureDT.ajax.reload();
+    });
+  });
+  
+    // if(HistoryFactureComponent.globalHistoryFactureDT==null){
+
       var historyFactureDT = $('#historyFactureDT').DataTable({
-        buttons: ["print"],
         responsive: false,
-        paging: true,
-        pagingType: "full_numbers",
-        serverSide: true,
-        processing: true,
-        ordering: true,
-        stateSave: true,      
-        autoWidth: true,
-        select: {
-          "style": "single"
-        },
-        searching: true,
-        lengthMenu: [[50, 100, 150, 200, 300], [50, 100, 150, 200, 300]],
-        ajax: {
-          type: "get",
+      orderCellsTop: true,
+      paging: true,
+      pagingType: "full_numbers",
+      serverSide: true,
+      processing: true,
+      searching: false,
+      ordering: true,
+      stateSave: false,
+      fixedHeader: true,
+      select: {
+        style: "single"
+      },
+      lengthMenu: [[25, 50, 100, 150, 200, 300], [25, 50, 100, 150, 200, 300]],
+      ajax: {
+        type: "get",
           url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/historyDT.php",
-          data:{"show":"facture"},
-          cache: false,
+          data: function(d) {
+            return $.extend({}, d, {
+              show: "facture",
+              nameSearch: HistoryFactureComponent.nameSearch,
+              dateSearch: HistoryFactureComponent.dateSearch,
+              codeSearch: HistoryFactureComponent.codeSearch
+            });
+          },
+          cache: true,
           async: true
         },
         order: [[0, 'asc']],
         columns: [
-          { data: "per_name", title: "Client" },
-          { data: "inv_date_req", title: "Date"},
-          { data: "inv_code", title: "Code"}
+          { data: "per_name", title: "CIENT" },
+          { data: "inv_date_req", title: "DATE"},
+          { data: "inv_code", title: "CODE"}
         ],
         "columnDefs": [ {
           "targets": 2,
@@ -119,7 +146,36 @@ export class HistoryFactureComponent implements OnInit {
               $(td).html(" <span style='color: #0000FF;' >"+data+"</span> ")
             } 
           }
-        } ]
+        } ],
+        language: {
+          "sProcessing":     "Traitement en cours...",
+          "sSearch":         "Rechercher&nbsp;:",
+          "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+          "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+          "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+          "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+          "sInfoPostFix":    "",
+          "sLoadingRecords": "Chargement en cours...",
+          "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+          "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+          "oPaginate": {
+              "sFirst":      "Premier",
+              "sPrevious":   "Pr&eacute;c&eacute;dent",
+              "sNext":       "Suivant",
+              "sLast":       "Dernier"
+          },
+          "oAria": {
+              "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+              "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+          },
+          "select": {
+                  "rows": {
+                      _: "%d lignes séléctionnées",
+                      0: "Aucune ligne séléctionnée",
+                      1: "1 ligne séléctionnée"
+                  } 
+          }
+        }
       });
       var selectedRowLS = localStorage.getItem('selectedRow');
       var x = localStorage.getItem('XOffset');
@@ -134,7 +190,7 @@ export class HistoryFactureComponent implements OnInit {
         localStorage.removeItem('XOffset');
         localStorage.removeItem('YOffset');
       }
-      this.globalHistoryFactureDT = historyFactureDT;
+      HistoryFactureComponent.globalHistoryFactureDT = historyFactureDT;
       historyFactureDT.on('select', function (e, dt, type, indexes) {
         HistoryFactureComponent.selectedFacture = [];
         if (type === 'row') {
@@ -174,11 +230,16 @@ export class HistoryFactureComponent implements OnInit {
         $(historyFactureDT.row(cell.index().row).node()).removeClass('selected');
       });      
 
-    } else{
-      this.globalHistoryFactureDT.ajax.reload(null, false);
-    }
+    // } else{
+    //   HistoryFactureComponent.globalHistoryFactureDT.ajax.reload(null, false);
+    // }
   }
-  
+  ngOnDestroy() {
+    HistoryFactureComponent.nameSearch="";
+    HistoryFactureComponent.codeSearch="";
+    HistoryFactureComponent.dateSearch="";
+    HistoryFactureComponent.globalHistoryFactureDT.fixedHeader.disable();
+  }
   openShowDetails() {
     this.historyComponent.showFactureDetails(HistoryFactureComponent.selectedFacture);
   }
@@ -209,13 +270,13 @@ export class HistoryFactureComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes!',
-      cancelButtonText: 'No',
+      confirmButtonText: 'Oui!',
+      cancelButtonText: 'Non',
     }).then((result) => {
       if (result.value) {
         this.historyService.deleteFacture(HistoryFactureComponent.selectedFactureID,HistoryFactureComponent.selectedFacture[0].type).subscribe(Response => {
           if(Response!=0){
-            this.globalHistoryFactureDT.ajax.reload(null, false);
+            HistoryFactureComponent.globalHistoryFactureDT.ajax.reload(null, false);
             swal({
               type: 'success',
               title: 'Succès',

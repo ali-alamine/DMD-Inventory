@@ -50,7 +50,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
     $("#clientsDT thead tr:eq(1) th").each(function(i) {
       var title = $(this).text();
       $(this).html(
-        '<input class="test123" type="text" placeholder="Search ' +
+        '<input class="test123" type="text" placeholder="Rechercher ' +
           title +
           '" />'
       );
@@ -96,11 +96,40 @@ export class ClientsComponent implements OnInit, OnDestroy {
       },
       order: [[0, "asc"]],
       columns: [
-        { data: "name", title: "Name" },
-        { data: "phone", title: "Phone" },
-        { data: "address", title: "Address" },
+        { data: "name", title: "Nom" },
+        { data: "phone", title: "Téléphone" },
+        { data: "address", title: "Adresse" },
         { data: "code", title: "Code" }
-      ]
+      ],
+      language: {
+        "sProcessing":     "Traitement en cours...",
+        "sSearch":         "Rechercher&nbsp;:",
+        "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+        "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+        "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+        "sInfoPostFix":    "",
+        "sLoadingRecords": "Chargement en cours...",
+        "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+        "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+        "oPaginate": {
+            "sFirst":      "Premier",
+            "sPrevious":   "Pr&eacute;c&eacute;dent",
+            "sNext":       "Suivant",
+            "sLast":       "Dernier"
+        },
+        "oAria": {
+            "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+            "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+        },
+        "select": {
+                "rows": {
+                    _: "%d lignes séléctionnées",
+                    0: "Aucune ligne séléctionnée",
+                    1: "1 ligne séléctionnée"
+                } 
+        }
+      }
     });
 
     this.items = [
@@ -113,7 +142,17 @@ export class ClientsComponent implements OnInit, OnDestroy {
           ) as HTMLElement;
           element.click();
         }
-      }
+      },
+      {
+        label: "Supprimer",
+        icon: "pi pi-fw pi-times",
+        command: event => {
+          let element: HTMLElement = document.getElementById(
+            "deleteBtn"
+          ) as HTMLElement;
+          element.click();
+        }
+      },
     ];
     ClientsComponent.globalClientsDT = subscriberDataTable;
 
@@ -219,7 +258,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
           Swal({
             type: "success",
             title: "Succès",
-            text: "Client mis à jour avec succès",
+            text: "Modifier client",
             showConfirmButton: false,
             timer: 1000
           });
@@ -239,7 +278,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
           Swal({
             type: "success",
             title: "Succès",
-            text: "Client ajouté avec succès",
+            text: "Ajouter client",
             showConfirmButton: false,
             timer: 1000
           });
@@ -256,7 +295,43 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
     this.modalReference.close();
   }
-
+  deleteClient() {
+    // console.log(ClientsComponent.selectedClientID)
+    Swal({
+      title: "Supprimer",
+      text: "vous voulez vraiment supprimer?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Oui!",
+      cancelButtonText: "Non"
+    }).then(result => {
+      if (result.value) {
+        this.clientsService
+          .deleteClient(ClientsComponent.selectedClientID)
+          .subscribe(
+            Response => {
+              ClientsComponent.globalClientsDT.ajax.reload(null, false);
+              Swal({
+                type: "success",
+                title: "Succès",
+                showConfirmButton: false,
+                timer: 1000
+              });
+            },
+            error => {
+              Swal({
+                type: "error",
+                title: "Attention",
+                text: "Ce client se trouve dans des factures",
+                confirmButtonText: "Oui",
+    });
+            }
+          );
+      }
+    });
+  }
   get name() {
     return this.clientForm.get("name");
   }

@@ -22,4 +22,8 @@ export class ClientsService {
       params: { keyword: data }
     });
   }
+  deleteClient(data): Observable<any> {
+    // console.log(data);
+    return this.httpClient.get(this.url + "deleteClient",{params:{ID:data}});
+  }
 }

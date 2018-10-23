@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { formatDate } from "@angular/common";
 import { ReportsService } from "../reports/reports.service";
+import { Router } from "../../../node_modules/@angular/router";
 declare var $: any;
 
 @Component({
@@ -19,16 +20,19 @@ export class ReportsInvoiceItemsComponent implements OnInit {
   private static toDate;
   options: any[];
   static clientID: any;
-  constructor(private fb: FormBuilder, private reportService: ReportsService) {}
+  constructor(private fb: FormBuilder, private reportService: ReportsService,private router: Router) {}
 
   ngOnInit() {
+    if (localStorage.getItem("user") !== '1') {
+      this.router.navigate(["login"]);
+    }
     var reportInvItemDT = $("#invoiceItemReportDT").DataTable({
       responsive: false,
       dom: "Bfrtip",
       buttons: [
         {
           extend: "print",
-          messageTop: "Facture Rapport",
+          messageTop: "Article Rapport",
           text: "Imprimer",
           exportOptions: {
             columns: ":visible",
@@ -49,6 +53,33 @@ export class ReportsInvoiceItemsComponent implements OnInit {
         "excel"
       ],
       language: {
+        "sProcessing":     "Traitement en cours...",
+        "sSearch":         "Rechercher&nbsp;:",
+        "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+        "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+        "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+        "sInfoPostFix":    "",
+        "sLoadingRecords": "Chargement en cours...",
+        "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+        "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+        "oPaginate": {
+            "sFirst":      "Premier",
+            "sPrevious":   "Pr&eacute;c&eacute;dent",
+            "sNext":       "Suivant",
+            "sLast":       "Dernier"
+        },
+        "oAria": {
+            "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+            "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+        },
+        "select": {
+                "rows": {
+                    _: "%d lignes séléctionnées",
+                    0: "Aucune ligne séléctionnée",
+                    1: "1 ligne séléctionnée"
+                } 
+        },
         buttons: {
           pageLength: {
             _: "Afficher %d éléments",
@@ -90,7 +121,7 @@ export class ReportsInvoiceItemsComponent implements OnInit {
         { data: "ord_crt", title: "CRT" },
         { data: "ord_piece", title: "Piece" },
         { data: "inv_date_req", title: "Date" },
-        { data: "per_name", title: "Client" }
+        { data: "per_name", title: "Nom Client" }
       ]
     });
     ReportsInvoiceItemsComponent.globalDataTable = reportInvItemDT;

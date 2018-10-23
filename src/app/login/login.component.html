@@ -2,7 +2,7 @@
     <div class="text-center noselect" style="padding: 150px;">
             <h4 class="modal-title" id="modal-basic-title">Connexion </h4>
             <span style='color:red;font-size: 13px;'>{{textError}}</span>
-        <form fxLayout="column" [formGroup]="userForm" autocomplete="off">
+        <form fxLayout="column" [formGroup]="userForm" autocomplete="off" (keyup.enter)= "setUser()">
             <div class="input-row" fxLayout="row">
                 <mat-form-field class="inputField" fxFlex>
                     <input matInput placeholder="Nom d'utilisateur" id="userName" formControlName="userName" type="text" name="nameInput" [appFocusDirective]="true">

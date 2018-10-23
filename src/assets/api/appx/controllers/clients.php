@@ -64,4 +64,14 @@ class clients extends REST_Controller
             exit;
         }
     }
+    public function deleteClient_get()
+    {
+        $clientID = $this->get('ID');
+        $result = $this->clients_model->deleteClient($clientID);
+        if ($result === false) {
+            $this->response("you can not", 404);
+        } else {
+            $this->response("success", 200);
+        }
+    }
 }

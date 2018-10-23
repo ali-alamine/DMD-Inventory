@@ -134,8 +134,9 @@ export class FactureClientComponent implements OnInit {
             this.itemsEditForm.push(item)
             this.lengthDeleted ++ ;
           });
-
+          setTimeout(function(){ document.getElementById("crtEdit0").focus();},200)
         } 
+
       }, error => {
         swal({
           type: 'error',
@@ -157,7 +158,6 @@ export class FactureClientComponent implements OnInit {
       var data = this.clientForm.get('name').value;
       this.factureClientService.searchClientName(data).subscribe(Response => {
         if(Response == 1){
-          // alert('exist')
           this.isExist = true;
         }
         else
@@ -174,8 +174,8 @@ export class FactureClientComponent implements OnInit {
         return;
       }
       this.factureClientService.searchClient(data).subscribe(Response => {
-        this.options = Response;
         document.getElementById("delDate").focus();
+        this.options = Response;
       })
     });    
   }
@@ -248,6 +248,8 @@ export class FactureClientComponent implements OnInit {
     this.itemsForm.removeAt(i);
     var index = FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', 'isDamaged', id.value, itemIsDamaged.value);
     FactureClientComponent.selectedItems.splice(index, 1);
+    // if(i!=0)
+      setTimeout(function(){ document.getElementById("crt0").focus();},200)
     
   }
   setClientName(id, name,phone) {
@@ -259,15 +261,17 @@ export class FactureClientComponent implements OnInit {
   addClientInvoice() {
     this.factureClientService.newClientInvoice(this.invoiceForm.value).subscribe(Response => {
       this.newCode = Response;
+      var msg = 'Facture Client Code: '+Response;
+      msg = msg +'<br/> Vous voulez imprimer?';
       swal({
         type: 'success',
         title: 'Success',
-        text: 'Facture Client Code: '+Response,
+        html: msg,
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Imprimer',
-        cancelButtonText: 'Non imprimer',
+        confirmButtonText: 'Oui',
+        cancelButtonText: 'Non',
       }).then((result) => {
         if (result.value) {
           this.printFactureClient();
@@ -303,10 +307,12 @@ export class FactureClientComponent implements OnInit {
       swal({
         type: 'success',
         title: 'Succès',
-        text: 'Mis à jour avec succés',
+        text: 'Modifier facture client',
         showConfirmButton: false,
         timer: 1000
       });
+      var routerHistory = localStorage.getItem('routerHistory');
+      this.router.navigate([routerHistory]);
     }, error => {
       swal({
         type: 'error',
@@ -320,8 +326,6 @@ export class FactureClientComponent implements OnInit {
     while (this.itemsEditForm.length !== 0) {
       this.itemsEditForm.removeAt(0)
     }
-    var routerHistory = localStorage.getItem('routerHistory');
-    this.router.navigate([routerHistory]);
   }
   addItemsToFacture() {
     FactureClientComponent.globalMultiSelectDT.destroy();
@@ -332,14 +336,14 @@ export class FactureClientComponent implements OnInit {
       var i = FactureClientComponent.findWithAttr(this.itemsForm.value, 'itemID', 'isDamaged', ID, isDamaged);
       if(this.itemsEditForm.length == 0){
         if(i == -1)
-          this.addRow(element);
+        this.addRow(element);
       } else if(this.itemsEditForm.length != 0){
         var i2 = FactureClientComponent.findWithAttr2(this.itemsEditForm.value, 'itemID', 'isDamaged', ID, isDamaged);
         if( i == -1 && i2 == -1)
-            this.addRow(element);
+        this.addRow(element);
       }
     });
-
+    setTimeout(function(){ document.getElementById("crt0").focus();},200)
   }
   openClientModal(clientModal) {
     this.modalReference = this.modalService.open(clientModal, { centered: true, ariaLabelledBy: 'modal-basic-title' });
@@ -353,13 +357,14 @@ export class FactureClientComponent implements OnInit {
   }
   addClient() {
     
-      this.factureClientService.addNewClient(this.clientForm.value).subscribe(Response => {
-        this.invoiceForm.get('clientName').setValue(this.clientForm.get('name').value);
-        this.invoiceForm.get('clientID').setValue(Response);
+    this.factureClientService.addNewClient(this.clientForm.value).subscribe(Response => {
+      this.invoiceForm.get('clientName').setValue(this.clientForm.get('name').value);
+      this.invoiceForm.get('clientID').setValue(Response);
+      document.getElementById("delDate").focus();
         swal({
           type: 'success',
           title: 'Succès',
-          text: 'Client ajouté avec succès',
+          text: 'Ajouter client',
           showConfirmButton: false,
           timer: 1000
         });
@@ -372,7 +377,6 @@ export class FactureClientComponent implements OnInit {
       });
 
     this.modalReference.close();
-    document.getElementById("delDate").focus();
   }
   openMultiSelect(mutliSelectModal) {
     this.modalReference = this.modalService.open(mutliSelectModal, { centered: true, size: 'lg', ariaLabelledBy: 'modal-basic-title' });
@@ -410,6 +414,35 @@ export class FactureClientComponent implements OnInit {
       "createdRow": function (row, data, index) {
         if (data['item_is_damaged'] == 1) {
           $(row).addClass("text-danger");
+        }
+      },
+      language: {
+        "sProcessing":     "Traitement en cours...",
+        "sSearch":         "Rechercher&nbsp;:",
+        "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+        "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+        "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+        "sInfoPostFix":    "",
+        "sLoadingRecords": "Chargement en cours...",
+        "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+        "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+        "oPaginate": {
+            "sFirst":      "Premier",
+            "sPrevious":   "Pr&eacute;c&eacute;dent",
+            "sNext":       "Suivant",
+            "sLast":       "Dernier"
+        },
+        "oAria": {
+            "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+            "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+        },
+        "select": {
+                "rows": {
+                    _: "%d lignes séléctionnées",
+                    0: "Aucune ligne séléctionnée",
+                    1: "1 ligne séléctionnée"
+                } 
         }
       }
     });

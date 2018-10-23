@@ -119,6 +119,7 @@ export class FactureReturnComponent implements OnInit {
             this.itemsEditForm.push(item);
             this.lengthDeleted ++ ;
           }
+          setTimeout(function(){ document.getElementById("crtEdit0").focus();},200)
         }
       },error => {
         console.log(error)
@@ -159,6 +160,7 @@ export class FactureReturnComponent implements OnInit {
       this.itemsForm.removeAt(i);
       var index = FactureReturnComponent.findWithAttr(FactureReturnComponent.selectedItems, 'id','gate', id.value , itemIsDamaged.value);
       FactureReturnComponent.selectedItems.splice(index, 1);
+      setTimeout(function(){ document.getElementById("crt0").focus();},200)
     }
   
     test(id, name) {
@@ -172,11 +174,11 @@ export class FactureReturnComponent implements OnInit {
           swal({
             type: 'success',
             title: 'Succès',
-            text: 'Facture Retour Code: '+Response,
+            text: 'Facture retour Code: '+Response,
             showConfirmButton: true,
             confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-            timer: 4000
+            confirmButtonText: 'Oui',
+            timer: 2000
           });
         }, error => {
           swal({
@@ -198,10 +200,12 @@ export class FactureReturnComponent implements OnInit {
           swal({
             type: 'success',
             title: 'Succès',
-            text: 'Mis à jour avec succés',
+            text: 'Modifier facture retour',
             showConfirmButton: false,
             timer: 1000
           });
+          var routerHistory = localStorage.getItem('routerHistory');
+          this.router.navigate([routerHistory]);
         }, error => {
           swal({
             type: 'error',
@@ -215,8 +219,6 @@ export class FactureReturnComponent implements OnInit {
         while (this.itemsEditForm.length !== 0) {
           this.itemsEditForm.removeAt(0)
         }
-        var routerHistory = localStorage.getItem('routerHistory');
-        this.router.navigate([routerHistory]);
     }
     addItemsToFacture() {
       FactureReturnComponent.globalMultiSelectDT.destroy();
@@ -234,6 +236,7 @@ export class FactureReturnComponent implements OnInit {
               this.addRow(element);
         }
       });
+      setTimeout(function(){ document.getElementById("crt0").focus();},200)
     }
   
     openMultiSelect(mutliSelectModal) {
@@ -274,6 +277,35 @@ export class FactureReturnComponent implements OnInit {
         "createdRow": function (row, data, index) {
           if (data['item_is_damaged'] == 1) {
             $(row).addClass("text-danger");
+          }
+        },
+        language: {
+          "sProcessing":     "Traitement en cours...",
+          "sSearch":         "Rechercher&nbsp;:",
+          "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+          "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+          "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+          "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+          "sInfoPostFix":    "",
+          "sLoadingRecords": "Chargement en cours...",
+          "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+          "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+          "oPaginate": {
+              "sFirst":      "Premier",
+              "sPrevious":   "Pr&eacute;c&eacute;dent",
+              "sNext":       "Suivant",
+              "sLast":       "Dernier"
+          },
+          "oAria": {
+              "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+              "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+          },
+          "select": {
+                  "rows": {
+                      _: "%d lignes séléctionnées",
+                      0: "Aucune ligne séléctionnée",
+                      1: "1 ligne séléctionnée"
+                  } 
           }
         }
       });

@@ -4,7 +4,6 @@ import { FormBuilder, Validators, FormControl } from "@angular/forms";
 import { StockService } from "./stock.service";
 import { MenuItem } from "primeng/api";
 import Swal from "sweetalert2";
-import swal from "sweetalert2";
 import { Router } from "../../../node_modules/@angular/router";
 declare var $: any;
 
@@ -79,7 +78,7 @@ export class StockComponent implements OnInit, OnDestroy {
         {
           targets: 1,
           createdCell: function(td, cellData, rowData, row, col) {
-            if (rowData["isDamagedFlag"] && rowData["pieceD"] != 0 && rowData["crtD"] != 0 ) {
+            if (rowData["isDamagedFlag"] && (rowData["pieceD"] != 0 || rowData["crtD"] != 0) ) {
               $(td).html(
                 cellData +
                   " <i style='float:right; color: #FF0000;' md-18 class='material-icons'>new_releases</i> "
@@ -89,12 +88,41 @@ export class StockComponent implements OnInit, OnDestroy {
         }
       ],
       createdRow: function(row, data, index) {
-        if (data["isDamagedFlag"] == 1 && data["pieceD"] != 0 && data["crtD"] != 0) {
+        if (data["isDamagedFlag"] == 1 && (data["pieceD"] != 0 || data["crtD"] != 0)) {
           $(row).addClass("text-danger");
           $(row).attr(
             "title",
             " CRT: " + data["crtD"] + " || Piece: " + data["pieceD"]
           );
+        }
+      },
+      language: {
+        "sProcessing":     "Traitement en cours...",
+        "sSearch":         "Rechercher&nbsp;:",
+        "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+        "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+        "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+        "sInfoPostFix":    "",
+        "sLoadingRecords": "Chargement en cours...",
+        "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+        "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+        "oPaginate": {
+            "sFirst":      "Premier",
+            "sPrevious":   "Pr&eacute;c&eacute;dent",
+            "sNext":       "Suivant",
+            "sLast":       "Dernier"
+        },
+        "oAria": {
+            "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+            "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+        },
+        "select": {
+                "rows": {
+                    _: "%d lignes séléctionnées",
+                    0: "Aucune ligne séléctionnée",
+                    1: "1 ligne séléctionnée"
+                } 
         }
       }
     });
@@ -121,7 +149,7 @@ export class StockComponent implements OnInit, OnDestroy {
         }
       },
       {
-        label: "Effacer",
+        label: "Supprimer",
         icon: "pi pi-fw pi-times",
         command: event => {
           let element: HTMLElement = document.getElementById(
@@ -131,7 +159,7 @@ export class StockComponent implements OnInit, OnDestroy {
         }
       },
       {
-        label: "Chart",
+        label: "Graphe",
         icon: "pi pi-fw pi-calendar",
         command: event => {
           let element: HTMLElement = document.getElementById(
@@ -213,8 +241,8 @@ export class StockComponent implements OnInit, OnDestroy {
         this.globalStocksDT.ajax.reload(null, false);
         Swal({
           type: "success",
-          title: "Success",
-          text: "damaged items transfered Successfully",
+          title: "Succès",
+          text: "Transférer une article gâter",
           showConfirmButton: false,
           timer: 1000
         });
@@ -241,8 +269,8 @@ export class StockComponent implements OnInit, OnDestroy {
           this.globalStocksDT.ajax.reload(null, false);
           Swal({
             type: "success",
-            title: "Success",
-            text: "Item Updated Successfully",
+            title: "Succès",
+            text: "Modifier une article ",
             showConfirmButton: false,
             timer: 1000
           });
@@ -261,8 +289,8 @@ export class StockComponent implements OnInit, OnDestroy {
           this.globalStocksDT.ajax.reload(null, false);
           Swal({
             type: "success",
-            title: "Success",
-            text: "Item Added Successfully",
+            title: "Succès",
+            text: "Ajouter une article",
             showConfirmButton: false,
             timer: 1000
           });
@@ -282,23 +310,24 @@ export class StockComponent implements OnInit, OnDestroy {
 
   deleteItem() {
     if (StockComponent.selectedRowData["isDamagedFlag"]) {
-      swal({
+      Swal({
         type: "error",
-        title: "vous ne pouvez pas",
-        text: "l'article a des factures"
-      });
+        title: "Attention",
+        text: "Cette article contient des gâter",
+        confirmButtonText: "Oui",
+    });
       return;
     }
 
-    swal({
-      title: "effacer ?",
-      text: "?",
+    Swal({
+      title: "Supprimer",
+      text: "Vous voulez vraiment supprimer?",
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes!",
-      cancelButtonText: "No"
+      confirmButtonText: "Oui!",
+      cancelButtonText: "Non"
     }).then(result => {
       if (result.value) {
         this.stockService
@@ -306,19 +335,19 @@ export class StockComponent implements OnInit, OnDestroy {
           .subscribe(
             Response => {
               this.globalStocksDT.ajax.reload(null, false);
-              swal({
+              Swal({
                 type: "success",
                 title: "Succès",
-                text: "ok",
                 showConfirmButton: false,
                 timer: 1000
               });
             },
             error => {
-              swal({
+              Swal({
                 type: "error",
-                title: "vous ne pouvez pas",
-                text: "l'article a des factures"
+                title: "Attention",
+                text: "Cetts article se trouve dans des factures",
+                confirmButtonText: "Oui",
               });
             }
           );

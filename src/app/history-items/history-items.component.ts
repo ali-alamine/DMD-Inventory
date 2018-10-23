@@ -21,10 +21,18 @@ export class HistoryItemsComponent implements OnInit {
   static selectedFactureID;
   static selectedOrdID;
   rightClick: MenuItem[];
-  globalHistoryItemsDT;
+  static globalHistoryItemsDT;
   private globalHistoryItemsDetailsDT;
   private itemsForm;
   static selectedFacture = new Array();
+  
+  static articleSearch = "";
+  static clientSearch = "";
+  static codeSearch = "";
+  static dateSearch = "";
+  static typeSearch = "";
+  static crtSearch = "";
+  static pieceSearch = "";
 
   constructor(private historyComponent : HistoryComponent,
     private histoeyService: HistoryService,
@@ -37,8 +45,8 @@ export class HistoryItemsComponent implements OnInit {
       this.router.navigate(["login"]);
     }
     
-      if(this.globalHistoryItemsDT!= null)
-        this.globalHistoryItemsDT.ajax.reload(null, false);
+      if(HistoryItemsComponent.globalHistoryItemsDT!= null)
+      HistoryItemsComponent.globalHistoryItemsDT.ajax.reload(null, false);
     this.getHistoryItemsDT();
 
     this.rightClick = [
@@ -59,7 +67,7 @@ export class HistoryItemsComponent implements OnInit {
         }
       },
       {
-        label: 'Imprimer la facture',
+        label: 'Imprimer',
         icon: 'pi pi-fw pi-print',
         command: (event) => {
           let element: HTMLElement = document.getElementById('printBtn') as HTMLElement;
@@ -77,27 +85,60 @@ export class HistoryItemsComponent implements OnInit {
     ];
   }
   getHistoryItemsDT(){
-    if(this.globalHistoryItemsDT==null){
+    $("#historyItemsDT thead tr")
+    .clone(true)
+    .appendTo("#historyItemsDT thead");
+  $("#historyItemsDT thead tr:eq(1) th").each(function(i) {
+    var title = $(this).text();
+    $(this).html(
+      '<input class="test123" type="text" placeholder="Rechercher ' +
+        title +
+        '" />'
+    );
+    // debugger
+    $("input", this).on("keyup change", function() {
+      if (i == 0) HistoryItemsComponent.codeSearch = this.value;
+      else if (i == 1) HistoryItemsComponent.typeSearch = this.value;
+      else if (i == 2) HistoryItemsComponent.articleSearch = this.value;
+      else if (i == 3) HistoryItemsComponent.crtSearch = this.value;
+      else if (i == 4) HistoryItemsComponent.pieceSearch = this.value;
+      else if (i == 5) HistoryItemsComponent.dateSearch = this.value;
+      else if (i == 6) HistoryItemsComponent.clientSearch = this.value;
+      HistoryItemsComponent.globalHistoryItemsDT.ajax.reload();
+    });
+  });
+  
+    // if(HistoryItemsComponent.globalHistoryItemsDT==null){
       var historyItemsDT = $('#historyItemsDT').DataTable({
-        buttons: ["print"],
         responsive: false,
+        orderCellsTop: true,
         paging: true,
         pagingType: "full_numbers",
         serverSide: true,
         processing: true,
+        searching: false,
         ordering: true,
-        stateSave: true,      
-        autoWidth: true,
+        stateSave: false,
+        fixedHeader: true,
         select: {
-          "style": "single"
+          style: "single"
         },
-        searching: true,
-        lengthMenu: [[50, 100, 150, 200, 300], [50, 100, 150, 200, 300]],
+        lengthMenu: [[25, 50, 100, 150, 200, 300], [25, 50, 100, 150, 200, 300]],
         ajax: {
-          type: "get",
-          url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/historyDT.php",
-          data:{"show":"items"},
-          cache: false,
+        type: "get",
+          url: "http://localhost/DMD-Inventory/src/assets/api/dataTables/historyItemsDT.php",
+          data: function(d) {
+            return $.extend({}, d, {
+              articleSearch: HistoryItemsComponent.articleSearch,
+              dateSearch: HistoryItemsComponent.dateSearch,
+              codeSearch: HistoryItemsComponent.codeSearch,
+              crtSearch: HistoryItemsComponent.crtSearch,
+              pieceSearch: HistoryItemsComponent.pieceSearch,
+              clientSearch: HistoryItemsComponent.clientSearch,
+              typeSearch: HistoryItemsComponent.typeSearch
+            });
+          },
+          cache: true,
           async: true
         },
         order: [[0, 'asc']],
@@ -147,7 +188,36 @@ export class HistoryItemsComponent implements OnInit {
               $(td).html(" <span style='color: #0000FF;' >"+data+"</span> ");
             } 
           }
-        }]
+        }],
+        language: {
+          "sProcessing":     "Traitement en cours...",
+          "sSearch":         "Rechercher&nbsp;:",
+          "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+          "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+          "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+          "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+          "sInfoPostFix":    "",
+          "sLoadingRecords": "Chargement en cours...",
+          "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+          "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+          "oPaginate": {
+              "sFirst":      "Premier",
+              "sPrevious":   "Pr&eacute;c&eacute;dent",
+              "sNext":       "Suivant",
+              "sLast":       "Dernier"
+          },
+          "oAria": {
+              "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+              "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+          },
+          "select": {
+                  "rows": {
+                      _: "%d lignes séléctionnées",
+                      0: "Aucune ligne séléctionnée",
+                      1: "1 ligne séléctionnée"
+                  } 
+          }
+        }
       });
       var selectedRowLS = localStorage.getItem('selectedRow');
       var x = localStorage.getItem('XOffset');
@@ -162,7 +232,7 @@ export class HistoryItemsComponent implements OnInit {
         localStorage.removeItem('XOffset');
         localStorage.removeItem('YOffset');
       }
-      this.globalHistoryItemsDT = historyItemsDT;
+      HistoryItemsComponent.globalHistoryItemsDT = historyItemsDT;
       historyItemsDT.on('select', function (e, dt, type, indexes) {
         HistoryItemsComponent.selectedFacture = [];
         if (type === 'row') {
@@ -197,9 +267,19 @@ export class HistoryItemsComponent implements OnInit {
       $('#historyItemsDT').on('key-blur.dt', function (e, datatable, cell) {
         $(historyItemsDT.row(cell.index().row).node()).removeClass('selected');
       });
-    } else{
-      this.globalHistoryItemsDT.ajax.reload(null, false);
-    }
+    // } else{
+    //   HistoryItemsComponent.globalHistoryItemsDT.ajax.reload(null, false);
+    // }
+  }
+  ngOnDestroy() {
+    HistoryItemsComponent.clientSearch="";
+    HistoryItemsComponent.articleSearch="";
+    HistoryItemsComponent.crtSearch="";
+    HistoryItemsComponent.pieceSearch="";
+    HistoryItemsComponent.typeSearch="";
+    HistoryItemsComponent.codeSearch="";
+    HistoryItemsComponent.dateSearch="";
+    HistoryItemsComponent.globalHistoryItemsDT.fixedHeader.disable();
   }
   openShowDetails() {
     this.historyComponent.showFactureDetails(HistoryItemsComponent.selectedFacture);
@@ -228,16 +308,16 @@ export class HistoryItemsComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes!',
-      cancelButtonText: 'No',
+      confirmButtonText: 'Oui!',
+      cancelButtonText: 'Non',
     }).then((result) => {
       if (result.value) {
         this.histoeyService.deleteItem(HistoryItemsComponent.selectedOrdID,HistoryItemsComponent.selectedFacture[0].type).subscribe(Response => {
-          this.globalHistoryItemsDT.ajax.reload(null, false);
+          HistoryItemsComponent.globalHistoryItemsDT.ajax.reload(null, false);
           swal({
             type: 'success',
             title: 'Succès',
-            text: "L' article est bien supprimer du facture.",
+            text: "L'article est bien supprimer du facture.",
             showConfirmButton: false,
             timer: 1000
           });

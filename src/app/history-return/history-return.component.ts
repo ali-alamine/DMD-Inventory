@@ -108,7 +108,36 @@ export class HistoryReturnComponent implements OnInit {
               this.lengthFR=this.lengthFR+1;
             } 
           }
-        } ]
+        } ],
+        language: {
+          "sProcessing":     "Traitement en cours...",
+          "sSearch":         "Rechercher&nbsp;:",
+          "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+          "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+          "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+          "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+          "sInfoPostFix":    "",
+          "sLoadingRecords": "Chargement en cours...",
+          "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+          "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+          "oPaginate": {
+              "sFirst":      "Premier",
+              "sPrevious":   "Pr&eacute;c&eacute;dent",
+              "sNext":       "Suivant",
+              "sLast":       "Dernier"
+          },
+          "oAria": {
+              "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+              "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+          },
+          "select": {
+                  "rows": {
+                      _: "%d lignes séléctionnées",
+                      0: "Aucune ligne séléctionnée",
+                      1: "1 ligne séléctionnée"
+                  } 
+          }
+        }
       });
       this.globalHistoryReturnDT = historyReturnDT;
       historyReturnDT.on('select', function (e, dt, type, indexes) {
@@ -120,8 +149,11 @@ export class HistoryReturnComponent implements OnInit {
           HistoryReturnComponent.selectedFactureDate = historyReturnDT.row(indexes).data()['inv_date_req'];
 
         }
+        else if (type === 'column') {
+          HistoryReturnComponent.selectedFactureID =-1;
+        }
       });
-      $('#historyFactureDT tbody').on('mousedown', 'tr', function (event) {
+      $('#historyReturnDT tbody').on('mousedown', 'tr', function (event) {
         if (event.which == 3) {
           historyReturnDT.row(this).select();
         }
@@ -132,11 +164,6 @@ export class HistoryReturnComponent implements OnInit {
       $('#historyReturnDT').on('key-blur.dt', function (e, datatable, cell) {
         $(historyReturnDT.row(cell.index().row).node()).removeClass('selected');
       });
-      // dt.page.info().recordsDisplay
-      // var tableinfo = historyReturnDT.variations.featureVariationRecords;
-      // var tableinfo = historyReturnDT.page.records;
-      // console.log(tableinfo)
-      // var total = tableinfo.recordsTotal;
     } else{
       this.globalHistoryReturnDT.ajax.reload(null, false);
     }
@@ -171,8 +198,8 @@ export class HistoryReturnComponent implements OnInit {
       } 
       swal({
         type: 'success',
-        title: 'Success',
-        text: 'Article Confirmer.',
+        title: 'Succès',
+        text: 'Article confirmer.',
         showConfirmButton: false,
         timer: 1000
       });
@@ -194,8 +221,8 @@ export class HistoryReturnComponent implements OnInit {
       } 
       swal({
         type: 'success',
-        title: 'Success',
-        text: 'Article Rejeter.',
+        title: 'Succès',
+        text: 'Article rejeter.',
         showConfirmButton: false,
         timer: 1000
       });
@@ -209,7 +236,7 @@ export class HistoryReturnComponent implements OnInit {
   }
   confirmAll(){
     var title = "Confirmer Article";
-    var text = "Vous voulez vraiment Confirmer toutes les Articles de cette Facture!"
+    var text = "Vous voulez vraiment confirmer toutes les articles de cette facture!"
     swal({
       title: title,
       html: text,
@@ -217,8 +244,8 @@ export class HistoryReturnComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes!',
-      cancelButtonText: 'No',
+      confirmButtonText: 'Oui!',
+      cancelButtonText: 'Non',
     }).then((result) => {
       if (result.value) {
       this.historyService.confirmAll(HistoryReturnComponent.selectedFactureID).subscribe(Response => {
@@ -227,7 +254,7 @@ export class HistoryReturnComponent implements OnInit {
           swal({
             type: 'success',
             title: 'Succès',
-            text: "La Facture est Confirmer.",
+            text: "Toutes les articles sont confirmés.",
             showConfirmButton: false,
             timer: 1000
           });
@@ -243,7 +270,7 @@ export class HistoryReturnComponent implements OnInit {
   }
   rejectAll(){
     var title = "Rejeter Article";
-    var text = "Vous voulez vraiment Rejeter toutes les Articles de cette Facture!"
+    var text = "Vous voulez vraiment rejeter toutes les articles de cette facture!"
     swal({
       title: title,
       html: text,
@@ -251,8 +278,8 @@ export class HistoryReturnComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes!',
-      cancelButtonText: 'No',
+      confirmButtonText: 'Oui!',
+      cancelButtonText: 'Non',
     }).then((result) => {
       if (result.value) {
       this.historyService.rejectAll(HistoryReturnComponent.selectedFactureID).subscribe(Response => {
@@ -261,7 +288,7 @@ export class HistoryReturnComponent implements OnInit {
           swal({
             type: 'success',
             title: 'Succès',
-            text: "La Facture est Rejeter.",
+            text: "Toutes les articles sont rejetés.",
             showConfirmButton: false,
             timer: 1000
           });
