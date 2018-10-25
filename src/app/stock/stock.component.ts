@@ -200,6 +200,7 @@ export class StockComponent implements OnInit, OnDestroy {
   }
 
   openStockModal(stockModal) {
+    debugger;
     this.modalReference = this.modalService.open(stockModal, {
       centered: true,
       ariaLabelledBy: "modal-basic-title"
