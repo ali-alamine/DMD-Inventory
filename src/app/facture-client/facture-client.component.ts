@@ -174,7 +174,6 @@ export class FactureClientComponent implements OnInit {
         return;
       }
       this.factureClientService.searchClient(data).subscribe(Response => {
-        document.getElementById("delDate").focus();
         this.options = Response;
       })
     });    
@@ -257,6 +256,7 @@ export class FactureClientComponent implements OnInit {
     this.invoiceForm.get('clientName').setValue(name);
     this.invoiceForm.get('clientPhone').setValue(phone);
     this.invoiceForm.get('clientID').setValue(id);
+    setTimeout(function(){ document.getElementById("delDate").focus();},200)
   }
   addClientInvoice() {
     this.factureClientService.newClientInvoice(this.invoiceForm.value).subscribe(Response => {
@@ -360,14 +360,14 @@ export class FactureClientComponent implements OnInit {
     this.factureClientService.addNewClient(this.clientForm.value).subscribe(Response => {
       this.invoiceForm.get('clientName').setValue(this.clientForm.get('name').value);
       this.invoiceForm.get('clientID').setValue(Response);
-      document.getElementById("delDate").focus();
-        swal({
-          type: 'success',
-          title: 'Succès',
-          text: 'Ajouter client',
-          showConfirmButton: false,
-          timer: 1000
-        });
+        document.getElementById("delDate").focus();
+      swal({
+        type: 'success',
+        title: 'Succès',
+        text: 'Ajouter client',
+        showConfirmButton: false,
+        timer: 1000
+      });
       }, error => {
         swal({
           type: 'error',
