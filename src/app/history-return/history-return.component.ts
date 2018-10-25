@@ -27,7 +27,6 @@ export class HistoryReturnComponent implements OnInit {
   private globalReturnDetailsDT;
   private itemsForm;
   static selectedFacture = new Array();
-  lengthFR;
   dataComfirm={};
   clientName; clientPhone; clientAddress; dateReq; codeFR;
 
@@ -105,7 +104,6 @@ export class HistoryReturnComponent implements OnInit {
           "createdCell": function (td, data, rowData, row, col) {
             if ( rowData['inv_type'] == "FR") {
               $(td).html(" <span style='color: #FF0000;' >"+data+"</span> ");
-              this.lengthFR=this.lengthFR+1;
             } 
           }
         } ],
