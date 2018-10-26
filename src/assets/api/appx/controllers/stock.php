@@ -40,15 +40,19 @@ class stock extends REST_Controller
     public function generateItemCode($itemName)
     {
         $itemName = strtoupper($itemName);
-        // $itemName=$this->stripAccents($itemName);
         $prefix = substr($itemName, 0, 3);
-        $suffix = '0001';
         $repeatedCount = $this->stock_model->getRepeatedCodeCount($prefix);
-        $code = $prefix . $suffix;
-        for ($i = 0; $i < $repeatedCount; $i++) {
-            $code = increment_string($code, '');
-        }
+        $suffix = $repeatedCount+1;
+        $suffix = str_pad($suffix, 4, '0', STR_PAD_LEFT);
+        $code=$prefix.$suffix;
         return $code;
+        // $itemName=$this->stripAccents($itemName);
+        // $suffix = '0001';
+        // $code = $prefix . $suffix;
+        // for ($i = 0; $i < $repeatedCount; $i++) {
+        //     $code = increment_string($code, '');
+        // }
+        // return $code;
     }
 
     public function transfer_post()

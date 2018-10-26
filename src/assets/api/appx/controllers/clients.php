@@ -44,15 +44,19 @@ class clients extends REST_Controller
 
     public function generateClientCode($clientName){
         $clientName=strtoupper($clientName);
-        // $clientName=$this->stripAccents($clientName);       
         $prefix = substr($clientName,0,3);
-        $suffix='0001';
         $repeatedCount = $this->clients_model->getRepeatedCodeCount($prefix);    
+        $suffix = $repeatedCount+1;
+        $suffix = str_pad($suffix, 4, '0', STR_PAD_LEFT);
         $code=$prefix.$suffix;
-        for($i=0;$i<$repeatedCount;$i++){
-            $code=increment_string($code,'');
-        }         
         return $code;
+        // $clientName=$this->stripAccents($clientName);       
+        // $suffix='0001';
+        // $code=$prefix.$suffix;
+        // for($i=0;$i<$repeatedCount;$i++){
+        //     $code=increment_string($code,'');
+        // }         
+        // return $code;
     }
     
     public function searchClientName_get(){
