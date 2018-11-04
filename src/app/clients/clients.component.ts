@@ -96,10 +96,10 @@ export class ClientsComponent implements OnInit, OnDestroy {
       },
       order: [[0, "asc"]],
       columns: [
-        { data: "name", title: "Nom" },
-        { data: "phone", title: "Téléphone" },
-        { data: "address", title: "Adresse" },
-        { data: "code", title: "Code" }
+        { data: "per_name", title: "Nom" },
+        { data: "per_phone", title: "Téléphone" },
+        { data: "per_address", title: "Adresse" },
+        { data: "per_code", title: "Code" }
       ],
       language: {
         "sProcessing":     "Traitement en cours...",
@@ -189,24 +189,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
     ClientsComponent.phoneSearch = "";
     ClientsComponent.addressSearch = "";
     ClientsComponent.codeSearch = "";
-
-    // var fixedHeaderEle = document.getElementsByClassName('fixedHeader');
-    // angular.element(fixedHeaderEle).remove();
-    // var fixedFooterEle = document.getElementsByClassName('fixedFooter');
-    // angular.element(fixedFooterEle).remove();
-    
-
-    // let element = this.elRef.nativeElement.getElementsByClassName('fixedHeader-floating');
-    // let elem = document.getElementsByClassName("fixedHeader-floating");
-    
-    // console.log(element);
-    // console.log(elem);
-
-    
-    // elem.style.display = element.style.display === 'none' ? 'block' : 'none';
-
     ClientsComponent.globalClientsDT.fixedHeader.disable();
-
   }
 
   openClientModal(clientModal) {
@@ -221,9 +204,9 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
     if (this.editFlag == true) {
       this.clientModalTitle = "Modifier Client";
-      name = ClientsComponent.selectedRowData["name"];
-      phone = ClientsComponent.selectedRowData["phone"];
-      address = ClientsComponent.selectedRowData["address"];
+      name = ClientsComponent.selectedRowData["per_name"];
+      phone = ClientsComponent.selectedRowData["per_phone"];
+      address = ClientsComponent.selectedRowData["per_address"];
     }
     this.clientForm = this.fb.group({
       name: [name, [Validators.required, Validators.minLength(3)]],
@@ -237,9 +220,9 @@ export class ClientsComponent implements OnInit, OnDestroy {
   onClientIsExistChange(): void {
     this.clientForm.get("name").valueChanges.subscribe(val => {
       var data = this.clientForm.get("name").value;
-      this.clientsService.searchClientName(data).subscribe(Response => {
+      var dataString = JSON.stringify(data);
+      this.clientsService.searchClientName(dataString).subscribe(Response => {
         if (Response == 1) {
-          // alert('exist')
           this.isExist = true;
         } else this.isExist = false;
       });
@@ -248,10 +231,10 @@ export class ClientsComponent implements OnInit, OnDestroy {
 
   addEditClient() {
     if (this.editFlag == true) {
-      this.editedClientData["name"] = this.name.value;
-      this.editedClientData["address"] = this.address.value;
-      this.editedClientData["phone"] = this.phoneNumber.value;
-      this.editedClientData["ID"] = ClientsComponent.selectedClientID;
+      this.editedClientData["per_name"] = this.name.value;
+      this.editedClientData["per_address"] = this.address.value;
+      this.editedClientData["per_phone"] = this.phoneNumber.value;
+      this.editedClientData["perID"] = ClientsComponent.selectedClientID;
       this.clientsService.editClient(this.editedClientData).subscribe(
         Response => {
           ClientsComponent.globalClientsDT.ajax.reload(null, false);
@@ -296,7 +279,6 @@ export class ClientsComponent implements OnInit, OnDestroy {
     this.modalReference.close();
   }
   deleteClient() {
-    // console.log(ClientsComponent.selectedClientID)
     Swal({
       title: "Supprimer",
       text: "vous voulez vraiment supprimer?",

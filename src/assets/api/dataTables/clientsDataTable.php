@@ -73,22 +73,31 @@ else {
 
 $getAllFactureQuerySQL = mysqli_query(openConn(), $getAllFactureQuery);
 $rowsCountFilter = mysqli_num_rows($getAllFactureQuerySQL);
-$jsonData = "";
+// $jsonData = "";
+$rows = array();
+
+
+
 if ($getAllFactureQuerySQL) {
-    while ($row = mysqli_fetch_assoc($getAllFactureQuerySQL)) {
-        if ($row != null) {
-            if ($jsonData != "") {
-                $jsonData = $jsonData . ",";
-            }
-            $jsonData = $jsonData . '{"ID":"' . $row['perID'] . '",';
-            $jsonData = $jsonData . '"name":"' . $row['per_name'] . '",';
-            $jsonData = $jsonData . '"phone":"' . $row['per_phone'] . '",';
-            $jsonData = $jsonData . '"address":"' . $row['per_address'] . '",';
-            $jsonData = $jsonData . '"code":"' . $row['per_code'] . '"}';
-        }
+    while($r = mysqli_fetch_assoc($getAllFactureQuerySQL)) {
+        $rows[] = $r;
     }
+
+    // while ($row = mysqli_fetch_assoc($getAllFactureQuerySQL)) {
+    //     if ($row != null) {
+    //         if ($jsonData != "") {
+    //             $jsonData = $jsonData . ",";
+    //         }
+    //         $jsonData = $jsonData . '{"ID":"' . $row['perID'] . '",';
+    //         $jsonData = $jsonData . '"name":"' . $row['per_name'] . '",';
+    //         $jsonData = $jsonData . '"phone":"' . $row['per_phone'] . '",';
+    //         $jsonData = $jsonData . '"address":"' . $row['per_address'] . '",';
+    //         $jsonData = $jsonData . '"code":"' . $row['per_code'] . '"}';
+    //     }
+    // }
 }
-$jsonData = '[' . $jsonData . ']';
+$jsonData = json_encode($rows);
+// $jsonData = '[' . $jsonData . ']';
 $jsonData2 = '{"draw":' . intval($requestData['draw']) . ',"recordsTotal":' . $rowsCount . ', "recordsFiltered":' . $rowsCount . ', "data":' . $jsonData . '}';
 echo ($jsonData2);
 closeConn();

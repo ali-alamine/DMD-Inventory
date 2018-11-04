@@ -31,6 +31,7 @@ class stock_model extends CI_Model
         $this->db->count_all_results('item');
         $this->db->like('item_code', $prefix, 'after');
         $this->db->from('item');
+        $this->db->where('item_is_damaged', 0);
         return $this->db->count_all_results();
 
     }
