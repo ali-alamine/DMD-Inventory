@@ -112,7 +112,8 @@ export class FactureClientComponent implements OnInit {
         this.invID.setValue(this.factureID);
         this.clientName.setValue(this.factureHeader[0]['per_name']);
         this.clientID.setValue(this.factureHeader[0]['perID']);
-        this.editFactureTitle = "Modifier Facture: "+this.factureHeader[0]['inv_code'];        
+        this.editFactureTitle = "Modifier Facture: "+this.factureHeader[0]['inv_code'];   
+
         if(Response[1]!=0){
           this.factureDetails = Response[1];    
           this.factureDetails.forEach(element => {
@@ -153,6 +154,7 @@ export class FactureClientComponent implements OnInit {
     this._hotkeysService.reset();
     FactureClientComponent.selectedItems = [];
   }
+
   onClientIsExistChange(): void {
     this.clientForm.get('name').valueChanges.subscribe(val => {
       var data = this.clientForm.get('name').value;
@@ -178,6 +180,7 @@ export class FactureClientComponent implements OnInit {
       })
     });    
   }
+
   checkQuantity(i){
     var stockCrt = this.itemsForm.controls[i].get('stockCrt').value;
     var stockPiece = this.itemsForm.controls[i].get('stockPiece').value;
@@ -199,6 +202,7 @@ export class FactureClientComponent implements OnInit {
         $(inputPiece).removeClass("text-danger");
     }
   }
+
   checkQuantityEdit(i){
     var stockCrt = parseInt(this.itemsEditForm.controls[i].get('stockCrt').value);
     var stockPiece = parseInt(this.itemsEditForm.controls[i].get('stockPiece').value);
@@ -239,10 +243,12 @@ export class FactureClientComponent implements OnInit {
     });
     this.itemsForm.push(item);
   }
+
   deleteItemEdit(i) {
     this.itemsEditForm.controls[i].get('isDeleted').setValue(1);
     this.lengthDeleted -- ;
   }
+
   deleteItem(i, id, itemIsDamaged) {
     this.itemsForm.removeAt(i);
     var index = FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', 'isDamaged', id.value, itemIsDamaged.value);
@@ -251,6 +257,7 @@ export class FactureClientComponent implements OnInit {
       setTimeout(function(){ document.getElementById("crt0").focus();},200)
     
   }
+
   setClientName(id, name,phone) {
     this.invoiceForm.get('searchClient').setValue('');
     this.invoiceForm.get('clientName').setValue(name);
@@ -258,6 +265,7 @@ export class FactureClientComponent implements OnInit {
     this.invoiceForm.get('clientID').setValue(id);
     setTimeout(function(){ document.getElementById("delDate").focus();},200)
   }
+
   addClientInvoice() {
     this.factureClientService.newClientInvoice(this.invoiceForm.value).subscribe(Response => {
       this.newCode = Response;
@@ -294,6 +302,7 @@ export class FactureClientComponent implements OnInit {
       });
     });
   }
+
   printFactureClient(){
       var printContents = document.getElementById('printFacture').innerHTML;
       var popupWin = window.open('', '_blank', 'width=800,height=600');
@@ -302,6 +311,7 @@ export class FactureClientComponent implements OnInit {
       popupWin.document.close();
       setTimeout(function(){ popupWin.close(); }, 1000);
   }
+
   editClientInvoice(){
     this.factureClientService.editClientInvoice(this.invoiceForm.value).subscribe(Response => {
       swal({
@@ -327,6 +337,7 @@ export class FactureClientComponent implements OnInit {
       this.itemsEditForm.removeAt(0)
     }
   }
+
   addItemsToFacture() {
     FactureClientComponent.globalMultiSelectDT.destroy();
     this.modalReference.close();
@@ -343,8 +354,10 @@ export class FactureClientComponent implements OnInit {
         this.addRow(element);
       }
     });
+    FactureClientComponent.selectedItems=[];
     setTimeout(function(){ document.getElementById("crt0").focus();},200)
   }
+
   openClientModal(clientModal) {
     this.modalReference = this.modalService.open(clientModal, { centered: true, ariaLabelledBy: 'modal-basic-title' });
     this.clientForm = this.fb.group({
@@ -355,8 +368,8 @@ export class FactureClientComponent implements OnInit {
     this.onClientIsExistChange();
 
   }
-  addClient() {
-    
+
+  addClient() {    
     this.factureClientService.addNewClient(this.clientForm.value).subscribe(Response => {
       this.invoiceForm.get('clientName').setValue(this.clientForm.get('name').value);
       this.invoiceForm.get('clientID').setValue(Response);
@@ -378,6 +391,7 @@ export class FactureClientComponent implements OnInit {
 
     this.modalReference.close();
   }
+
   openMultiSelect(mutliSelectModal) {
     this.modalReference = this.modalService.open(mutliSelectModal, { centered: true, size: 'lg', ariaLabelledBy: 'modal-basic-title' });
     var multiSelectDT = $('#stockDT').DataTable({
@@ -410,10 +424,20 @@ export class FactureClientComponent implements OnInit {
         { data: "item_packing_list", title: "Colisage" }
 
       ],
-      rowId: 'ID',
       "createdRow": function (row, data, index) {
         if (data['item_is_damaged'] == 1) {
           $(row).addClass("text-danger");
+        }
+
+        var ID = multiSelectDT.row(row).data()['ID'];
+        var isDamaged = multiSelectDT.row(row).data()['item_is_damaged'];
+
+        
+
+        if(FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', 'isDamaged', ID, isDamaged) !=-1){
+          console.log(ID,isDamaged)
+          multiSelectDT.row(row).select();
+          // $(multiSelectDT.row(row).node()).addClass("selected");
         }
       },
       language: {
@@ -450,6 +474,7 @@ export class FactureClientComponent implements OnInit {
 
     multiSelectDT.on('select', function (e, dt, type, indexes) {
       var rows = multiSelectDT.rows('.selected').indexes().toArray();
+      console.log(rows)
       rows.forEach(element => {
         var ID = multiSelectDT.row(element).data()['ID'];
         var name = multiSelectDT.row(element).data()['item_name'];
