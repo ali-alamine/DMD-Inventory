@@ -430,14 +430,11 @@ export class FactureClientComponent implements OnInit {
         }
 
         var ID = multiSelectDT.row(row).data()['ID'];
-        var isDamaged = multiSelectDT.row(row).data()['item_is_damaged'];
-
-        
+        var isDamaged = multiSelectDT.row(row).data()['item_is_damaged'];        
 
         if(FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', 'isDamaged', ID, isDamaged) !=-1){
           console.log(ID,isDamaged)
           multiSelectDT.row(row).select();
-          // $(multiSelectDT.row(row).node()).addClass("selected");
         }
       },
       language: {

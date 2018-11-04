@@ -185,7 +185,8 @@ export class SupplyComponent implements OnInit {
       if(SupplyComponent.findWithAttr(this.itemsForm.value, 'itemID', ID) == -1)
       this.addRow(element);
     });
-    setTimeout(function(){ document.getElementById("crt0").focus();},200)
+    setTimeout(function(){ document.getElementById("crt0").focus();},200);
+    SupplyComponent.selectedItems=[];
   }
 
   openMultiSelect(mutliSelectModal) {
@@ -221,7 +222,17 @@ export class SupplyComponent implements OnInit {
         { data: "item_packing_list", title: "Colisage" }
 
       ],
-      rowId: 'ID',
+      "createdRow": function (row, data, index) {
+        if (data['item_is_damaged'] == 1) {
+          $(row).addClass("text-danger");
+        }
+
+        var ID = multiSelectDT.row(row).data()['ID'];    
+
+        if(SupplyComponent.findWithAttr(SupplyComponent.selectedItems, 'id', ID) !=-1){          
+          multiSelectDT.row(row).select();
+        }
+      },
       language: {
         "sProcessing":     "Traitement en cours...",
         "sSearch":         "Rechercher&nbsp;:",
