@@ -61,7 +61,7 @@ class facture_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('person');
-        $this->db->like('per_name', $name, 'after');
+        $this->db->like('per_name', $name, 'both');
         $this->db->where('per_isClient', 1);
         $this->db->where('per_isActivated', 1);
         $this->db->limit(20);

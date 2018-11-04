@@ -36,7 +36,9 @@ class clients_model extends CI_Model
 
     }
     public function searchClientName($keyword){
-        $query = $this->db->query('SELECT perID FROM person WHERE per_isActivated=1 and  per_name = "' . $keyword . '" ');
+
+        $keyword = json_encode($keyword,true);
+        $query = $this->db->query('SELECT perID FROM person WHERE per_isActivated=1 and  per_name = ' . $keyword );
         if ($query->num_rows() > 0) {
             return 1;
         } else {
