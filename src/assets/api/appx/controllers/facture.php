@@ -14,7 +14,7 @@ class facture extends REST_Controller
         // $supplyDate = $this->post('supplyDate');
         $invoiceItems = $this->post('items');
 
-        date_default_timezone_set("Asia/Beirut");
+        date_default_timezone_set("Africa/Ouagadougou");
         $supplyDate=date("Y-m-d H:i:s");
 
         // $correctDate = new DateTime($supplyDate);
@@ -63,7 +63,7 @@ class facture extends REST_Controller
         
         // $invoiceCorrectDate = new DateTime($invoiceDate);
         // $invoiceCorrectDate->setTimezone(new DateTimeZone('Asia/Beirut'));
-        date_default_timezone_set("Asia/Beirut");
+        date_default_timezone_set("Africa/Ouagadougou");
         $invoiceDate=date("Y-m-d H:i:s");
 
         $deliveryCorrectDate = new DateTime($deliveryDate);

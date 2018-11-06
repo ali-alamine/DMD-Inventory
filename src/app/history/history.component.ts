@@ -27,7 +27,7 @@ export class HistoryComponent implements OnInit {
 
   constructor(private historyService: HistoryService,
     private modalService: NgbModal,
-    private router: Router, 
+    public router: Router, 
     private fb: FormBuilder) {  
   }
 

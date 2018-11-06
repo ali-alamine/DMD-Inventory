@@ -63,7 +63,7 @@ class stock extends REST_Controller
         $colisage = $this->post('colisage');
         $itemCode = $this->post('itemCode');
         $itemName = $this->post('itemName');
-        date_default_timezone_set("Asia/Beirut");
+        date_default_timezone_set("Africa/Ouagadougou");
         $now = date('Y-m-d H:i:s');
 
         $result = $this->stock_model->addTransferOperation(array("conv_itemID" => $itemID, "conv_date" => $now, "conv_crt" => $crt, "conv_piece" => $piece));

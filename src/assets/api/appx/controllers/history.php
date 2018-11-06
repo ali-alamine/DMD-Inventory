@@ -73,7 +73,7 @@ class history extends REST_Controller
         $itemID = $this->post('itemID');
         $isDamaged = $this->post('isDamaged');
         $packingList = $this->post('packingList');
-        date_default_timezone_set("Asia/Beirut");
+        date_default_timezone_set("Africa/Ouagadougou");
         $date_com=date("Y-m-d H:i:s");
         $this->db->trans_begin();
         $this->history_model->updateOrder($ordID,1,$date_com);
@@ -120,7 +120,7 @@ class history extends REST_Controller
     }
     public function confirmAll_get(){ 
         $invID = $this->get('invID');
-        date_default_timezone_set("Asia/Beirut");
+        date_default_timezone_set("Africa/Ouagadougou");
         $date_com=date("Y-m-d H:i:s");
         $this->db->trans_begin();
         $result = $this->history_model->getFactureReturnDetails($invID);

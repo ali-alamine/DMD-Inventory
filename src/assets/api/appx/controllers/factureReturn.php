@@ -33,7 +33,7 @@ class factureReturn extends REST_Controller
         $clientID = $this->post('clientID');
         $invoiceItems = $this->post('items');
         
-        date_default_timezone_set("Asia/Beirut");
+        date_default_timezone_set("Africa/Ouagadougou");
         $invoiceDate=date("Y-m-d H:i:s");
 
         // $invoiceCorrectDate = new DateTime($invoiceDate);
@@ -54,7 +54,7 @@ class factureReturn extends REST_Controller
             if ($ordID === 0) {
                 $this->response("Item information could not be saved. Try again.", 404);
             } else {
-                date_default_timezone_set("Asia/Beirut");
+                date_default_timezone_set("Africa/Ouagadougou");
                 $date=date("Y-m-d H:i:s");
                 $this->factureReturn_model->addDateReturn(array('date_ordID' => $ordID,'ord_perID' => $clientID,
                 'ord_date_req' => $date));
@@ -158,7 +158,7 @@ class factureReturn extends REST_Controller
                 if ($ordID === 0) {
                     $this->response("Item information could not be saved. Try again.", 404);
                 } else {
-                    date_default_timezone_set("Asia/Beirut");
+                    date_default_timezone_set("Africa/Ouagadougou");
                     $date=date("Y-m-d H:i:s");
                     $this->factureReturn_model->addDateReturn(array('date_ordID' => $ordID,'ord_perID' => $clientID,
                     'ord_date_req' => $date,'ord_date_com' =>$date,'ord_status'=> 0));
