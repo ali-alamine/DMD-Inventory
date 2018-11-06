@@ -89,7 +89,7 @@ export class FactureClientComponent implements OnInit {
       clientName: ['', Validators.required],
       clientPhone: '',
       searchClient: '',
-      clientID: '',
+      clientID: ['',Validators.required],
       itemsEdit: this.fb.array([]),
       items: this.fb.array([])
     });
@@ -301,6 +301,8 @@ export class FactureClientComponent implements OnInit {
         text: error.message
       });
     });
+
+    this.invoiceForm.get('clientID').setValue('');
   }
 
   printFactureClient(){
