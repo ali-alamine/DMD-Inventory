@@ -11,9 +11,10 @@ import { NavBarService } from './nav-bar.service';
 })
 export class NavBarComponent implements OnInit {
   currentUrl: string;
-  static badgeCount: number;
+  private badgeCount: any;
+  badgeCount2: any;
 
-  constructor(private router: Router,private location: Location) {
+  constructor(private router: Router,private location: Location,private navBarService:NavBarService) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.currentUrl = event.url;
@@ -22,7 +23,16 @@ export class NavBarComponent implements OnInit {
   }
 
   ngOnInit() {
-    NavBarComponent.getCountFR();
+    
+    
+    
+
+    this.navBarService.getCountFR().subscribe(Response => {
+      console.log(Response[0].c);
+      this.badgeCount = Response[0].c;      
+      this.getCountFR();
+      this.navBarService.changeCount(Response[0].c);
+    });
 
   }
   goBack(){
@@ -31,9 +41,11 @@ export class NavBarComponent implements OnInit {
   goForward(){
     this.location.forward();
   }
-  static getCountFR(){
-    NavBarService.getCountFR().subscribe(Response => {
-      NavBarComponent.badgeCount=Response[0].c;
-    });
+  getCountFR(){
+    this.navBarService.currentCount.subscribe(Response =>
+      {
+        this.badgeCount = Response;
+      }
+       )
   }
 }

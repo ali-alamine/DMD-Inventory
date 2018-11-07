@@ -6,7 +6,7 @@ class navBar_model extends CI_Model
     {
         $this->load->database();
     }
-    public static function getCountFR(){
+    public function getCountFR(){
         $query = $this->db->query("SELECT count(invID) as c FROM invoice
         -- INNER JOIN order_inv on ordID=date_ordID INNER JOIN return_details on ordID = date_ordID
         where inv_status = '-1' ");

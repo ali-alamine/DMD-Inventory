@@ -1,16 +1,23 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable, Subject, BehaviorSubject } from "rxjs";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class NavBarService {
-  static url="http://localhost/DMD-Inventory/src/assets/api/navBar/";
-  static httpClient: HttpClient;
-  constructor() { }
+  private url = "http://localhost/DMD-Inventory/src/assets/api/navBar/";
 
-  static getCountFR(): Observable<any>{
-    return NavBarService.httpClient.get(this.url+"getCountFR");
+  private countSource = new BehaviorSubject<string>("0");
+  currentCount = this.countSource.asObservable();
+
+  constructor(private httpClient: HttpClient) {}
+
+  public getCountFR(): Observable<any> {
+    return this.httpClient.get(this.url + "getCountFR");
+  }
+
+  changeCount(count:string) {
+    this.countSource.next(count);
   }
 }

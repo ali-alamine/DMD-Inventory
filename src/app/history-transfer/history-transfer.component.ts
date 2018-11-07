@@ -30,7 +30,7 @@ export class HistoryTransferComponent implements OnInit {
         title +
         '" />'
     );
-    // debugger
+    
     $("input", this).on("keyup change", function() {
       if (i == 0) HistoryTransferComponent.dateSearch = this.value;
       else if (i == 1) HistoryTransferComponent.codeSearch = this.value;

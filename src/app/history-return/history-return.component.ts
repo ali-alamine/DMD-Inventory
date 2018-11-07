@@ -7,6 +7,7 @@ import { MenuItem } from 'primeng/api';
 declare var $: any;
 import swal from 'sweetalert2';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
+import { NavBarService } from '../nav-bar/nav-bar.service';
 
 @Component({
   selector: 'app-history-return',
@@ -33,6 +34,7 @@ export class HistoryReturnComponent implements OnInit {
 
   constructor(
     private historyService: HistoryService,
+    private navBarService :NavBarService,
     private modalService : NgbModal, 
     private fb : FormBuilder,
     private router: Router) { }
@@ -193,7 +195,10 @@ export class HistoryReturnComponent implements OnInit {
       if(Response == 0) {
         this.globalHistoryReturnDT.ajax.reload(null, false);
         this.modalReference.close();
-        NavBarComponent.getCountFR();
+
+        this.navBarService.getCountFR().subscribe(Response => {
+          this.navBarService.changeCount(Response[0].c);
+        });
       } 
       swal({
         type: 'success',
@@ -216,7 +221,9 @@ export class HistoryReturnComponent implements OnInit {
       if(Response == 0) {
         this.globalHistoryReturnDT.ajax.reload(null, false);
         this.modalReference.close();
-        NavBarComponent.getCountFR();
+         this.navBarService.getCountFR().subscribe(Response => {
+          this.navBarService.changeCount(Response[0].c);
+        });
       } 
       swal({
         type: 'success',
@@ -249,7 +256,9 @@ export class HistoryReturnComponent implements OnInit {
       if (result.value) {
       this.historyService.confirmAll(HistoryReturnComponent.selectedFactureID).subscribe(Response => {
         this.globalHistoryReturnDT.ajax.reload(null, false);
-        NavBarComponent.getCountFR();
+        this.navBarService.getCountFR().subscribe(Response => {
+          this.navBarService.changeCount(Response[0].c);
+        });
           swal({
             type: 'success',
             title: 'Succès',
@@ -283,7 +292,9 @@ export class HistoryReturnComponent implements OnInit {
       if (result.value) {
       this.historyService.rejectAll(HistoryReturnComponent.selectedFactureID).subscribe(Response => {
         this.globalHistoryReturnDT.ajax.reload(null, false);
-        NavBarComponent.getCountFR();
+        this.navBarService.getCountFR().subscribe(Response => {
+          this.navBarService.changeCount(Response[0].c);
+        });
           swal({
             type: 'success',
             title: 'Succès',
