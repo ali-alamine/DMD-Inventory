@@ -5,7 +5,7 @@ import { SupplyService } from './facture-supply.service';
 import swal from 'sweetalert2';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DatePipe } from '../../../node_modules/@angular/common';
+import { DatePipe } from '@angular/common';
 declare var $: any;
 @Component({
   selector: 'app-supply',

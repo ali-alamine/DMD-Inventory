@@ -194,6 +194,8 @@ export class FactureReturnComponent implements OnInit {
         this.invoiceForm.reset();
         this.myNgForm.resetForm();
         this.invoiceForm.get('invoiceDate').setValue(this.deliveryDate);
+        NavBarComponent.getCountFR();
+
     }
     editReturnInvoice(){
         this.factureReturnService.editReturnInvoice(this.invoiceForm.value).subscribe(Response => {

@@ -11,7 +11,7 @@ declare var $: any;
 import { DatePipe } from '@angular/common';
 import { FactureComponent } from '../facture/facture.component';
 import { AppDateAdapter, APP_DATE_FORMATS } from '../date.adapter';
-import { DateAdapter, MAT_DATE_FORMATS } from '../../../node_modules/@angular/material';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material';
 @Component({
   selector: 'app-facture',
   templateUrl: './facture-client.component.html',
@@ -88,7 +88,7 @@ export class FactureClientComponent implements OnInit {
       delDate: [this.deliveryDate, Validators.required],
       clientName: ['', Validators.required],
       clientPhone: '',
-      searchClient: '',
+      // searchClient: '',
       clientID: ['',Validators.required],
       itemsEdit: this.fb.array([]),
       items: this.fb.array([])
@@ -169,8 +169,8 @@ export class FactureClientComponent implements OnInit {
   }
 
   onClientNameChange(): void {
-    this.invoiceForm.get('searchClient').valueChanges.subscribe(val => {
-      var data = this.invoiceForm.get('searchClient').value;
+    this.invoiceForm.get('clientName').valueChanges.subscribe(val => {
+      var data = this.invoiceForm.get('clientName').value;
       if (data == "") {
         this.options = [];
         return;
@@ -259,10 +259,10 @@ export class FactureClientComponent implements OnInit {
   }
 
   setClientName(id, name,phone) {
-    this.invoiceForm.get('searchClient').setValue('');
     this.invoiceForm.get('clientName').setValue(name);
     this.invoiceForm.get('clientPhone').setValue(phone);
     this.invoiceForm.get('clientID').setValue(id);
+    this.invoiceForm.controls['clientName'].disable();
     setTimeout(function(){ document.getElementById("delDate").focus();},200)
   }
 
@@ -393,7 +393,12 @@ export class FactureClientComponent implements OnInit {
 
     this.modalReference.close();
   }
-
+  clearClientName() {
+    this.invoiceForm.get("clientName").setValue("");
+    this.invoiceForm.get("clientPhone").setValue("");
+    this.invoiceForm.get("clientID").setValue("");
+    this.invoiceForm.controls['clientName'].enable();
+  }
   openMultiSelect(mutliSelectModal) {
     this.modalReference = this.modalService.open(mutliSelectModal, { centered: true, size: 'lg', ariaLabelledBy: 'modal-basic-title' });
     var multiSelectDT = $('#stockDT').DataTable({

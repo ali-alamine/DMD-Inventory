@@ -22,8 +22,8 @@ export class HistoryComponent implements OnInit {
   private globalHistoryFactureDetailsDT;
   @ViewChild('showDetails')
   private showDetailsTPL : TemplateRef<any>;
-  clientName; clientPhone; clientAddress; dateReq; code; type;
-  badgeCount: number;
+  clientName; clientPhone; clientAddress; dateReq; code; type;dateDel;
+  // badgeCount: number;
 
   constructor(private historyService: HistoryService,
     private modalService: NgbModal,
@@ -35,7 +35,7 @@ export class HistoryComponent implements OnInit {
     if (localStorage.getItem("user") !== '1') {
       this.router.navigate(["login"]);
     }
-    this.getCountFR();
+    // this.getCountFR();
     var router = localStorage.getItem('routerHistory');
     if (router !== null){
       this.router.navigate([router]);
@@ -72,6 +72,7 @@ export class HistoryComponent implements OnInit {
       this.clientPhone = facture[0].phone;
       this.clientAddress = facture[0].address;
       this.dateReq = facture[0].date_req;
+      this.dateDel = facture[0].date_del;
       this.code = facture[0].code;
       this.type = facture[0].type;
       if(facture[0].type=="FD"){
@@ -152,11 +153,11 @@ export class HistoryComponent implements OnInit {
       alert(error)
     });
   }
-  getCountFR(){
-    this.historyService.getCountFR().subscribe(Response => {
-      this.badgeCount=Response[0].c;
-    });
-  }
+  // getCountFR(){
+  //   this.historyService.getCountFR().subscribe(Response => {
+  //     this.badgeCount=Response[0].c;
+  //   });
+  // }
 
   printFacture(facture) {
     this.historyService.getFactureDetails(facture[0].ID,facture[0].type).subscribe(Response => {
@@ -166,6 +167,7 @@ export class HistoryComponent implements OnInit {
       this.clientPhone = facture[0].phone;
       this.clientAddress = facture[0].address;
       this.dateReq = facture[0].date_req;
+      this.dateDel = facture[0].date_del;
       this.code = facture[0].code;
       this.type = facture[0].type;
       // this.zone.run(() => {
@@ -195,6 +197,7 @@ printPage(){
     '</div>'+
     '<div style="float: right;">'+
       '<b>Date De Commande:</b> '+this.dateReq+'<br>'+
+      '<b>Date De Livraison:</b> '+this.dateDel+'<br>'+
       '<b>Code:</b> '+this.code+
     '</div>'+
     '<br><br><br><hr>';

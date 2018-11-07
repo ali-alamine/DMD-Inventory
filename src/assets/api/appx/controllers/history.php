@@ -167,11 +167,11 @@ class history extends REST_Controller
             $this->response('success', 200);
         }
     }
-    public function getCountFR_get(){
-        $count = $this->history_model->getCountFR();
-        if ($count) {
-            $this->response($count, 200);
-            exit;
-        }
-    }
+    // public function getCountFR_get(){
+    //     $count = $this->history_model->getCountFR();
+    //     if ($count) {
+    //         $this->response($count, 200);
+    //         exit;
+    //     }
+    // }
 }

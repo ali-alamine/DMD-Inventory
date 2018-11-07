@@ -31,7 +31,8 @@
           <a class="nav-link" routerLink="/clients" routerLinkActive="active">Client</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/history" routerLinkActive="active">Histoire</a>
+          <span *ngIf="badgeCount > 0" matBadge="{{badgeCount}}" matBadgeOverlap="false" style="text-align: right;"></span>
+          <a class="nav-link" routerLink="/history" routerLinkActive="active">Historique</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/settings" routerLinkActive="active">Paramètres</a>

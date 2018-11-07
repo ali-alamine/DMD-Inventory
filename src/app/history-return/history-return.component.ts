@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HistoryComponent } from '../history/history.component';
 import { HistoryService } from '../history/history.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder } from '@angular/forms';
@@ -7,6 +6,7 @@ import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 declare var $: any;
 import swal from 'sweetalert2';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
 
 @Component({
   selector: 'app-history-return',
@@ -30,7 +30,8 @@ export class HistoryReturnComponent implements OnInit {
   dataComfirm={};
   clientName; clientPhone; clientAddress; dateReq; codeFR;
 
-  constructor(private historyComponent : HistoryComponent,
+
+  constructor(
     private historyService: HistoryService,
     private modalService : NgbModal, 
     private fb : FormBuilder,
@@ -192,7 +193,7 @@ export class HistoryReturnComponent implements OnInit {
       if(Response == 0) {
         this.globalHistoryReturnDT.ajax.reload(null, false);
         this.modalReference.close();
-        this.historyComponent.getCountFR();
+        NavBarComponent.getCountFR();
       } 
       swal({
         type: 'success',
@@ -215,7 +216,7 @@ export class HistoryReturnComponent implements OnInit {
       if(Response == 0) {
         this.globalHistoryReturnDT.ajax.reload(null, false);
         this.modalReference.close();
-        this.historyComponent.getCountFR();
+        NavBarComponent.getCountFR();
       } 
       swal({
         type: 'success',
@@ -248,7 +249,7 @@ export class HistoryReturnComponent implements OnInit {
       if (result.value) {
       this.historyService.confirmAll(HistoryReturnComponent.selectedFactureID).subscribe(Response => {
         this.globalHistoryReturnDT.ajax.reload(null, false);
-        this.historyComponent.getCountFR();
+        NavBarComponent.getCountFR();
           swal({
             type: 'success',
             title: 'Succès',
@@ -282,7 +283,7 @@ export class HistoryReturnComponent implements OnInit {
       if (result.value) {
       this.historyService.rejectAll(HistoryReturnComponent.selectedFactureID).subscribe(Response => {
         this.globalHistoryReturnDT.ajax.reload(null, false);
-        this.historyComponent.getCountFR();
+        NavBarComponent.getCountFR();
           swal({
             type: 'success',
             title: 'Succès',

@@ -10,9 +10,11 @@
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="searchClient" fxFlex>
 
-          <input matInput placeholder="Rechercher le Nom du Client" formControlName="searchClient" type="text" name="nameInput"
+          <input matInput placeholder="Rechercher le nom du client" formControlName="clientName" type="text" name="nameInput"
             [matAutocomplete]="auto" autofocus>
-
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearClientName()">
+              <mat-icon>close</mat-icon>
+          </button>
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option (onSelectionChange)="setClientName(option.perID,option.per_name,option.per_phone)" *ngFor="let option of options"
               [value]="option.name">{{option.per_name}}
@@ -24,10 +26,9 @@
             <i class="material-icons">add</i> Ajouter un Client
           </button>
       </div>
-
-      <mat-form-field class="itemName" fxFlex>
+      <!-- <mat-form-field class="itemName" fxFlex>
         <input matInput placeholder="Nom" formControlName="clientName" type="text" name="nameInput" [readonly]="true">
-      </mat-form-field>
+      </mat-form-field> -->
 
       <mat-form-field class="itemDateInputs">
         <input matInput formControlName="invoiceDate" placeholder="Date de Commande" readonly=true>

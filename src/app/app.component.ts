@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { Router, NavigationEnd } from '../../node_modules/@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 declare var $: any;
 
 @Component({

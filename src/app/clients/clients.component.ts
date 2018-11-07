@@ -4,7 +4,7 @@ import { FormBuilder, Validators, FormControl } from "@angular/forms";
 import { ClientsService } from "./clients.service";
 import { MenuItem } from "primeng/api";
 import Swal from "sweetalert2";
-import { Router } from "../../../node_modules/@angular/router";
+import { Router } from "@angular/router";
 declare var $: any;
 
 
