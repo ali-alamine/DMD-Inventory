@@ -16,11 +16,23 @@
                       <mat-icon>close</mat-icon>
                   </button>
                   <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option (onSelectionChange)="setClientName(option.perID,option.per_name)" *ngFor="let option of options"
+                    <mat-option (onSelectionChange)="setClientName(option.perID,option.per_name,option.per_phone,option.per_address)" *ngFor="let option of options"
                       [value]="option.name">{{option.per_name}}
                       || {{option.per_code}}</mat-option>
                   </mat-autocomplete>
                   <mat-error> Le nom du client est requis</mat-error>
+                </mat-form-field>
+              </div>
+              <div>
+                  <mat-form-field class="searchClient">
+                    <input matInput formControlName="clientPhone" placeholder="Numéro de téléphone" type= "text" >
+                  <mat-error> La numéro de téléphone est requis</mat-error>
+                </mat-form-field>
+              </div>
+              <div>
+                  <mat-form-field class="searchClient">
+                    <input matInput formControlName="clientAddress" placeholder="Adresse" type= "text">
+                  <mat-error> L'adresse est requis</mat-error>
                 </mat-form-field>
               </div>
           <mat-form-field class="inputField">

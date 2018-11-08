@@ -99,7 +99,7 @@ export class HistoryComponent implements OnInit {
         fixedHeader: false,
         searching: true,
         data: this.factureDetails,
-        order: [[0, 'desc']],
+        order: [[0, 'asc']],
         columns: [
 
           { data: "item_name", title: "ARTICLE" },
@@ -153,7 +153,7 @@ export class HistoryComponent implements OnInit {
           fixedHeader: false,
           searching: true,
           data: this.factureDetails,
-          order: [[0, 'desc']],
+          order: [[0, 'asc']],
           columns: [
   
             { data: "item_name", title: "ARTICLE" },
@@ -213,7 +213,6 @@ export class HistoryComponent implements OnInit {
   printFacture(facture) {
     this.historyService.getFactureDetails(facture[0].ID,facture[0].type).subscribe(Response => {
       this.factureDetails = Response;
-      console.log(this.factureDetails)
       this.clientName = facture[0].clientName;
       this.clientPhone = facture[0].phone;
       this.clientAddress = facture[0].address;
@@ -243,13 +242,26 @@ export class HistoryComponent implements OnInit {
       '<b>Code:</b> '+this.code+
     '</div>'+
     '<br><br><br><hr>';
-  } else{
+  } else if(this.type == 'FR'){
+    html = html + '<div class="table table-striped noselect" id="printFacture">'+
+    '<div style="float:left;">'+
+      '<b>Nom:</b> '+this.clientName+'<br>'+
+      '<b>Téléphone:</b> '+this.clientPhone+'<br>'+
+      '<b>Adresse:</b> '+this.clientAddress+
+    '</div>'+
+    '<div style="float: right;">'+
+      '<b>Date De Commande:</b> '+this.dateReq+'<br>'+
+      '<b>Code:</b> '+this.code+
+    '</div>'+
+    '<br><br><br><hr>';
+  }else{
     html = html + '<div class="table table-striped noselect" id="printFacture">'+
     '<div style="float: right;">'+
       '<b>Date De Commande:</b> '+this.dateReq+'<br>'+
       '<b>Code:</b> '+this.code+
     '</div>'+
     '<br><br><br><hr>';
+
   }
   if(this.type == 'FR'){
     html = html +'<table class="table table-responsive table-bordered text-center test noselect" style="width:100%;  border-collapse: collapse; border: 1px solid black;">'+

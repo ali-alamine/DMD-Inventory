@@ -39,7 +39,18 @@
           <b>Code:</b> {{code}}
         </div>
       </div>
-      <div *ngIf="type != 'FC'">
+      <div *ngIf="type == 'FR'">
+          <div style="float:left;" >
+            <b>Nom:</b> {{clientName}}<br>
+            <b>Téléphone:</b> {{clientPhone}}<br>
+            <b>Adresse:</b> {{clientAddress}}
+          </div>
+          <div style="float: right;">
+            <b>Date De Commande:</b> {{dateReq}}<br>
+            <b>Code:</b> {{code}}
+          </div>
+        </div>
+      <div *ngIf="type == 'FD'">
           <div style="float: right;">
             <b>Date De Commande:</b> {{dateReq}}<br>
             <b>Code:</b> {{code}}

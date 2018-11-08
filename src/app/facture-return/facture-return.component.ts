@@ -111,7 +111,9 @@ export class FactureReturnComponent implements OnInit {
       invID: "-1",
       invoiceDate: [this.deliveryDate, Validators.required],
       clientName: ["", Validators.required],
-      clientID: "",
+      clientID: ["", Validators.required],
+      clientPhone: ["", Validators.required],
+      clientAddress: ["", Validators.required],
       itemsEdit: this.fb.array([]),
       items: this.fb.array([])
     });
@@ -132,7 +134,14 @@ export class FactureReturnComponent implements OnInit {
         this.invoiceForm
           .get("clientName")
           .setValue(this.factureHeader[0].per_name);
+          this.invoiceForm
+            .get("clientPhone")
+            .setValue(this.factureHeader[0].inv_per_phone);
+            this.invoiceForm
+              .get("clientAddress")
+              .setValue(this.factureHeader[0].inv_per_address);
         this.invoiceForm.get("clientID").setValue(this.factureHeader[0].perID);
+        this.invoiceForm.controls['clientName'].disable();
         this.editFactureTitle =
           "Modifier Facture: " + this.factureHeader[0].inv_code;
         if (Response[1] != 0) {
@@ -206,13 +215,17 @@ export class FactureReturnComponent implements OnInit {
     }, 200);
   }
 
-  setClientName(id, name) {
+  setClientName(id, name,phone,address) {
     this.invoiceForm.get('clientName').setValue(name);
+    this.invoiceForm.get('clientPhone').setValue(phone);
+    this.invoiceForm.get('clientAddress').setValue(address);
     this.invoiceForm.get('clientID').setValue(id);
     this.invoiceForm.controls['clientName'].disable();
   }
   clearClientName() {
     this.invoiceForm.get("clientName").setValue("");
+    this.invoiceForm.get("clientPhone").setValue("");
+    this.invoiceForm.get("clientAddress").setValue("");
     this.invoiceForm.get("clientID").setValue("");
     this.invoiceForm.controls['clientName'].enable();
   }

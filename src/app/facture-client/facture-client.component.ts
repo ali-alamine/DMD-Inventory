@@ -85,8 +85,8 @@ export class FactureClientComponent implements OnInit {
       invoiceDate: [this.invoiceDate, Validators.required],
       delDate: [this.deliveryDate, Validators.required],
       clientName: ['', Validators.required],
-      clientPhone: '',
-      clientAddress: '',
+      clientPhone:["", Validators.required],
+      clientAddress: ["", Validators.required],
       clientID: ['',Validators.required],
       itemsEdit: this.fb.array([]),
       items: this.fb.array([])
@@ -109,7 +109,10 @@ export class FactureClientComponent implements OnInit {
         this.delDate.setValue(dateDel);
         this.invID.setValue(this.factureID);
         this.clientName.setValue(this.factureHeader[0]['per_name']);
+        this.clientPhone.setValue(this.factureHeader[0]['inv_per_phone']);
+        this.clientAddress.setValue(this.factureHeader[0]['inv_per_address']);
         this.clientID.setValue(this.factureHeader[0]['perID']);
+        this.invoiceForm.controls['clientName'].disable();
         this.editFactureTitle = "Modifier Facture: "+this.factureHeader[0]['inv_code'];   
 
         if(Response[1]!=0){

@@ -103,8 +103,8 @@ if ($getAllFactureQuerySQL) {
             }
             $jsonData = $jsonData . '{"invID":"' . $row['invID'] . '",';
             $jsonData = $jsonData . '"per_name":"' . $row['per_name'] . '",';
-            $jsonData = $jsonData . '"per_phone":"' . $row['per_phone'] . '",';
-            $jsonData = $jsonData . '"per_address":"' . $row['per_address'] . '",';
+            $jsonData = $jsonData . '"inv_per_phone":"' . $row['inv_per_phone'] . '",';
+            $jsonData = $jsonData . '"inv_per_address":"' . $row['inv_per_address'] . '",';
             $jsonData = $jsonData . '"inv_code":"' . $row['inv_code'] . '",';
             $jsonData = $jsonData . '"inv_type":"' . $row['inv_type'] . '",';
             $jsonData = $jsonData . '"inv_date_del":"' . $row['inv_date_del'] . '",';
@@ -117,8 +117,8 @@ if ($getAllFactureQuerySQL) {
             }
             $jsonData = $jsonData . '{"invID":"' . $row['invID'] . '",';
             $jsonData = $jsonData . '"per_name":"' . $row['per_name'] . '",';
-            $jsonData = $jsonData . '"per_phone":"' . $row['per_phone'] . '",';
-            $jsonData = $jsonData . '"per_address":"' . $row['per_address'] . '",';
+            $jsonData = $jsonData . '"inv_per_phone":"' . $row['inv_per_phone'] . '",';
+            $jsonData = $jsonData . '"inv_per_address":"' . $row['inv_per_address'] . '",';
             $jsonData = $jsonData . '"inv_code":"' . $row['inv_code'] . '",';
             $jsonData = $jsonData . '"inv_type":"' . $row['inv_type'] . '",';
             $jsonData = $jsonData . '"inv_date_req":"' . $row['inv_date_req'] . '"}';
