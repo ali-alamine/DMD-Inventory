@@ -16,7 +16,7 @@
               <mat-icon>close</mat-icon>
           </button>
           <mat-autocomplete #auto="matAutocomplete">
-            <mat-option (onSelectionChange)="setClientName(option.perID,option.per_name,option.per_phone)" *ngFor="let option of options"
+            <mat-option (onSelectionChange)="setClientName(option.perID,option.per_name,option.per_phone,option.per_address)" *ngFor="let option of options"
               [value]="option.name">{{option.per_name}}
               || {{option.per_code}}</mat-option>
           </mat-autocomplete>
@@ -176,7 +176,7 @@
         </div>
         <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field class="inputField" fxFlex>
-            <input matInput placeholder="Addresse" formControlName="address" type="text">
+            <input matInput placeholder="Adresse" formControlName="address" type="text">
             <mat-error> L'adresse du client est obligatoire</mat-error>
           </mat-form-field>
         </div>
@@ -192,6 +192,7 @@
     <div style="float:left;" class="noselect">
         <b>Nom:</b> {{clientName.value}}<br>
         <b>Numéro de téléphone:</b> {{clientPhone.value}}<br>
+        <b>Adresse:</b> {{clientAddress.value}}<br>
       </div>
       <div style="float: right;" class="noselect">
         <b>Date de Commande:</b> {{factureDate.value}}<br>

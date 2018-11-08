@@ -45,7 +45,7 @@ export class FactureClientComponent implements OnInit {
   factureDetails = [];
   private clientForm;
   isExist; newCode="-1";
-  p_clientName; p_clientPhone; p_dateReq;
+  p_clientName; p_clientPhone; p_dateReq;p_clientAddress;
   lengthDeleted = 0;
   
   constructor(private datePipe: DatePipe,
@@ -88,6 +88,7 @@ export class FactureClientComponent implements OnInit {
       delDate: [this.deliveryDate, Validators.required],
       clientName: ['', Validators.required],
       clientPhone: '',
+      clientAddress: '',
       // searchClient: '',
       clientID: ['',Validators.required],
       itemsEdit: this.fb.array([]),
@@ -258,9 +259,10 @@ export class FactureClientComponent implements OnInit {
     
   }
 
-  setClientName(id, name,phone) {
+  setClientName(id, name,phone,address) {
     this.invoiceForm.get('clientName').setValue(name);
     this.invoiceForm.get('clientPhone').setValue(phone);
+    this.invoiceForm.get('clientAddress').setValue(address);
     this.invoiceForm.get('clientID').setValue(id);
     this.invoiceForm.controls['clientName'].disable();
     setTimeout(function(){ document.getElementById("delDate").focus();},200)
@@ -398,6 +400,7 @@ export class FactureClientComponent implements OnInit {
   clearClientName() {
     this.invoiceForm.get("clientName").setValue("");
     this.invoiceForm.get("clientPhone").setValue("");
+    this.invoiceForm.get("clientAddress").setValue("");
     this.invoiceForm.get("clientID").setValue("");
     this.invoiceForm.controls['clientName'].enable();
   }
@@ -534,6 +537,9 @@ export class FactureClientComponent implements OnInit {
   }
   get clientPhone() {
     return this.invoiceForm.get('clientPhone');
+  }
+  get clientAddress() {
+    return this.invoiceForm.get('clientAddress');
   }
   get clientID() {
     return this.invoiceForm.get('clientID');
