@@ -40,7 +40,7 @@
           <input matInput placeholder="Nom" formControlName="name" type="text" name="nameInput" autofocus>
           <mat-error> Le nom du client est obligatoire avec 3 lettres minimum</mat-error>
         </mat-form-field>
-        <span *ngIf="isExist == true && editFlag==false" style="color:red"> Client exist!</span>
+        <span *ngIf="isExist == true && editFlag==false" style="color:red"> Client existe!</span>
       </div>
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="inputField" fxFlex>

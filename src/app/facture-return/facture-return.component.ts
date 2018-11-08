@@ -99,7 +99,6 @@ export class FactureReturnComponent implements OnInit {
       this.router.navigate(["login"]);
     }
     const currentDate = new Date();
-    //  this.deliveryDate = currentDate.toISOString().substring(0, 10);
     this.deliveryDate = this.datePipe.transform(currentDate, "dd-MM-yyyy");
 
     if (this.factureComponent.factureID != -1) {
@@ -112,7 +111,6 @@ export class FactureReturnComponent implements OnInit {
       invID: "-1",
       invoiceDate: [this.deliveryDate, Validators.required],
       clientName: ["", Validators.required],
-      searchClient: "",
       clientID: "",
       itemsEdit: this.fb.array([]),
       items: this.fb.array([])
@@ -154,7 +152,7 @@ export class FactureReturnComponent implements OnInit {
             this.itemsEditForm.push(item);
             this.lengthDeleted++;
           }
-          setTimeout(function() {
+          setTimeout(function () {
             document.getElementById("crtEdit0").focus();
           }, 200);
         }
@@ -165,8 +163,8 @@ export class FactureReturnComponent implements OnInit {
     );
   }
   onClientNameChange(): void {
-    this.invoiceForm.get("searchClient").valueChanges.subscribe(val => {
-      var data = this.invoiceForm.get("searchClient").value;
+    this.invoiceForm.get("clientName").valueChanges.subscribe(val => {
+      var data = this.invoiceForm.get("clientName").value;
       if (data == "") {
         this.options = [];
         return;
@@ -203,17 +201,21 @@ export class FactureReturnComponent implements OnInit {
       itemIsDamaged.value
     );
     FactureReturnComponent.selectedItems.splice(index, 1);
-    setTimeout(function() {
+    setTimeout(function () {
       document.getElementById("crt0").focus();
     }, 200);
   }
 
-  test(id, name) {
-    this.invoiceForm.get("searchClient").setValue("");
-    this.invoiceForm.get("clientName").setValue(name);
-    this.invoiceForm.get("clientID").setValue(id);
+  setClientName(id, name) {
+    this.invoiceForm.get('clientName').setValue(name);
+    this.invoiceForm.get('clientID').setValue(id);
+    this.invoiceForm.controls['clientName'].disable();
   }
-
+  clearClientName() {
+    this.invoiceForm.get("clientName").setValue("");
+    this.invoiceForm.get("clientID").setValue("");
+    this.invoiceForm.controls['clientName'].enable();
+  }
   addReturnInvoice() {
     this.factureReturnService
       .newReturnInvoice(this.invoiceForm.value)
@@ -247,8 +249,7 @@ export class FactureReturnComponent implements OnInit {
     this.invoiceForm.reset();
     this.myNgForm.resetForm();
     this.invoiceForm.get("invoiceDate").setValue(this.deliveryDate);
-
-   
+    this.invoiceForm.controls['clientName'].enable();
   }
   editReturnInvoice() {
     this.factureReturnService
@@ -306,7 +307,7 @@ export class FactureReturnComponent implements OnInit {
         if (i == -1 && i2 == -1) this.addRow(element);
       }
     });
-    setTimeout(function() {
+    setTimeout(function () {
       document.getElementById("crt0").focus();
     }, 200);
   }
@@ -349,7 +350,7 @@ export class FactureReturnComponent implements OnInit {
         { data: "item_packing_list", title: "Colisage" }
       ],
       rowId: "ID",
-      createdRow: function(row, data, index) {
+      createdRow: function (row, data, index) {
         if (data["item_is_damaged"] == 1) {
           $(row).addClass("text-danger");
         }
@@ -389,7 +390,7 @@ export class FactureReturnComponent implements OnInit {
       }
     });
 
-    multiSelectDT.on("select", function(e, dt, type, indexes) {
+    multiSelectDT.on("select", function (e, dt, type, indexes) {
       var rows = multiSelectDT
         .rows(".selected")
         .indexes()
@@ -418,7 +419,7 @@ export class FactureReturnComponent implements OnInit {
       });
     });
 
-    multiSelectDT.on("deselect", function(e, dt, type, indexes) {
+    multiSelectDT.on("deselect", function (e, dt, type, indexes) {
       var rows = multiSelectDT
         .rows(".selected")
         .indexes()

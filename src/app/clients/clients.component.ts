@@ -220,8 +220,8 @@ export class ClientsComponent implements OnInit, OnDestroy {
   onClientIsExistChange(): void {
     this.clientForm.get("name").valueChanges.subscribe(val => {
       var data = this.clientForm.get("name").value;
-      var dataString = JSON.stringify(data);
-      this.clientsService.searchClientName(dataString).subscribe(Response => {
+      // var dataString = JSON.stringify(data);
+      this.clientsService.searchClientName(data).subscribe(Response => {
         if (Response == 1) {
           this.isExist = true;
         } else this.isExist = false;

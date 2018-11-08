@@ -63,7 +63,7 @@ class clients extends REST_Controller
 
         $keyword = $this->get('keyword');
         // $keyword = json_decode($keyword,JSON_HEX_QUOT);
-        $keyword = json_decode($keyword,true);
+        // $keyword = json_decode($keyword,true);
 
         
         $result = $this->clients_model->searchClientName($keyword);      

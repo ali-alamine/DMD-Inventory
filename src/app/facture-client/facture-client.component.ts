@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { StockService } from '../stock/stock.service';
-import { SupplyService } from '../facture-supply/facture-supply.service';
 import swal from 'sweetalert2';
 import { FactureClientService } from './facture-client.service';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
@@ -89,7 +87,6 @@ export class FactureClientComponent implements OnInit {
       clientName: ['', Validators.required],
       clientPhone: '',
       clientAddress: '',
-      // searchClient: '',
       clientID: ['',Validators.required],
       itemsEdit: this.fb.array([]),
       items: this.fb.array([])
@@ -254,12 +251,12 @@ export class FactureClientComponent implements OnInit {
     this.itemsForm.removeAt(i);
     var index = FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', 'isDamaged', id.value, itemIsDamaged.value);
     FactureClientComponent.selectedItems.splice(index, 1);
-    // if(i!=0)
       setTimeout(function(){ document.getElementById("crt0").focus();},200)
     
   }
 
   setClientName(id, name,phone,address) {
+    this.p_clientName = name ;
     this.invoiceForm.get('clientName').setValue(name);
     this.invoiceForm.get('clientPhone').setValue(phone);
     this.invoiceForm.get('clientAddress').setValue(address);
@@ -269,8 +266,6 @@ export class FactureClientComponent implements OnInit {
   }
 
   addClientInvoice() {
-    this.invoiceForm.controls['clientName'].enable();
-    console.log(this.invoiceForm.get('clientName').value)
     this.factureClientService.newClientInvoice(this.invoiceForm.value).subscribe(Response => {
       this.newCode = Response;
       var msg = 'Facture Client Code: '+Response;
@@ -291,9 +286,9 @@ export class FactureClientComponent implements OnInit {
         FactureClientComponent.selectedItems = [];
         this.invoiceForm.reset();
         this.myNgForm.resetForm();
-        // this.invoiceForm.get('clientID').setValue('');
         this.invoiceForm.get('invoiceDate').setValue(this.invoiceDate);
         this.invoiceForm.get('delDate').setValue(this.deliveryDate);
+        this.invoiceForm.controls['clientName'].enable();
         while (this.itemsForm.length !== 0) {
           this.itemsForm.removeAt(0)
         }
@@ -309,13 +304,13 @@ export class FactureClientComponent implements OnInit {
   }
 
   printFactureClient(){
-    // console.log(this.invoiceForm.value)
       var printContents = document.getElementById('printFacture').innerHTML;
       var popupWin = window.open('', '_blank', 'width=800,height=600');
       popupWin.document.open();
       popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="../../styles.css"></head><body onload="window.print()">' + printContents + '</body></html>');
       popupWin.document.close();
       setTimeout(function(){ popupWin.close(); }, 1000);
+      this.p_clientName = '';
   }
 
   editClientInvoice(){
@@ -377,9 +372,13 @@ export class FactureClientComponent implements OnInit {
 
   addClient() {    
     this.factureClientService.addNewClient(this.clientForm.value).subscribe(Response => {
-      this.invoiceForm.get('clientName').setValue(this.clientForm.get('name').value);
       this.invoiceForm.get('clientID').setValue(Response);
-        document.getElementById("delDate").focus();
+      this.invoiceForm.get('clientPhone').setValue(this.clientForm.value.phone);
+      this.invoiceForm.get('clientAddress').setValue(this.clientForm.value.address);
+      this.invoiceForm.get('clientName').setValue(this.clientForm.value.name);
+      this.p_clientName=this.clientForm.value.name;
+      this.invoiceForm.controls['clientName'].disable();
+      document.getElementById("delDate").focus();
       swal({
         type: 'success',
         title: 'Succès',
@@ -398,6 +397,7 @@ export class FactureClientComponent implements OnInit {
     this.modalReference.close();
   }
   clearClientName() {
+    this.p_clientName = '';
     this.invoiceForm.get("clientName").setValue("");
     this.invoiceForm.get("clientPhone").setValue("");
     this.invoiceForm.get("clientAddress").setValue("");
@@ -546,6 +546,9 @@ export class FactureClientComponent implements OnInit {
   }
   get itemIsDamaged() {
     return this.invoiceForm.get('isDamaged');
+  }
+  get name (){
+    return this.clientForm.get('name');
   }
   static findWithAttr(array, attr, attr2, value, value2) {
     var index = -1;
