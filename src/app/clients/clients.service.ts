@@ -14,7 +14,6 @@ export class ClientsService {
   }
 
   editClient(clientData): Observable<any> {
-    console.log(clientData);
     return this.httpClient.put(this.url + "client", clientData);
   }
 
@@ -25,7 +24,6 @@ export class ClientsService {
   }
 
   deleteClient(data): Observable<any> {
-    // console.log(data);
     return this.httpClient.get(this.url + "deleteClient",{params:{ID:data}});
   }
 

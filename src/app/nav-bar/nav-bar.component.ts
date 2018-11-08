@@ -23,12 +23,7 @@ export class NavBarComponent implements OnInit {
   }
 
   ngOnInit() {
-    
-    
-    
-
     this.navBarService.getCountFR().subscribe(Response => {
-      console.log(Response[0].c);
       this.badgeCount = Response[0].c;      
       this.getCountFR();
       this.navBarService.changeCount(Response[0].c);

@@ -165,7 +165,6 @@ export class ReportsInvoiceItemsComponent implements OnInit, OnDestroy {
   }
 
   searchSubmit() {
-    console.log(this.filterForm.value);
     if (this.filterForm.get("fromDateCtrl").value != null &&this.filterForm.get("toDateCtrl").value != null) {
       ReportsInvoiceItemsComponent.fromDate = formatDate(this.filterForm.get("fromDateCtrl").value,"yyyy-MM-dd","en");
       ReportsInvoiceItemsComponent.toDate = formatDate(this.filterForm.get("toDateCtrl").value,"yyyy-MM-dd","en");
@@ -234,10 +233,6 @@ export class ReportsInvoiceItemsComponent implements OnInit, OnDestroy {
       ReportsInvoiceItemsComponent.selectedClients="-1";
     }
  
-
-    console.log(ReportsInvoiceItemsComponent.selectedClients)
-
-
     ReportsInvoiceItemsComponent.clientID = this.filterForm.get("clientID").value;
     ReportsInvoiceItemsComponent.fromCode = this.filterForm.get("fromCode").value;
     ReportsInvoiceItemsComponent.toCode = this.filterForm.get("toCode").value;

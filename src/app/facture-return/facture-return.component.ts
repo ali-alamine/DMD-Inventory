@@ -167,7 +167,11 @@ export class FactureReturnComponent implements OnInit {
         }
       },
       error => {
-        console.log(error);
+        swal({
+          type: "error",
+          title: error.statusText,
+          text: error.message
+        });
       }
     );
   }

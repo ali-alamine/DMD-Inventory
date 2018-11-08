@@ -3,7 +3,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SettingsService } from './settings.service';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
-import Swal from 'sweetalert2';
+
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-settings',
@@ -43,18 +44,21 @@ export class SettingsComponent implements OnInit {
         userID: [id],
         userName: [name, [Validators.required]],
         password: [pass, [Validators.required]]
-      });
-      console.log(this.userForm.value)
+      });      
       this.modalReference = this.modalService.open(editUserModal, { centered: true, size: 'lg', ariaLabelledBy: 'modal-basic-title' });
       
     }, error => {
-      console.log(error);
+      swal({
+        type: "error",
+        title: error.statusText,
+        text: error.message
+      });
     });
     
   }
   editUser(){
     this.settingsService.editUser(this.userForm.value).subscribe(Response => {
-      Swal({
+      swal({
         type: 'success',
         title: 'Succès',
         text: "Modifier l'utilisateur",
@@ -62,7 +66,7 @@ export class SettingsComponent implements OnInit {
         timer: 1000
       });
     }, error => {
-      Swal({
+      swal({
         type: 'error',
         title: error.statusText,
         text: error.message
@@ -75,9 +79,9 @@ export class SettingsComponent implements OnInit {
       this.uploadedFile.push(file);
 
       this.settingsService.uploadScript(file).subscribe(Response => {
-        console.log(Response);
+        // console.log(Response);
       }, error => {
-        console.log(error);
+        // console.log(error);
       });
     }
   }

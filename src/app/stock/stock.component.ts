@@ -229,7 +229,6 @@ export class StockComponent implements OnInit, OnDestroy {
   getItemDesactivate(){
     this.stockService.getItemDesactivate().subscribe( Response => {
       this.details = Response;
-      // console.log(this.details)
     });
 
   }
