@@ -2,6 +2,9 @@
   <button mat-raised-button color="primary" (click)="editFlag=false;openStockModal(stockModal)">
     <i class="material-icons">add</i> Ajouter Article
   </button>
+  <button mat-raised-button color="primary" (click)="openStockDelModal(showDetails)">
+    <i class="material-icons">delete_sweep</i> Article Désactivé
+  </button>
 
   <hr>
   <p-contextMenu [target]="contextScope" [model]="items" oncontextmenu="return false;"></p-contextMenu>
@@ -20,6 +23,7 @@
   <button id="editStockBtn" (click)="editFlag=true;openStockModal(stockModal)"></button>
   <button id="transferBtn" (click)="openTransferModal(transferModal)"></button>
   <button id="deleteBtn" (click)="deleteItem()"></button>
+  <!-- <button id="addBtn" (click)="returnItem()"></button> -->
   <button id="chartBtn" (click)="openChartModal(chart)"></button>
 </div>
 
@@ -100,3 +104,57 @@
 
   </div>
 </ng-template>
+<ng-template #showDetails  let-c="close" let-d="dismiss" class="showTemplate">
+    <div class="modal-header noselect">
+      <h4 class="modal-title" id="modal-basic-title">Article Désactivé</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body noselect">
+
+        <table class="table table-bordered table-hover noselect " id="detailFactureDT">
+            <thead>
+              <tr>
+                <th style="text-align: center; ">ARTICLE</th>
+                <th style="text-align: center; width: 10%;">CRT</th>
+                <th style="text-align: center; width: 10%;">PIECE</th>
+                <!-- <th>CONFIRMER</th> -->
+                <th style="text-align: center; width: 10%;">Activé</th></tr>
+            </thead>
+            <tbody #contextScopeDetails>
+                <tr *ngFor="let d of details; let i=index">
+                  <td *ngIf="d.isDamagedFlag == 1 && (d.pieceD != 0 || d.crtD != 0)" >
+                    <i style='float:right; color: #FF0000;' md-18 class='material-icons'
+                    title=" CRT:{{d.crtD}} || Piece:{{d.pieceD}}">new_releases</i>{{d.item_name}}
+                  </td>
+                  <td *ngIf="d.item_is_damaged == 0 && !d.isDamagedFlag" >{{d.item_name}}</td>
+                  <td>{{d.crt}}</td>
+                  <td>{{d.item_piece}}</td>
+                  <!-- <td>
+                    <button mat-raised-button matTooltip=""  (click)="confirmOrder(i,order.ordID,order.ord_invID,order.ord_crt,order.ord_piece,order.ord_itemID,order.ord_item_isDamaged,order.item_packing_list)" value="Confirmer" color="primary">Confirmer</button>
+                  </td> -->
+                  <td>
+                <button mat-raised-button matTooltip="" (click)="returnItem(d.itemID)" value="Activé" color="primary">Activé</button>
+                 </td>
+              </tr>
+              <tr *ngIf = "details == null "><td colspan="4" style="text-align: center;"> Pas des articles désactivé</td></tr>
+
+            </tbody>
+          </table>
+
+
+        <!-- <p-contextMenu class="p-con" [target]="contextScopeDel"  [model]="itemsDel" oncontextmenu="return false;"></p-contextMenu>
+
+        <table class="table table-striped table-bordered table-hover table-sm noselect " id="stocksDelDT">
+          <thead>
+      
+          </thead>
+          <tbody #contextScopeDel>
+          </tbody>
+        </table> -->
+    </div>
+    <div class="modal-footer noselect">
+      
+    </div>
+  </ng-template>
