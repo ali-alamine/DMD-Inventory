@@ -1,12 +1,13 @@
 <?php
 include './connection.php';
 openConn();
+$item_isActivated = $_GET['item_isActivated'];
 $requestData = $_REQUEST;
 $rowsReq = (isset($_GET['length'])) ? intval($_GET['length']) : 10;
 $start = (isset($_GET['start'])) ? intval($_GET['start']) : 0;
 $orderString = "";
 
-$rowsCount = mysqli_fetch_assoc(mysqli_query(openConn(), "SELECT COUNT(itemID) as exp FROM item  where item_isActivated = 1 AND item_is_damaged = 0 "))['exp'];
+$rowsCount = mysqli_fetch_assoc(mysqli_query(openConn(), "SELECT COUNT(itemID) as exp FROM item  where item_isActivated = '".$item_isActivated."' AND item_is_damaged = 0 "))['exp'];
 
 if (count($_GET['order'])) {
     $orderBy = $_GET['columns'][$_GET['order'][0]['column']]['data'];
@@ -31,11 +32,11 @@ if (count($_GET['order'])) {
 if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     $search = $_GET["search"]["value"];
 
-    $getAllFactureQuery = " SELECT *, FLOOR(item_piece/item_packing_list) as crt FROM item left join (select item.itemID as itemIDD , item_is_damaged as isDamagedFlag, FLOOR(item_piece/item_packing_list) as crtD, item_piece as pieceD FROM item where item_is_damaged = 1 ) as d on item.itemID = d.itemIDD where item_isActivated = 1 AND item_is_damaged = 0 AND ( item_name like '%" . $search . "%' OR item_code like '%" . $search . "%' ) " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+    $getAllFactureQuery = " SELECT *, FLOOR(item_piece/item_packing_list) as crt FROM item left join (select item.itemID as itemIDD , item_is_damaged as isDamagedFlag, FLOOR(item_piece/item_packing_list) as crtD, item_piece as pieceD FROM item where item_is_damaged = 1 ) as d on item.itemID = d.itemIDD where item_isActivated = '".$item_isActivated."' AND item_is_damaged = 0 AND ( item_name like '%" . $search . "%' OR item_code like '%" . $search . "%' ) " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
 } else {
 
-    $getAllFactureQuery = "SELECT *, FLOOR(item_piece/item_packing_list) as crt FROM item left join (select item.itemID as itemIDD , item_is_damaged as isDamagedFlag, FLOOR(item_piece/item_packing_list) as crtD, item_piece as pieceD FROM item where item_is_damaged = 1 ) as d on item.itemID = d.itemIDD where item_isActivated = 1 AND item_is_damaged = 0 " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+    $getAllFactureQuery = "SELECT *, FLOOR(item_piece/item_packing_list) as crt FROM item left join (select item.itemID as itemIDD , item_is_damaged as isDamagedFlag, FLOOR(item_piece/item_packing_list) as crtD, item_piece as pieceD FROM item where item_is_damaged = 1 ) as d on item.itemID = d.itemIDD where item_isActivated = '".$item_isActivated."' AND item_is_damaged = 0 " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
 }
 

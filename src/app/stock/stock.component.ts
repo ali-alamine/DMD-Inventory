@@ -22,15 +22,19 @@ export class StockComponent implements OnInit, OnDestroy {
   stockModalTitle;
   editFlag = false;
   private static selectedRowData;
+  // private static selectedRowDelData;
   private static selectedStockID;
+  private static selectedStockDelID;
   editedStockData = {};
   items: MenuItem[];
+  // itemsDel: MenuItem[];
   private globalStocksDT;
+  // private globalStocksDelDT;
   data: any;
   labels: Array<String> = [];
   data1: Array<String> = [];
   data2: Array<String> = [];
-
+  details;
   constructor(
     private router: Router,
     private modalService: NgbModal,
@@ -62,7 +66,7 @@ export class StockComponent implements OnInit, OnDestroy {
         type: "get",
         url:
           "http://localhost/DMD-Inventory/src/assets/api/dataTables/stockDataTable.php",
-        data: {},
+        data: {'item_isActivated':1},
         cache: true,
         async: true
       },
@@ -149,7 +153,7 @@ export class StockComponent implements OnInit, OnDestroy {
         }
       },
       {
-        label: "Supprimer",
+        label: "Désactivé",
         icon: "pi pi-fw pi-times",
         command: event => {
           let element: HTMLElement = document.getElementById(
@@ -200,7 +204,6 @@ export class StockComponent implements OnInit, OnDestroy {
   }
 
   openStockModal(stockModal) {
-    debugger;
     this.modalReference = this.modalService.open(stockModal, {
       centered: true,
       ariaLabelledBy: "modal-basic-title"
@@ -218,6 +221,17 @@ export class StockComponent implements OnInit, OnDestroy {
       name: [name, [Validators.required, Validators.minLength(3)]],
       colisage: [colisage, [Validators.required]]
     });
+  }
+  openStockDelModal(showDetails) {
+    this.modalReference = this.modalService.open(showDetails, { centered: true, ariaLabelledBy: 'modal-basic-title', size: 'lg' });
+    this.getItemDesactivate();
+  }
+  getItemDesactivate(){
+    this.stockService.getItemDesactivate().subscribe( Response => {
+      this.details = Response;
+      // console.log(this.details)
+    });
+
   }
 
   openTransferModal(transferModal) {
@@ -308,21 +322,60 @@ export class StockComponent implements OnInit, OnDestroy {
 
     this.modalReference.close();
   }
+  returnItem(id) {
+    Swal({
+      title: "Activé",
+      text: "Vous voulez vraiment activé cette article?",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Oui!",
+      cancelButtonText: "Non"
+    }).then(result => {
+      if (result.value) {
+        this.stockService
+          .returnStockItem(id)
+          .subscribe(
+            Response => {
+              this.getItemDesactivate();
+              // this.globalStocksDelDT.ajax.reload(null, false);
+              this.globalStocksDT.ajax.reload(null, false);
+              Swal({
+                type: "success",
+                title: "Succès",
+                showConfirmButton: false,
+                timer: 1000
+              });
+            },
+            // error => {
+            //   Swal({
+            //     type: "error",
+            //     title: "Attention",
+            //     text: "Cetts article se trouve dans des factures",
+            //     confirmButtonText: "Oui",
+            //   });
+            // }
+          );
+      }
+    });
+    // this.modalReference.close();
+  }
 
   deleteItem() {
-    if (StockComponent.selectedRowData["isDamagedFlag"]) {
-      Swal({
-        type: "error",
-        title: "Attention",
-        text: "Cette article contient des gâter",
-        confirmButtonText: "Oui",
-    });
-      return;
-    }
+    // if (StockComponent.selectedRowData["isDamagedFlag"]) {
+    //   Swal({
+    //     type: "error",
+    //     title: "Attention",
+    //     text: "Cette article contient des gâter",
+    //     confirmButtonText: "Oui",
+    // });
+    //   return;
+    // }
 
     Swal({
-      title: "Supprimer",
-      text: "Vous voulez vraiment supprimer?",
+      title: "Désactivé",
+      text: "Vous voulez vraiment désactivé?",
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
@@ -343,14 +396,14 @@ export class StockComponent implements OnInit, OnDestroy {
                 timer: 1000
               });
             },
-            error => {
-              Swal({
-                type: "error",
-                title: "Attention",
-                text: "Cetts article se trouve dans des factures",
-                confirmButtonText: "Oui",
-              });
-            }
+            // error => {
+            //   Swal({
+            //     type: "error",
+            //     title: "Attention",
+            //     text: "Cetts article se trouve dans des factures",
+            //     confirmButtonText: "Oui",
+            //   });
+            // }
           );
       }
     });

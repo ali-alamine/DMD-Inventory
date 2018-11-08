@@ -36,7 +36,7 @@ class history_model extends CI_Model
     public function getFactureReturnDetails($invID){
         $query = $this->db->query("SELECT * FROM order_inv 
         INNER JOIN return_details on date_ordID = ordID 
-        INNER JOIN person on ord_perID = perID 
+        -- INNER JOIN person on ord_perID = perID 
         INNER JOIN item on itemID = ord_itemID and item_is_Damaged = ord_item_isDamaged 
         where ord_status = 0 and ord_invID = '".$invID."' ");
 

@@ -97,10 +97,10 @@ class history extends REST_Controller
         $this->db->trans_begin();
         $this->history_model->deletedOrder($ordID);
         $count = $this->history_model->checkInvoice($invID,0);
-        $count2 = $this->history_model->checkInvoice($invID,1);
-        if($count == 0 && $count2 != 0)
-            $this->history_model->updateInvoice($invID,1);
-        if($count == 0 && $count2 == 0)
+        // $count2 = $this->history_model->checkInvoice($invID,1);
+        // if($count == 0 && $count2 != 0)
+        //     $this->history_model->updateInvoice($invID,1);
+        // if($count == 0 && $count2 == 0)
             $this->history_model->updateInvoice($invID,0);
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();

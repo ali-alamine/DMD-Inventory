@@ -79,7 +79,17 @@ class stock extends REST_Controller
     public function deleteStockItem_get()
     {
         $itemID = $this->get('ID');
-        $result = $this->stock_model->deleteItem($itemID);
+        $result = $this->stock_model->deleteItem($itemID,0);
+        if ($result === false) {
+            $this->response("you can not", 404);
+        } else {
+            $this->response("success", 200);
+        }
+    }
+    public function returnStockItem_get()
+    {
+        $itemID = $this->get('ID');
+        $result = $this->stock_model->deleteItem($itemID,1);
         if ($result === false) {
             $this->response("you can not", 404);
         } else {
@@ -101,7 +111,17 @@ class stock extends REST_Controller
         }
 
     }
+    public function getItemDesactivate_get()
+    {
+        // $itemID = $this->get('itemID');
+        // $resultFC = $this->stock_model->itemChartFC($itemID);
+        $result = $this->stock_model->getItemDesactivate();
+        if ($result) {
+            $this->response($result, 200);
+            exit;
+        }
 
+    }
     // public function stripAccents($stripAccents){
     //     return strtr($stripAccents,'ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ','AAAAACEEEEIIIINOOOOOUUUUY');
     //   }

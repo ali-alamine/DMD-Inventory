@@ -66,28 +66,35 @@ class stock_model extends CI_Model
         }
     }
 
-    public function deleteItem($id)
-    {
-        $flag = $this->checkItemInInvoices($id);
-        if ( $flag == 0) {
+    public function deleteItem($id,$isActivated)
+    { 
+        // if($isActivated == 0){
+        //     $flag = $this->checkItemInInvoices($id);
+        //     if ( $flag == 0) {
+        //         $this->db->where('itemID', $id);
+        //         $this->db->set('item_isActivated',$isActivated, false);
+        //         $this->db->update('item');
+        //         return true;
+        //     } else {
+        //         return false;
+        //     }
+        // } else{
             $this->db->where('itemID', $id);
-            $this->db->set('item_isActivated',0, false);
+            $this->db->set('item_isActivated',$isActivated, false);
             $this->db->update('item');
             return true;
-        } else {
-            return false;
-        }
+        // }
     }
 
-    public function checkItemInInvoices($itemID)
-    {
-        $this->db->select('*');
-        $this->db->from('order_inv');       
-        $this->db->where('ord_itemID', $itemID);
-        $query = $this->db->get();
-        return $query->num_rows();       
+    // public function checkItemInInvoices($itemID)
+    // {
+    //     $this->db->select('*');
+    //     $this->db->from('order_inv');       
+    //     $this->db->where('ord_itemID', $itemID);
+    //     $query = $this->db->get();
+    //     return $query->num_rows();       
 
-    }
+    // }
 
    
 
@@ -104,6 +111,20 @@ class stock_model extends CI_Model
 
     public function itemChartFD($itemID){
         $query = $this->db->query("select DATE_FORMAT(inv_date_req,'%Y-%m') as month, sum(`ord_piece`+(`ord_crt`*item.item_packing_list)) as quan from order_inv inner join invoice on order_inv.ord_invID = invoice.invID inner join item on order_inv.ord_itemID = item.itemID and order_inv.ord_item_isDamaged = item.item_is_damaged where invoice.inv_type = 'FD' and `ord_itemID` = ".$itemID." GROUP BY DATE_FORMAT(inv_date_req,'%Y-%m')");
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return 0;
+        }
+    }
+    public function getItemDesactivate(){
+        $query = $this->db->query("SELECT *, FLOOR(item_piece/item_packing_list) as crt 
+        FROM item left join (
+            select item.itemID as itemIDD , item_is_damaged as isDamagedFlag, 
+                FLOOR(item_piece/item_packing_list) as crtD, item_piece as pieceD 
+                FROM item where item_is_damaged = 1 ) 
+            as d on item.itemID = d.itemIDD 
+        where item_isActivated = 0 AND item_is_damaged = 0 ");
         if ($query->num_rows() > 0) {
             return $query->result_array();
         } else {

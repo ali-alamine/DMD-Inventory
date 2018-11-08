@@ -30,5 +30,10 @@ export class StockService {
     return this.httpClient.get(this.url+"itemChart", {params:{itemID:data}});
   }
   
-  
+  returnStockItem(data): Observable<any>{
+    return this.httpClient.get(this.url+"returnStockItem", {params:{ID:data}});
+  }
+  getItemDesactivate(): Observable<any>{
+    return this.httpClient.get(this.url+"getItemDesactivate");
+  }
 }
