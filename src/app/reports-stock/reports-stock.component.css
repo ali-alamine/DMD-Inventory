@@ -4,4 +4,8 @@ mat-expansion-panel{
 
 #stockReportDT{
     text-align: center;
+    min-width: 100%;
+}
+mat-radio-button{
+    margin-right: 10px;
 }

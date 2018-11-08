@@ -1,20 +1,27 @@
 #accordionSearch {
-    margin: 15px;
-  }
-  .searchFormBtn {
-    margin: 10px;
-  }
-  
-  .dateFilter {
-    margin-left: 10px;
-  }
-  
-  #invoiceItemReportDT {
-    text-align: center;
-  }
-  
-  .container-fluid {
-    margin-bottom: 25px;
-    margin-top: 25px;
-  }
-  
+  margin: 15px;
+}
+.searchFormBtn {
+  margin: 10px;
+}
+
+.dateFilter {
+  margin-left: 10px;
+}
+
+#invoiceItemReportDT {
+  text-align: center;
+  min-width: 100%;
+}
+
+.container-fluid {
+  margin-bottom: 25px;
+  margin-top: 25px;
+}
+
+#clientMutiSelect {
+  margin-bottom: 10px;
+}
+mat-checkbox {
+  margin-right: 10px;
+}

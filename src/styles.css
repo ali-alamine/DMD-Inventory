@@ -73,21 +73,41 @@
   user-select: none;
 }
 
-.mat-button-toggle-button{
+.mat-button-toggle-button {
   width: 100%;
   cursor: pointer;
 }
 
-.btn-group, .btn-group-vertical{
+.btn-group,
+.btn-group-vertical {
   margin-bottom: 15px;
 }
 
-
-.test123{
+.test123 {
   border: 0px !important;
   text-align: center !important;
   width: 100% !important;
   color: red;
+}
+
+.dropdown-item {
+  margin: 1px !important;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  color: black !important;
+  font-weight: bold !important;
+  text-decoration: none !important;
+  background-color: #ffffff !important;
+}
+
+.ui-multiselect{
+  width: 35% !important;
+}
+.dt-buttons  .btn-secondary{
+  margin-left: 5px !important;
+  border-radius: 0 !important;
 }
 /* 
   

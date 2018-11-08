@@ -1,46 +1,43 @@
-<div class="container-fluid">
+<div class="container-fluid noselect">
   <mat-accordion id="accordionSearch">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Filter Inputs
+            Entrées de Filtre
         </mat-panel-title>
         <mat-panel-description>
-          Enter search criteria to filter result
+          Entrez les critères derecherche pour filtrer les résultats
         </mat-panel-description>
-      </mat-expansion-panel-header>
+        </mat-expansion-panel-header>
 
       <form fxLayout="column" [formGroup]="filterForm" autocomplete="off">
-
-        <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-          <mat-form-field class="inputFieldDim" fxFlex>
-            <mat-select placeholder="Gate" formControlName="gate">
-              <mat-option value="-1">All</mat-option>
-              <mat-option value="1">Yes</mat-option>
-              <mat-option value="0">No</mat-option>
-            </mat-select>
-          </mat-form-field>
+        <div style="margin-bottom:10px;">
+          <mat-radio-group formControlName="gate" fxLayout fxLayoutAlign="center" fxLayoutGap="30px">
+            <mat-radio-button value="-1" [checked]="true">Tous les Deux</mat-radio-button>
+            <mat-radio-button value="1">Gate Seulement</mat-radio-button>
+            <mat-radio-button value="0">Bon Seulement</mat-radio-button>
+          </mat-radio-group>
         </div>
-
-
-        <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-          <mat-form-field class="inputFieldDim" fxFlex>
-            <mat-select placeholder="status" formControlName="status">
-              <mat-option value="-1">Any</mat-option>
-              <mat-option value="1">Available</mat-option>
-              <mat-option value="0">Out of Stock</mat-option>
-            </mat-select>
-          </mat-form-field>
+        <hr>
+        <div style="margin-bottom:10px;">
+          <mat-radio-group formControlName="status" fxLayout fxLayoutAlign="center" fxLayoutGap="30px">
+            <mat-radio-button value="-1" [checked]="true">Tous les Deux</mat-radio-button>
+            <mat-radio-button value="1">Disponible</mat-radio-button>
+            <mat-radio-button value="0">En rupture de stock</mat-radio-button>
+          </mat-radio-group>
         </div>
-
-
-
-
+        <hr>
+        <div style="margin-bottom:10px;">
+          <mat-radio-group formControlName="deactivated" fxLayout fxLayoutAlign="center" fxLayoutGap="30px">
+            <mat-radio-button value="-1" [checked]="true">Tous les Deux</mat-radio-button>
+            <mat-radio-button value="1">Activé</mat-radio-button>
+            <mat-radio-button value="0">Désactivé</mat-radio-button>
+          </mat-radio-group>
+        </div>
       </form>
       <button mat-raised-button class="searchFormBtn" name="searchBtn" color="primary" [disabled]="!filterForm.valid"
-        (click)="searchSubmit() ">Show  Result
+        (click)="searchSubmit() ">Afficher le résultat
       </button>
-      <!-- <button mat-raised-button class="searchFormBtn" name="clearBtn" color="warn" (click)="clearForm()">Clear</button> -->
     </mat-expansion-panel>
   </mat-accordion>
   <table class="table table-striped table-bordered table-hover table-sm noselect " id="stockReportDT">

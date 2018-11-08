@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from "@angular/router";
 declare var $: any;
 
@@ -7,11 +7,15 @@ declare var $: any;
   templateUrl: './reports-client.component.html',
   styleUrls: ['./reports-client.component.css']
 })
-export class ReportsClientComponent implements OnInit {
+export class ReportsClientComponent implements OnInit,OnDestroy {
+  static globalDataTable: any;
 
   constructor(
     private router: Router) { }
-
+    ngOnDestroy(): void {
+      ReportsClientComponent.globalDataTable.fixedHeader.disable();
+    }
+  
   ngOnInit() {
     if (localStorage.getItem("user") !== '1') {
       this.router.navigate(["login"]);
@@ -105,6 +109,8 @@ export class ReportsClientComponent implements OnInit {
         { data: "code", title: "Code" }
       ]
     });
+
+    ReportsClientComponent.globalDataTable = clientDataTable;
   }
 
 }

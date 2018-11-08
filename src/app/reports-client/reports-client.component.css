@@ -9,4 +9,5 @@
 
 #clientReportDataTable{
     text-align: center;
+    min-width: 100%;
 }

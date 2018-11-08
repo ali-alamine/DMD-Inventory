@@ -10,13 +10,13 @@ $orderString = "";
 $condition = "WHERE 1 ";
 if (isset($_GET['invoiceType']) && $_GET['invoiceType'] != "-1") {
     $invoiceType = $_GET['invoiceType'];
-    $condition = $condition . " AND inv_type='" . $invoiceType."' ";
+    $condition = $condition . " AND inv_type IN( " . $invoiceType.") ";
 
 }
 
 if (isset($_GET['clientID']) && $_GET['clientID'] != "-1" && $_GET['clientID'] != "") {
     $clientID = $_GET['clientID'];
-    $condition = $condition . " AND inv_perID = " . $clientID." ";
+    $condition = $condition . " AND inv_perID IN( " . $clientID.") ";
 
 }
 
@@ -24,6 +24,12 @@ if (isset($_GET['fromDate']) && isset($_GET['toDate']) && $_GET['fromDate'] != "
     $fromDate = $_GET['fromDate'];
     $toDate = $_GET['toDate'];
     $condition = $condition . " AND ( inv_date_req between '" . $fromDate . "' AND '" . $toDate . "' ) ";
+}
+
+if (isset($_GET['fromCode']) && isset($_GET['toCode']) && $_GET['fromCode'] != "" && $_GET['toCode'] != "") {
+    $fromCode = $_GET['fromCode'];
+    $toCode = $_GET['toCode'];
+    $condition = $condition . " AND cast(SUBSTRING(inv_code,3) AS UNSIGNED ) between ".$fromCode." and ".$toCode;
 }
 
 if (count($_GET['order'])) {

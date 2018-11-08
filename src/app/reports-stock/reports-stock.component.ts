@@ -1,22 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
+import { ClientsService } from '../clients/clients.service';
 declare var $: any;
 @Component({
   selector: 'app-reports-stock',
   templateUrl: './reports-stock.component.html',
   styleUrls: ['./reports-stock.component.css']
 })
-export class ReportsStockComponent implements OnInit {
+export class ReportsStockComponent implements OnInit,OnDestroy {
   panelOpenState = false;
   filterForm;
   private static globalDataTable;
+
   private static gateSearch=-1;
   static qunatityStatus = -1;
+  static deactivated = -1;
 
   constructor(private fb: FormBuilder) { }
-
-  ngOnInit() {
+  ngOnDestroy(): void {
+    ReportsStockComponent.globalDataTable.fixedHeader.disable();
+  }
+  ngOnInit() {    
     var stockDT = $('#stockReportDT').DataTable({
       responsive: true,
       dom: 'Bfrtip',
@@ -94,7 +99,8 @@ export class ReportsStockComponent implements OnInit {
         data: function ( d ) {
           return $.extend( {}, d, {
             "gate":ReportsStockComponent.gateSearch,
-            "qunatityStatus":ReportsStockComponent.qunatityStatus
+            "qunatityStatus":ReportsStockComponent.qunatityStatus,
+            "deactivated":ReportsStockComponent.deactivated
           } );
         },
         cache: true,
@@ -103,7 +109,7 @@ export class ReportsStockComponent implements OnInit {
       order: [[0, 'asc']],
       columns: [
         { data: "item_name", title: "Article" },
-        // { data: "item_is_damaged", title: "Gâte" },
+        { data: "item_is_damaged", title: "Gâte" },
         { data: "item_code", title: "Code" },
         { data: "item_packing_list", title: "Colisage" },
         { data: "item_piece", title: "Piece" },
@@ -114,13 +120,15 @@ export class ReportsStockComponent implements OnInit {
     ReportsStockComponent.globalDataTable=stockDT;
     this.filterForm = this.fb.group({
       status: ['-1'],
-      gate: ['-1']
+      gate: ['-1'],
+      deactivated:['-1']
     });
   }
-
+  
   searchSubmit(){    
     ReportsStockComponent.qunatityStatus=this.filterForm.get('status').value;
     ReportsStockComponent.gateSearch=this.filterForm.get('gate').value;
+    ReportsStockComponent.deactivated=this.filterForm.get('deactivated').value;
     ReportsStockComponent.globalDataTable.ajax.reload();
   }
 

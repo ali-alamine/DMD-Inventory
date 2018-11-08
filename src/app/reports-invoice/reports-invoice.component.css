@@ -11,9 +11,25 @@
 
 #invoiceReportDT {
   text-align: center;
+  min-width: 100%;
 }
 
 .container-fluid {
   margin-bottom: 25px;
   margin-top: 25px;
+}
+
+mat-radio-button {
+  margin-right: 10px;
+}
+.itemInputs {
+  margin-right: 5px;
+  width: 10%;
+}
+
+#clientMutiSelect {
+  margin-bottom: 10px;
+}
+mat-checkbox {
+  margin-right: 10px;
 }

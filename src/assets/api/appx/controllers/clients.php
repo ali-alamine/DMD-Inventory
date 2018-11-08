@@ -62,8 +62,6 @@ class clients extends REST_Controller
     public function searchClientName_get(){
 
         $keyword = $this->get('keyword');
-        // $keyword = json_decode($keyword,JSON_HEX_QUOT);
-        // $keyword = json_decode($keyword,true);
 
         
         $result = $this->clients_model->searchClientName($keyword);      
@@ -73,6 +71,15 @@ class clients extends REST_Controller
             exit;
         }
     }
+    
+    public function getAllClient_get(){                
+        $result = $this->clients_model->getAllClients();      
+        if ($result) {
+            $this->response($result, 200);
+            exit;
+        }
+    }
+
     public function deleteClient_get()
     {
         $clientID = $this->get('ID');

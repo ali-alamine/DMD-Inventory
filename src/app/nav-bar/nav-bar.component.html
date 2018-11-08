@@ -37,8 +37,20 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/settings" routerLinkActive="active">Paramètres</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/reports" routerLinkActive="active">Rapports</a>
+        
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false"  [class.active]="currentUrl == '/reports/clients' || currentUrl == '/reports/stock'   || currentUrl == '/reports/invoices' || currentUrl == '/reports/items' ">
+            Rapports
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" routerLink="/reports/clients" routerLinkActive="active">Client</a>
+            <a class="dropdown-item" routerLink="/reports/stock" routerLinkActive="active">Stock</a>
+            <a class="dropdown-item" routerLink="/reports/invoices" routerLinkActive="active">Facture</a>
+            <a class="dropdown-item" routerLink="/reports/items" routerLinkActive="active">Articles</a>  
+            <!-- <div class="dropdown-divider"></div> -->
+  
+          </div>
         </li>
         </ul>
   </div>

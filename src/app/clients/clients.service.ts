@@ -17,13 +17,19 @@ export class ClientsService {
     console.log(clientData);
     return this.httpClient.put(this.url + "client", clientData);
   }
+
   searchClientName(data): Observable<any> {
     return this.httpClient.get(this.url + "searchClientName", {
       params: { keyword: data }
     });
   }
+
   deleteClient(data): Observable<any> {
     // console.log(data);
     return this.httpClient.get(this.url + "deleteClient",{params:{ID:data}});
+  }
+
+  getAllClient(): Observable<any> {
+    return this.httpClient.get(this.url + "getAllClient");
   }
 }

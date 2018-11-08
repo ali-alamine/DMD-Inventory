@@ -45,6 +45,16 @@ class clients_model extends CI_Model
             return 0;
         }
     }
+
+    public function getAllClients(){
+        $query = $this->db->query("SELECT * FROM person WHERE per_isActivated = 1 and  per_isClient = 1 ");
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return 0;
+        }
+    }
+
     public function deleteClient($id)
     {
         $flag = $this->checkClientInInvoices($id);

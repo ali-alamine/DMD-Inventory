@@ -17,7 +17,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Routes, RouterModule } from '@angular/router';
 import { MatNativeDateModule, MatAutocompleteModule, MatSnackBarModule, MatBottomSheetModule } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
-import {ChartModule} from 'primeng/chart';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -26,6 +25,9 @@ import { ClientsComponent } from './clients/clients.component';
 import { SupplyComponent } from './facture-supply/facture-supply.component';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatRadioModule} from '@angular/material/radio';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { FocusDirectiveDirective } from './focus-directive.directive';
 import { FactureComponent } from './facture/facture.component';
@@ -35,19 +37,21 @@ import { HistoryComponent } from './history/history.component';
 import { FactureClientComponent } from './facture-client/facture-client.component';
 import { FactureReturnComponent } from './facture-return/facture-return.component';
 import {HotkeyModule} from 'angular2-hotkeys';
-import { SettingsComponent } from './settings/settings.component';
-import { FileUploadModule } from 'primeng/components/fileupload/fileupload';
-import {MatBadgeModule} from '@angular/material/badge';
-import { HistoryReturnComponent } from './history-return/history-return.component';
 import {DatePipe} from '@angular/common';
+
+import { SettingsComponent } from './settings/settings.component';
+import { HistoryReturnComponent } from './history-return/history-return.component';
 import { HistoryTransferComponent } from './history-transfer/history-transfer.component';
 import { LoginComponent } from './login/login.component';
 import { ReportsComponent } from './reports/reports.component';
 import { ReportsClientComponent } from './reports-client/reports-client.component';
-import {MatMenuModule} from '@angular/material/menu';
 import { ReportsStockComponent } from './reports-stock/reports-stock.component';
 import { ReportsInvoiceComponent } from './reports-invoice/reports-invoice.component';
 import { ReportsInvoiceItemsComponent } from './reports-invoice-items/reports-invoice-items.component';
+
+import {MultiSelectModule} from 'primeng/multiselect';
+import { FileUploadModule } from 'primeng/components/fileupload/fileupload';
+import {ChartModule} from 'primeng/chart';
 
 
 @NgModule({
@@ -96,10 +100,12 @@ import { ReportsInvoiceItemsComponent } from './reports-invoice-items/reports-in
     NgxSpinnerModule,
     MatButtonToggleModule,
     ChartModule,
+    MatRadioModule,
     HotkeyModule.forRoot(),
     FileUploadModule,
     MatBadgeModule,
-    MatMenuModule
+    MatMenuModule,
+    MultiSelectModule
   ],
   entryComponents: [],
   providers: [DatePipe],

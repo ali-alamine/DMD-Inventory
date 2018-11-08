@@ -30,6 +30,16 @@ if (isset($_GET['qunatityStatus'])) {
     }
 }
 
+if (isset($_GET['deactivated'])) {
+    $deactivated = $_GET['deactivated'];
+
+    if ($deactivated == 1) {
+        $condition = $condition . " AND item_isActivated = 1 ";
+    } else if ($deactivated == 0) {
+        $condition = $condition . " AND item_isActivated = 0 ";
+    }
+}
+
 
 if (count($_GET['order'])) {
     $orderBy = $_GET['columns'][$_GET['order'][0]['column']]['data'];    
@@ -62,6 +72,7 @@ if ($getAllFactureQuerySQL) {
             $jsonData = $jsonData . '{"itemID":"' . $row['itemID'] . '",';
             $jsonData = $jsonData . '"item_is_damaged":"' . $row['item_is_damaged'] . '",';
             $jsonData = $jsonData . '"item_code":"' . $row['item_code'] . '",';
+            $jsonData = $jsonData . '"item_isActivated":"' . $row['item_isActivated'] . '",';
             $jsonData = $jsonData . '"item_name":"' . $row['item_name'] . '",';
             $jsonData = $jsonData . '"item_packing_list":"' . $row['item_packing_list'] . '",';
             $jsonData = $jsonData . '"crt":"' . $row['crt'] . '",';
