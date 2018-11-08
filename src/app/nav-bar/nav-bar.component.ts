@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Location } from '@angular/common';
+import { NavBarService } from './nav-bar.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -10,7 +11,10 @@ import { Location } from '@angular/common';
 })
 export class NavBarComponent implements OnInit {
   currentUrl: string;
-  constructor(private router: Router,private location: Location) {
+  private badgeCount: any;
+  badgeCount2: any;
+
+  constructor(private router: Router,private location: Location,private navBarService:NavBarService) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.currentUrl = event.url;
@@ -19,6 +23,16 @@ export class NavBarComponent implements OnInit {
   }
 
   ngOnInit() {
+    
+    
+    
+
+    this.navBarService.getCountFR().subscribe(Response => {
+      console.log(Response[0].c);
+      this.badgeCount = Response[0].c;      
+      this.getCountFR();
+      this.navBarService.changeCount(Response[0].c);
+    });
 
   }
   goBack(){
@@ -27,5 +41,11 @@ export class NavBarComponent implements OnInit {
   goForward(){
     this.location.forward();
   }
-
+  getCountFR(){
+    this.navBarService.currentCount.subscribe(Response =>
+      {
+        this.badgeCount = Response;
+      }
+       )
+  }
 }

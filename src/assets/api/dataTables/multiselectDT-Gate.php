@@ -21,11 +21,11 @@ if (count($_GET['order'])) {
 if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     $search = $_GET["search"]["value"];
 
-    $getAllFactureQuery = "select *,FLOOR(item_piece/item_packing_list) as item_crt from item  where item_isActivated=1 and  (item_name like '%" . $search . "%' OR item_code like '%" . $search . "%') " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+    $getAllFactureQuery = "select *,FLOOR(item_piece/item_packing_list) as item_crt from item  where item_isActivated=1 and (item_is_damaged = 1 and item_piece !=0 OR item_is_damaged=0 ) and  (item_name like '%" . $search . "%' OR item_code like '%" . $search . "%') " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
 } else {
 
-    $getAllFactureQuery = "select *,FLOOR(item_piece/item_packing_list) as item_crt from item where item_isActivated=1 " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+    $getAllFactureQuery = "select *,FLOOR(item_piece/item_packing_list) as item_crt from item where item_isActivated=1 and (item_is_damaged = 1 and item_piece !=0 OR item_is_damaged=0) " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
 }
 

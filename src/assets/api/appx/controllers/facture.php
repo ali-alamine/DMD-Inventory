@@ -14,11 +14,11 @@ class facture extends REST_Controller
         // $supplyDate = $this->post('supplyDate');
         $invoiceItems = $this->post('items');
 
-        date_default_timezone_set("Asia/Beirut");
+        date_default_timezone_set("Africa/Ouagadougou");
         $supplyDate=date("Y-m-d H:i:s");
 
         // $correctDate = new DateTime($supplyDate);
-        // $correctDate->setTimezone(new DateTimeZone('Asia/Beirut'));
+        // $correctDate->setTimezone(new DateTimeZone('Africa/Ouagadougou'));
 
         $invoiceCode = $this->generateFactureCode('FD');
         $this->db->trans_begin();
@@ -58,23 +58,26 @@ class facture extends REST_Controller
         // $invoiceDate = $this->post('invoiceDate');
         $deliveryDate = $this->post('delDate');
         $clientID = $this->post('clientID');
+        $clientPhone = $this->post('clientPhone');
+        $clientAddress = $this->post('clientAddress');
 
         $invoiceItems = $this->post('items');
         
         // $invoiceCorrectDate = new DateTime($invoiceDate);
-        // $invoiceCorrectDate->setTimezone(new DateTimeZone('Asia/Beirut'));
-        date_default_timezone_set("Asia/Beirut");
+        // $invoiceCorrectDate->setTimezone(new DateTimeZone('Africa/Ouagadougou'));
+        date_default_timezone_set("Africa/Ouagadougou");
         $invoiceDate=date("Y-m-d H:i:s");
 
         $deliveryCorrectDate = new DateTime($deliveryDate);
-        $deliveryCorrectDate->setTimezone(new DateTimeZone('Asia/Beirut'));
+        $deliveryCorrectDate->setTimezone(new DateTimeZone('Africa/Ouagadougou'));
 
         $invoiceCode = $this->generateFactureCode('FC');
 
         $this->db->trans_begin();
 
         $invoiceID = $this->facture_model->addClientInvoice(array("inv_perID" =>  $clientID, "inv_code" => $invoiceCode, "inv_type" => 'FC', 
-        "inv_date_req" => $invoiceDate, "inv_date_del" => $deliveryCorrectDate->format('Y-m-d')));
+        "inv_date_req" => $invoiceDate, "inv_date_del" => $deliveryCorrectDate->format('Y-m-d'),
+        "inv_per_phone" => $clientPhone,"inv_per_address" => $clientAddress));
 
         foreach ($invoiceItems as $row) {
             if($row['crt'] == '') $row['crt']=0;
@@ -150,7 +153,7 @@ class facture extends REST_Controller
         $invoiceItems = $this->post('items');
 
         // $correctDate = new DateTime($supplyDate);
-        // $correctDate->setTimezone(new DateTimeZone('Asia/Beirut'));
+        // $correctDate->setTimezone(new DateTimeZone('Africa/Ouagadougou'));
 
        
         $this->db->trans_begin();
@@ -197,14 +200,17 @@ class facture extends REST_Controller
         $delDate = $this->post('delDate');
         $invID = $this->post('invID');
         $clientID = $this->post('clientID');
+        $clientPhone = $this->post('clientPhone');
+        $clientAddress = $this->post('clientAddress');
         $invoiceItemsEdit = $this->post('itemsEdit');
         $invoiceItems = $this->post('items');
         $correctDate = new DateTime($delDate);
-        $correctDate->setTimezone(new DateTimeZone('Asia/Beirut'));
+        $correctDate->setTimezone(new DateTimeZone('Africa/Ouagadougou'));
         $this->db->trans_begin();
 
         $this->facture_model->editReturnInvoice($invID,array("inv_perID" =>  $clientID, 
-        "inv_date_del" => $correctDate->format('Y-m-d')));
+        "inv_date_del" => $correctDate->format('Y-m-d'),
+        "inv_per_phone" => $clientPhone,"inv_per_address" => $clientAddress));
 
         foreach ($invoiceItemsEdit as $row) {
 

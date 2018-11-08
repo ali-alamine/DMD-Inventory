@@ -22,12 +22,12 @@ export class HistoryComponent implements OnInit {
   private globalHistoryFactureDetailsDT;
   @ViewChild('showDetails')
   private showDetailsTPL : TemplateRef<any>;
-  clientName; clientPhone; clientAddress; dateReq; code; type;
-  badgeCount: number;
+  clientName; clientPhone; clientAddress; dateReq; code; type;dateDel;
+  // badgeCount: number;
 
   constructor(private historyService: HistoryService,
     private modalService: NgbModal,
-    private router: Router, 
+    public router: Router, 
     private fb: FormBuilder) {  
   }
 
@@ -35,7 +35,7 @@ export class HistoryComponent implements OnInit {
     if (localStorage.getItem("user") !== '1') {
       this.router.navigate(["login"]);
     }
-    this.getCountFR();
+    // this.getCountFR();
     var router = localStorage.getItem('routerHistory');
     if (router !== null){
       this.router.navigate([router]);
@@ -72,6 +72,7 @@ export class HistoryComponent implements OnInit {
       this.clientPhone = facture[0].phone;
       this.clientAddress = facture[0].address;
       this.dateReq = facture[0].date_req;
+      this.dateDel = facture[0].date_del;
       this.code = facture[0].code;
       this.type = facture[0].type;
       if(facture[0].type=="FD"){
@@ -83,7 +84,8 @@ export class HistoryComponent implements OnInit {
       if(facture[0].type=="FC"){
         this.showDetailsCode="Afficher les détails du facture Client" ;
       }
-      var factureDetailDT = $('#detailFactureDT').DataTable({
+      if(facture[0].type=="FR"){
+        var factureDetailDT = $('#detailFactureDT').DataTable({
         responsive: true,
         paging: false,
         lengthChange:false,
@@ -97,13 +99,14 @@ export class HistoryComponent implements OnInit {
         fixedHeader: false,
         searching: true,
         data: this.factureDetails,
-        order: [[0, 'desc']],
+        order: [[0, 'asc']],
         columns: [
 
           { data: "item_name", title: "ARTICLE" },
           { data: "ord_crt", title: "CRT" ,"searchable": false,"sortable": false},
           { data: "ord_piece", title: "PIECE","searchable": false,"sortable": false },
           { data: "ord_note", title: "NOTE" ,"searchable": false,"sortable": false},
+          { data: "ord_date_com", title: "Date de confirme" ,"searchable": false,"sortable": false},
         ],
         language: {
           "sProcessing":     "Traitement en cours...",
@@ -134,7 +137,62 @@ export class HistoryComponent implements OnInit {
                   } 
           }
         }
-      });
+        });
+      } else{
+        var factureDetailDT = $('#detailFactureDT').DataTable({
+          responsive: true,
+          paging: false,
+          lengthChange:false,
+          serverSide: false,
+          processing: true,
+          select: {
+            "style": "single"
+          },
+          ordering: true,
+          stateSave: false,
+          fixedHeader: false,
+          searching: true,
+          data: this.factureDetails,
+          order: [[0, 'asc']],
+          columns: [
+  
+            { data: "item_name", title: "ARTICLE" },
+            { data: "ord_crt", title: "CRT" ,"searchable": false,"sortable": false},
+            { data: "ord_piece", title: "PIECE","searchable": false,"sortable": false },
+            { data: "ord_note", title: "NOTE" ,"searchable": false,"sortable": false},
+            // { data: "ord_det_com", title: "Date de confirmation" ,"searchable": false,"sortable": false},
+          ],
+          language: {
+            "sProcessing":     "Traitement en cours...",
+            "sSearch":         "Rechercher&nbsp;:",
+            "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+            "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+            "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+            "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+            "sInfoPostFix":    "",
+            "sLoadingRecords": "Chargement en cours...",
+            "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+            "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+            "oPaginate": {
+                "sFirst":      "Premier",
+                "sPrevious":   "Pr&eacute;c&eacute;dent",
+                "sNext":       "Suivant",
+                "sLast":       "Dernier"
+            },
+            "oAria": {
+                "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+                "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+            },
+            "select": {
+                    "rows": {
+                        _: "%d lignes séléctionnées",
+                        0: "Aucune ligne séléctionnée",
+                        1: "1 ligne séléctionnée"
+                    } 
+            }
+          }
+          });
+      }
       this.globalHistoryFactureDetailsDT = factureDetailDT;
       $('#factureDetailDT tbody').on('mousedown', 'tr', function (event) {
         if (event.which == 3) {
@@ -152,25 +210,16 @@ export class HistoryComponent implements OnInit {
       alert(error)
     });
   }
-  getCountFR(){
-    this.historyService.getCountFR().subscribe(Response => {
-      this.badgeCount=Response[0].c;
-    });
-  }
-
   printFacture(facture) {
     this.historyService.getFactureDetails(facture[0].ID,facture[0].type).subscribe(Response => {
       this.factureDetails = Response;
-      console.log(this.factureDetails)
       this.clientName = facture[0].clientName;
       this.clientPhone = facture[0].phone;
       this.clientAddress = facture[0].address;
       this.dateReq = facture[0].date_req;
+      this.dateDel = facture[0].date_del;
       this.code = facture[0].code;
       this.type = facture[0].type;
-      // this.zone.run(() => {
-        // this.factureDetails;
-      // });
       if(this.factureDetails!= null)
         this.printPage();
     }, error => {
@@ -178,15 +227,22 @@ export class HistoryComponent implements OnInit {
     });
 
 }
-// run(fn, applyThis, applyArgs) {
-//   return this._inner.run(fn, applyThis, applyArgs);
-// }
-printPage(){
-  // console.log($('#printFacture').html())
-  // var printContents = document.getElementById('printFacture').innerHTML;
-
+  printPage(){
   var html='';
   if(this.type == "FC"){
+    html = html + '<div class="table table-striped noselect" id="printFacture">'+
+    '<div style="float:left;">'+
+      '<b>Nom:</b> '+this.clientName+'<br>'+
+      '<b>Téléphone:</b> '+this.clientPhone+'<br>'+
+      '<b>Adresse:</b> '+this.clientAddress+
+    '</div>'+
+    '<div style="float: right;">'+
+      '<b>Date De Commande:</b> '+this.dateReq+'<br>'+
+      '<b>Date De Livraison:</b> '+this.dateDel+'<br>'+
+      '<b>Code:</b> '+this.code+
+    '</div>'+
+    '<br><br><br><hr>';
+  } else if(this.type == 'FR'){
     html = html + '<div class="table table-striped noselect" id="printFacture">'+
     '<div style="float:left;">'+
       '<b>Nom:</b> '+this.clientName+'<br>'+
@@ -198,41 +254,62 @@ printPage(){
       '<b>Code:</b> '+this.code+
     '</div>'+
     '<br><br><br><hr>';
-  } else{
+  }else{
     html = html + '<div class="table table-striped noselect" id="printFacture">'+
     '<div style="float: right;">'+
       '<b>Date De Commande:</b> '+this.dateReq+'<br>'+
       '<b>Code:</b> '+this.code+
     '</div>'+
     '<br><br><br><hr>';
-  }
-  html = html +'<table class="table table-responsive table-bordered text-center test noselect" style="width:100%;  border-collapse: collapse; border: 1px solid black;">'+
-                '<thead>'+
-                '<tr>'+
-                '<th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">ARTICLES</th>'+
-                '<th style="border: 1px solid black;" class="text-center mousetrap" colspan="2">QUANTITE</th>'+
-                '<th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">P.Unit</th>'+
-                        '<th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">Montant</th>'+
-                    '</tr>'+
-                    '<tr>'+
-                        '<th style="border: 1px solid black;" class="text-center mousetrap">CLS/CRT</th>'+
-                        '<th style="border: 1px solid black;" class="text-center mousetrap">PIECE</th>'+
-                    '</tr>'+
-                '</thead>'+
-              '<tbody>';
-// console.log(this.factureDetails.length)
-this.factureDetails.forEach(element => {
-  html = html + '<tr><td style="border: 1px solid black;">'+element.item_name+'</td>'+
-                '<td style="border: 1px solid black;">'+element.ord_crt+'</td>'+
-                '<td style="border: 1px solid black;">'+element.ord_piece+'</td>'+
-                '<td style="border: 1px solid black;"></td>'+
-                '<td style="border: 1px solid black;"></td></tr>';
-  // this.addFactureEditRow(element);
-  // SupplyComponent.selectedItems.push({ id: element['itemID'], name: element['item_name'], colisage:element['item_packing_list'] });
-});
-// for(var i = 0 ; i< this.factureDetails.lengthChange; i++){
 
-// }
+  }
+  if(this.type == 'FR'){
+    html = html +'<table class="table table-responsive table-bordered text-center test noselect" style="width:100%;  border-collapse: collapse; border: 1px solid black;">'+
+                  '<thead>'+
+                  '<tr>'+
+                  '<th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">ARTICLES</th>'+
+                  '<th style="border: 1px solid black;" class="text-center mousetrap" colspan="2">QUANTITE</th>'+
+                  '<th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">P.Unit</th>'+
+                  '<th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">Montant</th>'+
+                  '<th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">Date de confirme</th>'+
+                      '</tr>'+
+                      '<tr>'+
+                          '<th style="border: 1px solid black;" class="text-center mousetrap">CLS/CRT</th>'+
+                          '<th style="border: 1px solid black;" class="text-center mousetrap">PIECE</th>'+
+                      '</tr>'+
+                  '</thead>'+
+                '<tbody>';
+    this.factureDetails.forEach(element => {
+      html = html + '<tr><td style="border: 1px solid black;">'+element.item_name+'</td>'+
+                  '<td style="border: 1px solid black;">'+element.ord_crt+'</td>'+
+                  '<td style="border: 1px solid black;">'+element.ord_piece+'</td>'+
+                  '<td style="border: 1px solid black;"></td>'+
+                  '<td style="border: 1px solid black;"></td>'+
+                  '<td style="border: 1px solid black;">'+element.ord_date_com+'</td></tr>';
+    });
+  }else{
+    html = html +'<table class="table table-responsive table-bordered text-center test noselect" style="width:100%;  border-collapse: collapse; border: 1px solid black;">'+
+    '<thead>'+
+    '<tr>'+
+    '<th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">ARTICLES</th>'+
+    '<th style="border: 1px solid black;" class="text-center mousetrap" colspan="2">QUANTITE</th>'+
+    '<th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">P.Unit</th>'+
+            '<th style="border: 1px solid black;" class="text-center mousetrap" rowspan="2">Montant</th>'+
+        '</tr>'+
+        '<tr>'+
+            '<th style="border: 1px solid black;" class="text-center mousetrap">CLS/CRT</th>'+
+            '<th style="border: 1px solid black;" class="text-center mousetrap">PIECE</th>'+
+        '</tr>'+
+    '</thead>'+
+  '<tbody>';
+this.factureDetails.forEach(element => {
+html = html + '<tr><td style="border: 1px solid black;">'+element.item_name+'</td>'+
+    '<td style="border: 1px solid black;">'+element.ord_crt+'</td>'+
+    '<td style="border: 1px solid black;">'+element.ord_piece+'</td>'+
+    '<td style="border: 1px solid black;"></td>'+
+    '<td style="border: 1px solid black;"></td></tr>';
+});
+  }
 html =html +'</tbody>'+
             '</table>'+ 
             '<hr>'+

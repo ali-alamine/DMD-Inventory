@@ -24,10 +24,10 @@ export class HistoryService {
   deleteItem(ordID,type): Observable<any>{
     return this.httpClient.get(this.url+"deleteItem", {params:{ordID:ordID,type:type}});
   }
-  confirmOrder(data): Observable<any>{
-    return this.httpClient.post(this.url+"confirmOrder",data);
+  // confirmOrder(data): Observable<any>{
+  //   return this.httpClient.post(this.url+"confirmOrder",data);
 
-  }
+  // }
   rejectOrder(ordID,invID): Observable<any>{
     return this.httpClient.get(this.url+"rejectOrder",  {params:{ordID:ordID,invID:invID}});
   }
@@ -38,7 +38,7 @@ export class HistoryService {
   rejectAll(invID): Observable<any>{
     return this.httpClient.get(this.url+"rejectAll",  {params:{invID:invID}});
   }
-  getCountFR(): Observable<any>{
-    return this.httpClient.get(this.url+"getCountFR");
-  }
+  // getCountFR(): Observable<any>{
+  //   return this.httpClient.get(this.url+"getCountFR");
+  // }
 }

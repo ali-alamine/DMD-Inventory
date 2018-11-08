@@ -78,14 +78,14 @@ if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     
 
     if($show=="facture")
-        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req  from invoice INNER JOIN person on perID= inv_perID  where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_status = '1' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req,DATE_FORMAT(inv_date_del,'%d-%m-%Y') AS inv_date_del  from invoice INNER JOIN person on perID= inv_perID  where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_status = '1' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
    
     if($show=="return")
         $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req from invoice INNER JOIN person on perID= inv_perID where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_type = 'FR' and inv_status='-1' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
      
 } else {
     if($show=="facture")
-        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req from invoice INNER JOIN person on perID= inv_perID " . $condition . " and inv_status = '1'  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req,DATE_FORMAT(inv_date_del,'%d-%m-%Y') AS inv_date_del from invoice INNER JOIN person on perID= inv_perID " . $condition . " and inv_status = '1'  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     
     if($show=="return")
         $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req from invoice INNER JOIN person on perID= inv_perID " . $condition . " and  inv_type = 'FR' and inv_status='-1'  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
@@ -103,8 +103,8 @@ if ($getAllFactureQuerySQL) {
             }
             $jsonData = $jsonData . '{"invID":"' . $row['invID'] . '",';
             $jsonData = $jsonData . '"per_name":"' . $row['per_name'] . '",';
-            $jsonData = $jsonData . '"per_phone":"' . $row['per_phone'] . '",';
-            $jsonData = $jsonData . '"per_address":"' . $row['per_address'] . '",';
+            $jsonData = $jsonData . '"inv_per_phone":"' . $row['inv_per_phone'] . '",';
+            $jsonData = $jsonData . '"inv_per_address":"' . $row['inv_per_address'] . '",';
             $jsonData = $jsonData . '"inv_code":"' . $row['inv_code'] . '",';
             $jsonData = $jsonData . '"inv_type":"' . $row['inv_type'] . '",';
             $jsonData = $jsonData . '"inv_date_del":"' . $row['inv_date_del'] . '",';
@@ -117,8 +117,8 @@ if ($getAllFactureQuerySQL) {
             }
             $jsonData = $jsonData . '{"invID":"' . $row['invID'] . '",';
             $jsonData = $jsonData . '"per_name":"' . $row['per_name'] . '",';
-            $jsonData = $jsonData . '"per_phone":"' . $row['per_phone'] . '",';
-            $jsonData = $jsonData . '"per_address":"' . $row['per_address'] . '",';
+            $jsonData = $jsonData . '"inv_per_phone":"' . $row['inv_per_phone'] . '",';
+            $jsonData = $jsonData . '"inv_per_address":"' . $row['inv_per_address'] . '",';
             $jsonData = $jsonData . '"inv_code":"' . $row['inv_code'] . '",';
             $jsonData = $jsonData . '"inv_type":"' . $row['inv_type'] . '",';
             $jsonData = $jsonData . '"inv_date_req":"' . $row['inv_date_req'] . '"}';

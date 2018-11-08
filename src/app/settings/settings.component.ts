@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SettingsService } from './settings.service';
-import { Router } from '../../../node_modules/@angular/router';
-import { FormBuilder, Validators } from '../../../node_modules/@angular/forms';
+import { Router } from '@angular/router';
+import { FormBuilder, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 @Component({

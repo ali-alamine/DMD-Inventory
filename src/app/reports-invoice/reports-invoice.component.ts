@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { formatDate } from "@angular/common";
 import { ReportsService } from "../reports/reports.service";
-import { Router } from "../../../node_modules/@angular/router";
+import { Router } from "@angular/router";
 declare var $: any;
 @Component({
   selector: "app-reports-invoice",

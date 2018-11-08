@@ -31,9 +31,11 @@ class factureReturn extends REST_Controller
     public function newReturnInvoice_post(){
         // $invoiceDate = $this->post('invoiceDate');
         $clientID = $this->post('clientID');
+        $clientPhone = $this->post('clientPhone');
+        $clientAddress = $this->post('clientAddress');
         $invoiceItems = $this->post('items');
         
-        date_default_timezone_set("Asia/Beirut");
+        date_default_timezone_set("Africa/Ouagadougou");
         $invoiceDate=date("Y-m-d H:i:s");
 
         // $invoiceCorrectDate = new DateTime($invoiceDate);
@@ -41,7 +43,8 @@ class factureReturn extends REST_Controller
         $invoiceCode = $this->generateFactureCode('FR');
         $this->db->trans_begin();
         $invoiceID = $this->factureReturn_model->addReturnInvoice(array("inv_perID" =>  $clientID, "inv_code" => $invoiceCode, 
-        "inv_type" => 'FR', "inv_date_req" => $invoiceDate, "inv_status" => -1));
+        "inv_type" => 'FR', "inv_date_req" => $invoiceDate, "inv_status" => -1,
+        "inv_per_phone" => $clientPhone,"inv_per_address" => $clientAddress));
         foreach ($invoiceItems as $row) {
             $itemData = array(
                 "ord_itemID" => $row['itemID'],
@@ -54,7 +57,7 @@ class factureReturn extends REST_Controller
             if ($ordID === 0) {
                 $this->response("Item information could not be saved. Try again.", 404);
             } else {
-                date_default_timezone_set("Asia/Beirut");
+                date_default_timezone_set("Africa/Ouagadougou");
                 $date=date("Y-m-d H:i:s");
                 $this->factureReturn_model->addDateReturn(array('date_ordID' => $ordID,'ord_perID' => $clientID,
                 'ord_date_req' => $date));
@@ -105,11 +108,14 @@ class factureReturn extends REST_Controller
         $invoiceDate = $this->post('invoiceDate');
         $invID = $this->post('invID');
         $clientID = $this->post('clientID');
+        $clientPhone = $this->post('clientPhone');
+        $clientAddress = $this->post('clientAddress');
         $invoiceItemsEdit = $this->post('itemsEdit');
         $invoiceItems = $this->post('items');
         $this->db->trans_begin();
 
-        $this->factureReturn_model->editReturnInvoice($invID,array("inv_perID" =>  $clientID));
+        $this->factureReturn_model->editReturnInvoice($invID,array("inv_perID" =>  $clientID,
+        "inv_per_phone" => $clientPhone,"inv_per_address" => $clientAddress));
         foreach ($invoiceItemsEdit as $row) {
             $query = $this->db->query("SELECT ord_crt,ord_piece,ord_perID FROM order_inv 
             INNER JOIN return_details on date_ordID = ordID where ordID = '".$row['ordID']."'");
@@ -158,7 +164,7 @@ class factureReturn extends REST_Controller
                 if ($ordID === 0) {
                     $this->response("Item information could not be saved. Try again.", 404);
                 } else {
-                    date_default_timezone_set("Asia/Beirut");
+                    date_default_timezone_set("Africa/Ouagadougou");
                     $date=date("Y-m-d H:i:s");
                     $this->factureReturn_model->addDateReturn(array('date_ordID' => $ordID,'ord_perID' => $clientID,
                     'ord_date_req' => $date,'ord_date_com' =>$date,'ord_status'=> 0));

@@ -5,21 +5,36 @@
     <form [formGroup]="invoiceForm" autocomplete="off"  #f="ngForm">
       <div>
         <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-          <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-            <mat-form-field class="searchClient" fxFlex>
-              <input matInput placeholder="Rechercher le Nom du Client" formControlName="searchClient" type="text" name="nameInput"
-                [matAutocomplete]="auto" autofocus>
-              <mat-autocomplete #auto="matAutocomplete">
-                <mat-option (onSelectionChange)="test(option.perID,option.per_name)" *ngFor="let option of options" [value]="option.per_name">
-                  {{option.per_name}}
-                  || {{option.per_address}}</mat-option>
-              </mat-autocomplete>
-              <mat-error> Le nom du client est requis</mat-error>
-            </mat-form-field>
-          </div>
-          <mat-form-field class="itemName" fxFlex>
-            <input matInput placeholder="Nom" formControlName="clientName" type="text"  name="nameInput" [readonly]="true">
-          </mat-form-field>
+
+          
+            <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                <mat-form-field class="searchClient" fxFlex>
+        
+                  <input matInput placeholder="Client" formControlName="clientName" type="text" name="nameInput"
+                    [matAutocomplete]="auto" autofocus>
+                    <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearClientName()">
+                      <mat-icon>close</mat-icon>
+                  </button>
+                  <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option (onSelectionChange)="setClientName(option.perID,option.per_name,option.per_phone,option.per_address)" *ngFor="let option of options"
+                      [value]="option.name">{{option.per_name}}
+                      || {{option.per_code}}</mat-option>
+                  </mat-autocomplete>
+                  <mat-error> Le nom du client est requis</mat-error>
+                </mat-form-field>
+              </div>
+              <div>
+                  <mat-form-field class="searchClient">
+                    <input matInput formControlName="clientPhone" placeholder="Numéro de téléphone" type= "text" >
+                  <mat-error> La numéro de téléphone est requis</mat-error>
+                </mat-form-field>
+              </div>
+              <div>
+                  <mat-form-field class="searchClient">
+                    <input matInput formControlName="clientAddress" placeholder="Adresse" type= "text">
+                  <mat-error> L'adresse est requis</mat-error>
+                </mat-form-field>
+              </div>
           <mat-form-field class="inputField">
             <input matInput formControlName="invoiceDate" placeholder="Date de Commande" readonly=true>
           </mat-form-field>  

@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { StockService } from '../stock/stock.service';
-import { SupplyService } from '../facture-supply/facture-supply.service';
 import swal from 'sweetalert2';
 import { FactureClientService } from './facture-client.service';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
@@ -11,7 +9,7 @@ declare var $: any;
 import { DatePipe } from '@angular/common';
 import { FactureComponent } from '../facture/facture.component';
 import { AppDateAdapter, APP_DATE_FORMATS } from '../date.adapter';
-import { DateAdapter, MAT_DATE_FORMATS } from '../../../node_modules/@angular/material';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material';
 @Component({
   selector: 'app-facture',
   templateUrl: './facture-client.component.html',
@@ -45,7 +43,7 @@ export class FactureClientComponent implements OnInit {
   factureDetails = [];
   private clientForm;
   isExist; newCode="-1";
-  p_clientName; p_clientPhone; p_dateReq;
+  p_clientName; p_clientPhone; p_dateReq;p_clientAddress;
   lengthDeleted = 0;
   
   constructor(private datePipe: DatePipe,
@@ -87,9 +85,9 @@ export class FactureClientComponent implements OnInit {
       invoiceDate: [this.invoiceDate, Validators.required],
       delDate: [this.deliveryDate, Validators.required],
       clientName: ['', Validators.required],
-      clientPhone: '',
-      searchClient: '',
-      clientID: '',
+      clientPhone:["", Validators.required],
+      clientAddress: ["", Validators.required],
+      clientID: ['',Validators.required],
       itemsEdit: this.fb.array([]),
       items: this.fb.array([])
     });
@@ -111,7 +109,10 @@ export class FactureClientComponent implements OnInit {
         this.delDate.setValue(dateDel);
         this.invID.setValue(this.factureID);
         this.clientName.setValue(this.factureHeader[0]['per_name']);
+        this.clientPhone.setValue(this.factureHeader[0]['inv_per_phone']);
+        this.clientAddress.setValue(this.factureHeader[0]['inv_per_address']);
         this.clientID.setValue(this.factureHeader[0]['perID']);
+        this.invoiceForm.controls['clientName'].disable();
         this.editFactureTitle = "Modifier Facture: "+this.factureHeader[0]['inv_code'];   
 
         if(Response[1]!=0){
@@ -169,8 +170,8 @@ export class FactureClientComponent implements OnInit {
   }
 
   onClientNameChange(): void {
-    this.invoiceForm.get('searchClient').valueChanges.subscribe(val => {
-      var data = this.invoiceForm.get('searchClient').value;
+    this.invoiceForm.get('clientName').valueChanges.subscribe(val => {
+      var data = this.invoiceForm.get('clientName').value;
       if (data == "") {
         this.options = [];
         return;
@@ -253,16 +254,17 @@ export class FactureClientComponent implements OnInit {
     this.itemsForm.removeAt(i);
     var index = FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', 'isDamaged', id.value, itemIsDamaged.value);
     FactureClientComponent.selectedItems.splice(index, 1);
-    // if(i!=0)
       setTimeout(function(){ document.getElementById("crt0").focus();},200)
     
   }
 
-  setClientName(id, name,phone) {
-    this.invoiceForm.get('searchClient').setValue('');
+  setClientName(id, name,phone,address) {
+    this.p_clientName = name ;
     this.invoiceForm.get('clientName').setValue(name);
     this.invoiceForm.get('clientPhone').setValue(phone);
+    this.invoiceForm.get('clientAddress').setValue(address);
     this.invoiceForm.get('clientID').setValue(id);
+    this.invoiceForm.controls['clientName'].disable();
     setTimeout(function(){ document.getElementById("delDate").focus();},200)
   }
 
@@ -289,7 +291,7 @@ export class FactureClientComponent implements OnInit {
         this.myNgForm.resetForm();
         this.invoiceForm.get('invoiceDate').setValue(this.invoiceDate);
         this.invoiceForm.get('delDate').setValue(this.deliveryDate);
-      
+        this.invoiceForm.controls['clientName'].enable();
         while (this.itemsForm.length !== 0) {
           this.itemsForm.removeAt(0)
         }
@@ -301,6 +303,7 @@ export class FactureClientComponent implements OnInit {
         text: error.message
       });
     });
+    
   }
 
   printFactureClient(){
@@ -310,6 +313,7 @@ export class FactureClientComponent implements OnInit {
       popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="../../styles.css"></head><body onload="window.print()">' + printContents + '</body></html>');
       popupWin.document.close();
       setTimeout(function(){ popupWin.close(); }, 1000);
+      this.p_clientName = '';
   }
 
   editClientInvoice(){
@@ -371,9 +375,13 @@ export class FactureClientComponent implements OnInit {
 
   addClient() {    
     this.factureClientService.addNewClient(this.clientForm.value).subscribe(Response => {
-      this.invoiceForm.get('clientName').setValue(this.clientForm.get('name').value);
       this.invoiceForm.get('clientID').setValue(Response);
-        document.getElementById("delDate").focus();
+      this.invoiceForm.get('clientPhone').setValue(this.clientForm.value.phone);
+      this.invoiceForm.get('clientAddress').setValue(this.clientForm.value.address);
+      this.invoiceForm.get('clientName').setValue(this.clientForm.value.name);
+      this.p_clientName=this.clientForm.value.name;
+      this.invoiceForm.controls['clientName'].disable();
+      document.getElementById("delDate").focus();
       swal({
         type: 'success',
         title: 'Succès',
@@ -391,7 +399,14 @@ export class FactureClientComponent implements OnInit {
 
     this.modalReference.close();
   }
-
+  clearClientName() {
+    this.p_clientName = '';
+    this.invoiceForm.get("clientName").setValue("");
+    this.invoiceForm.get("clientPhone").setValue("");
+    this.invoiceForm.get("clientAddress").setValue("");
+    this.invoiceForm.get("clientID").setValue("");
+    this.invoiceForm.controls['clientName'].enable();
+  }
   openMultiSelect(mutliSelectModal) {
     this.modalReference = this.modalService.open(mutliSelectModal, { centered: true, size: 'lg', ariaLabelledBy: 'modal-basic-title' });
     var multiSelectDT = $('#stockDT').DataTable({
@@ -430,14 +445,11 @@ export class FactureClientComponent implements OnInit {
         }
 
         var ID = multiSelectDT.row(row).data()['ID'];
-        var isDamaged = multiSelectDT.row(row).data()['item_is_damaged'];
-
-        
+        var isDamaged = multiSelectDT.row(row).data()['item_is_damaged'];        
 
         if(FactureClientComponent.findWithAttr(FactureClientComponent.selectedItems, 'id', 'isDamaged', ID, isDamaged) !=-1){
           console.log(ID,isDamaged)
           multiSelectDT.row(row).select();
-          // $(multiSelectDT.row(row).node()).addClass("selected");
         }
       },
       language: {
@@ -529,11 +541,17 @@ export class FactureClientComponent implements OnInit {
   get clientPhone() {
     return this.invoiceForm.get('clientPhone');
   }
+  get clientAddress() {
+    return this.invoiceForm.get('clientAddress');
+  }
   get clientID() {
     return this.invoiceForm.get('clientID');
   }
   get itemIsDamaged() {
     return this.invoiceForm.get('isDamaged');
+  }
+  get name (){
+    return this.clientForm.get('name');
   }
   static findWithAttr(array, attr, attr2, value, value2) {
     var index = -1;

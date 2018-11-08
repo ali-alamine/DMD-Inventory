@@ -10,9 +10,7 @@
     </mat-button-toggle>
     <mat-button-toggle [class.mat-button-toggle-checked]="router.url == '/history/return'" routerLink="return" value="historyReturn" class="historyBtns" mat-raised-button color="primary">
     <i class="material-icons">get_app</i>Retour
-    <!-- RETOUR <span  class="matBadge" style="color :red;">( {{badgeCount}} )</span> -->
-    <span *ngIf="badgeCount > 0" matBadge="{{badgeCount}}" matBadgeOverlap="false"></span>
-    <!-- <span>RETOUR</span> -->
+    <!-- <span *ngIf="badgeCount > 0" matBadge="{{badgeCount}}" matBadgeOverlap="false"></span> -->
   </mat-button-toggle>
   <mat-button-toggle [class.mat-button-toggle-checked]="router.url == '/history/transfer'" routerLink="transfer" value="transferHistory" class="historyBtns" mat-raised-button color="primary">
     <i class="material-icons">settings_backup_restore</i>
@@ -29,14 +27,34 @@
       </button>
     </div>
     <div class="modal-body noselect">
-      <div style="float:left;" *ngIf="type == 'FC'">
-        <b>Nom:</b> {{clientName}}<br>
-        <b>Téléphone:</b> {{clientPhone}}<br>
-        <b>Adresse:</b> {{clientAddress}}
+      <div *ngIf="type == 'FC'">
+        <div style="float:left;" >
+          <b>Nom:</b> {{clientName}}<br>
+          <b>Téléphone:</b> {{clientPhone}}<br>
+          <b>Adresse:</b> {{clientAddress}}
+        </div>
+        <div style="float: right;">
+          <b>Date De Commande:</b> {{dateReq}}<br>
+          <b>Date De Livraison:</b> {{dateDel}}<br>
+          <b>Code:</b> {{code}}
+        </div>
       </div>
-      <div style="float: right;">
-        <b>Date De Commande:</b> {{dateReq}}<br>
-        <b>Code:</b> {{code}}
+      <div *ngIf="type == 'FR'">
+          <div style="float:left;" >
+            <b>Nom:</b> {{clientName}}<br>
+            <b>Téléphone:</b> {{clientPhone}}<br>
+            <b>Adresse:</b> {{clientAddress}}
+          </div>
+          <div style="float: right;">
+            <b>Date De Commande:</b> {{dateReq}}<br>
+            <b>Code:</b> {{code}}
+          </div>
+        </div>
+      <div *ngIf="type == 'FD'">
+          <div style="float: right;">
+            <b>Date De Commande:</b> {{dateReq}}<br>
+            <b>Code:</b> {{code}}
+          </div>
       </div>
       <br>
       <br>

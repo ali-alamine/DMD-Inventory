@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HistoryComponent } from '../history/history.component';
 import { HistoryService } from '../history/history.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder } from '@angular/forms';
@@ -7,6 +6,8 @@ import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 declare var $: any;
 import swal from 'sweetalert2';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
+import { NavBarService } from '../nav-bar/nav-bar.service';
 
 @Component({
   selector: 'app-history-return',
@@ -30,8 +31,10 @@ export class HistoryReturnComponent implements OnInit {
   dataComfirm={};
   clientName; clientPhone; clientAddress; dateReq; codeFR;
 
-  constructor(private historyComponent : HistoryComponent,
+
+  constructor(
     private historyService: HistoryService,
+    private navBarService :NavBarService,
     private modalService : NgbModal, 
     private fb : FormBuilder,
     private router: Router) { }
@@ -43,7 +46,7 @@ export class HistoryReturnComponent implements OnInit {
     this.getHistoryReturnDT();
     this.rightClick2 = [
       {
-        label: 'Con/Rej',
+        label: 'Modifier',
         icon: 'pi pi-fw pi-pencil',
         command: (event) => {
           let element: HTMLElement = document.getElementById('editBtn') as HTMLElement;
@@ -179,43 +182,45 @@ export class HistoryReturnComponent implements OnInit {
       alert(error)
     });
   }
-  confirmOrder(i,ordID,invID,crt,piece,itemID,isDamaged,packingList){
-    this.dataComfirm['ordID']= ordID;
-    this.dataComfirm['invID']=invID;
-    this.dataComfirm['crt']=crt;
-    this.dataComfirm['piece']=piece;
-    this.dataComfirm['itemID']=itemID;
-    this.dataComfirm['isDamaged']=isDamaged;
-    this.dataComfirm['packingList']=packingList;
-    this.historyService.confirmOrder(this.dataComfirm).subscribe(Response => {      
-      this.factureDetails.splice(i, 1);
-      if(Response == 0) {
-        this.globalHistoryReturnDT.ajax.reload(null, false);
-        this.modalReference.close();
-        this.historyComponent.getCountFR();
-      } 
-      swal({
-        type: 'success',
-        title: 'Succès',
-        text: 'Article confirmer.',
-        showConfirmButton: false,
-        timer: 1000
-      });
-    }, error => {
-      swal({
-        type: 'error',
-        title: error.statusText,
-        text: error.message
-      });
-    });
-  }
+  // confirmOrder(i,ordID,invID,crt,piece,itemID,isDamaged,packingList){
+  //   this.dataComfirm['ordID']= ordID;
+  //   this.dataComfirm['invID']=invID;
+  //   this.dataComfirm['crt']=crt;
+  //   this.dataComfirm['piece']=piece;
+  //   this.dataComfirm['itemID']=itemID;
+  //   this.dataComfirm['isDamaged']=isDamaged;
+  //   this.dataComfirm['packingList']=packingList;
+  //   this.historyService.confirmOrder(this.dataComfirm).subscribe(Response => {      
+  //     this.factureDetails.splice(i, 1);
+  //     if(Response == 0) {
+  //       this.globalHistoryReturnDT.ajax.reload(null, false);
+  //       this.modalReference.close();
+  //       NavBarComponent.getCountFR();
+  //     } 
+  //     swal({
+  //       type: 'success',
+  //       title: 'Succès',
+  //       text: 'Article confirmer.',
+  //       showConfirmButton: false,
+  //       timer: 1000
+  //     });
+  //   }, error => {
+  //     swal({
+  //       type: 'error',
+  //       title: error.statusText,
+  //       text: error.message
+  //     });
+  //   });
+  // }
   rejectOrder(i,ordID,invID){
     this.historyService.rejectOrder(ordID,invID).subscribe(Response => {
       this.factureDetails.splice(i, 1);
       if(Response == 0) {
         this.globalHistoryReturnDT.ajax.reload(null, false);
         this.modalReference.close();
-        this.historyComponent.getCountFR();
+         this.navBarService.getCountFR().subscribe(Response => {
+          this.navBarService.changeCount(Response[0].c);
+        });
       } 
       swal({
         type: 'success',
@@ -248,7 +253,9 @@ export class HistoryReturnComponent implements OnInit {
       if (result.value) {
       this.historyService.confirmAll(HistoryReturnComponent.selectedFactureID).subscribe(Response => {
         this.globalHistoryReturnDT.ajax.reload(null, false);
-        this.historyComponent.getCountFR();
+        this.navBarService.getCountFR().subscribe(Response => {
+          this.navBarService.changeCount(Response[0].c);
+        });
           swal({
             type: 'success',
             title: 'Succès',
@@ -282,7 +289,9 @@ export class HistoryReturnComponent implements OnInit {
       if (result.value) {
       this.historyService.rejectAll(HistoryReturnComponent.selectedFactureID).subscribe(Response => {
         this.globalHistoryReturnDT.ajax.reload(null, false);
-        this.historyComponent.getCountFR();
+        this.navBarService.getCountFR().subscribe(Response => {
+          this.navBarService.changeCount(Response[0].c);
+        });
           swal({
             type: 'success',
             title: 'Succès',

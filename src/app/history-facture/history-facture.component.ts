@@ -197,23 +197,15 @@ export class HistoryFactureComponent implements OnInit {
           localStorage.setItem('selectedRow', indexes);
           this.selectedFactureRowData = historyFactureDT.row(indexes).data();
           HistoryFactureComponent.selectedFactureID = historyFactureDT.row(indexes).data()['invID'];
-          var ID = historyFactureDT.row(indexes).data()['invID'];
-          var type = historyFactureDT.row(indexes).data()['inv_type'];
-          var clientName = historyFactureDT.row(indexes).data()['per_name'];
-          var phone = historyFactureDT.row(indexes).data()['per_phone'];
-          var address = historyFactureDT.row(indexes).data()['per_address'];
-          var date_req = historyFactureDT.row(indexes).data()['inv_date_req'];
-          var date_del = historyFactureDT.row(indexes).data()['inv_date_del'];
-          var code = historyFactureDT.row(indexes).data()['inv_code'];
           HistoryFactureComponent.selectedFacture.push({
-            ID:ID,
-            type:type,
-            clientName:clientName,
-            phone:phone,
-            address:address,
-            date_req:date_req,
-            date_del:date_del,
-            code:code
+            ID:historyFactureDT.row(indexes).data()['invID'],
+            type:historyFactureDT.row(indexes).data()['inv_type'],
+            clientName:historyFactureDT.row(indexes).data()['per_name'],
+            phone:historyFactureDT.row(indexes).data()['inv_per_phone'],
+            address:historyFactureDT.row(indexes).data()['inv_per_address'],
+            date_req:historyFactureDT.row(indexes).data()['inv_date_req'],
+            date_del:historyFactureDT.row(indexes).data()['inv_date_del'],
+            code:historyFactureDT.row(indexes).data()['inv_code']
           });
 
         }

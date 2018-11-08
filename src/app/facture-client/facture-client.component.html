@@ -10,11 +10,13 @@
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="searchClient" fxFlex>
 
-          <input matInput placeholder="Rechercher le Nom du Client" formControlName="searchClient" type="text" name="nameInput"
+          <input matInput placeholder="Client" formControlName="clientName" type="text" name="nameInput"
             [matAutocomplete]="auto" autofocus>
-
+            <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearClientName()">
+              <mat-icon>close</mat-icon>
+          </button>
           <mat-autocomplete #auto="matAutocomplete">
-            <mat-option (onSelectionChange)="setClientName(option.perID,option.per_name,option.per_phone)" *ngFor="let option of options"
+            <mat-option (onSelectionChange)="setClientName(option.perID,option.per_name,option.per_phone,option.per_address)" *ngFor="let option of options"
               [value]="option.name">{{option.per_name}}
               || {{option.per_code}}</mat-option>
           </mat-autocomplete>
@@ -24,11 +26,18 @@
             <i class="material-icons">add</i> Ajouter un Client
           </button>
       </div>
-
-      <mat-form-field class="itemName" fxFlex>
-        <input matInput placeholder="Nom" formControlName="clientName" type="text" name="nameInput" [readonly]="true">
-      </mat-form-field>
-
+      <div>
+          <mat-form-field class="searchClient">
+            <input matInput formControlName="clientPhone" placeholder="Numéro de téléphone" type= "text" >
+            <mat-error> La numéro de téléphone est requis</mat-error>
+          </mat-form-field>
+      </div>
+      <div>
+          <mat-form-field class="searchClient">
+            <input matInput formControlName="clientAddress" placeholder="Adresse" type= "text">
+            <mat-error> L'adresse est requis</mat-error>
+          </mat-form-field>
+      </div>
       <mat-form-field class="itemDateInputs">
         <input matInput formControlName="invoiceDate" placeholder="Date de Commande" readonly=true>
       </mat-form-field>
@@ -117,14 +126,10 @@
 
     </div>
 
-    <!-- <button mat-raised-button id="submit" class="addBtns" color="primary" (click)="addEditReturnInvoice()" [disabled]="!invoiceForm.valid || itemsForm.length == 0 " >Soumettre</button> -->
     <button mat-raised-button id="update" class="addBtns" color="primary" (click)="editClientInvoice()" [disabled]="!invoiceForm.valid || itemsEditForm.length == 0 || lengthDeleted == 0" >Mis à Jour</button>
     <div id="submit">
       <button mat-raised-button name="addButton" class="addBtns" color="primary" (click)="addClientInvoice()"
         [disabled]="!invoiceForm.valid || itemsForm.length == 0">Soumettre</button>
-  
-      <!-- <button mat-raised-button name="submitPrint" class="addBtns" color="primary" (click)="addClientInvoice(true)"
-        [disabled]="!invoiceForm.valid || itemsForm.length == 0">Soumettre et Imprimer</button> -->
     </div>
   </form>
 </div>
@@ -163,9 +168,8 @@
           <mat-form-field class="inputField" fxFlex>
             <input matInput placeholder="Nom" formControlName="name" type="text" name="nameInput" autofocus>
             <mat-error> Le nom du client est obligatoire avec 3 lettres minimum</mat-error>
-            <!-- <mat-error *ngIf="isExist == true"> client exist</mat-error> -->
           </mat-form-field>
-          <span *ngIf="isExist == true" style="color:red"> Client exist!</span>
+          <span *ngIf="isExist == true" style="color:red"> Client existe!</span>
         </div>
         <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field class="inputField" fxFlex>
@@ -175,7 +179,7 @@
         </div>
         <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
           <mat-form-field class="inputField" fxFlex>
-            <input matInput placeholder="Addresse" formControlName="address" type="text">
+            <input matInput placeholder="Adresse" formControlName="address" type="text">
             <mat-error> L'adresse du client est obligatoire</mat-error>
           </mat-form-field>
         </div>
@@ -189,13 +193,13 @@
 
 <div class="table table-striped noselect" id="printFacture" hidden>
     <div style="float:left;" class="noselect">
-        <b>Nom:</b> {{clientName.value}}<br>
+        <b>Nom:</b> {{p_clientName}}<br>
         <b>Numéro de téléphone:</b> {{clientPhone.value}}<br>
+        <b>Adresse:</b> {{clientAddress.value}}<br>
       </div>
       <div style="float: right;" class="noselect">
         <b>Date de Commande:</b> {{factureDate.value}}<br>
         <b>Date de Livraison:</b> {{delDate.value  | date: 'dd-MM-yyyy'}}<br>
-        <!-- code: {{newCode}} -->
         <b>Code:</b> {{newCode}}
       </div>
       <br>
@@ -226,8 +230,6 @@
     </tbody>
   </table> 
   <hr>
-  <!-- <div class="row"> -->
-      <!-- </br> -->
       <div style="float:left;" class="noselect">
           <label style="font-size: 13px;">Le Responseble</label>
           <label>----------------------</label>
@@ -236,10 +238,8 @@
           <label style="font-size: 13px;">Num de cls/crt</label>
           <label>-----------------------</label>
       </div>
-      <!-- </div> -->
       <br>
       <br>
-      <!-- <div class="row"> -->
             <div style="float:left;" class="noselect">
                 <label style="font-size: 13px;">Le Client</label>
                 <label>-----------------------</label>
@@ -248,5 +248,4 @@
           <label style="font-size: 13px;">Num de piece</label>
           <label>-----------------------</label>
       </div>
-  <!-- </div> -->
 </div>
