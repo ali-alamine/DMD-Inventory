@@ -17,6 +17,7 @@ export class NavBarService {
     return this.httpClient.get(this.url + "getCountFR");
   }
 
+  /* count notification */
   changeCount(count:string) {
     this.countSource.next(count);
   }
