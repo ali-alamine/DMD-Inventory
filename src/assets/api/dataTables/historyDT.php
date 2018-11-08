@@ -78,14 +78,14 @@ if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     
 
     if($show=="facture")
-        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req  from invoice INNER JOIN person on perID= inv_perID  where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_status = '1' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req,DATE_FORMAT(inv_date_del,'%d-%m-%Y') AS inv_date_del  from invoice INNER JOIN person on perID= inv_perID  where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_status = '1' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
    
     if($show=="return")
         $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req from invoice INNER JOIN person on perID= inv_perID where (inv_date_req like '%" . $search . "%' OR per_name like '%" . $search . "%' OR inv_code like '%" . $search . "%' ) and inv_type = 'FR' and inv_status='-1' " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
      
 } else {
     if($show=="facture")
-        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req from invoice INNER JOIN person on perID= inv_perID " . $condition . " and inv_status = '1'  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+        $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req,DATE_FORMAT(inv_date_del,'%d-%m-%Y') AS inv_date_del from invoice INNER JOIN person on perID= inv_perID " . $condition . " and inv_status = '1'  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
     
     if($show=="return")
         $getAllFactureQuery = "select *,DATE_FORMAT(inv_date_req,'%d-%m-%Y %H:%i') AS inv_date_req from invoice INNER JOIN person on perID= inv_perID " . $condition . " and  inv_type = 'FR' and inv_status='-1'  " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;

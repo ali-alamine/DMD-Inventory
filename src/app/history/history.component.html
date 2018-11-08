@@ -27,15 +27,23 @@
       </button>
     </div>
     <div class="modal-body noselect">
-      <div style="float:left;" *ngIf="type == 'FC'">
-        <b>Nom:</b> {{clientName}}<br>
-        <b>Téléphone:</b> {{clientPhone}}<br>
-        <b>Adresse:</b> {{clientAddress}}
+      <div *ngIf="type == 'FC'">
+        <div style="float:left;" >
+          <b>Nom:</b> {{clientName}}<br>
+          <b>Téléphone:</b> {{clientPhone}}<br>
+          <b>Adresse:</b> {{clientAddress}}
+        </div>
+        <div style="float: right;">
+          <b>Date De Commande:</b> {{dateReq}}<br>
+          <b>Date De Livraison:</b> {{dateDel}}<br>
+          <b>Code:</b> {{code}}
+        </div>
       </div>
-      <div style="float: right;">
-        <b>Date De Commande:</b> {{dateReq}}<br>
-        <b>Date De Livraison:</b> {{dateDel}}<br>
-        <b>Code:</b> {{code}}
+      <div *ngIf="type != 'FC'">
+          <div style="float: right;">
+            <b>Date De Commande:</b> {{dateReq}}<br>
+            <b>Code:</b> {{code}}
+          </div>
       </div>
       <br>
       <br>

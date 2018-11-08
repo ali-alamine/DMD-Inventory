@@ -7,7 +7,8 @@ class history_model extends CI_Model
     }
     public function getFactureDetails($ID,$type){
         if($type=='FR'){
-            $query = $this->db->query("SELECT * FROM order_inv  
+            $query = $this->db->query("SELECT *,DATE_FORMAT(ord_date_com,'%d-%m-%Y') as ord_date_com 
+            FROM order_inv  
             INNER JOIN item ON itemID = ord_itemID and item_is_damaged = ord_item_isDamaged
             INNER JOIN return_details on date_ordID = ordID
             where ord_invID = '".$ID."' and ord_status = '1' ");

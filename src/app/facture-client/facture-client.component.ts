@@ -267,6 +267,8 @@ export class FactureClientComponent implements OnInit {
   }
 
   addClientInvoice() {
+    this.invoiceForm.controls['clientName'].enable();
+    console.log(this.invoiceForm.get('clientName').value)
     this.factureClientService.newClientInvoice(this.invoiceForm.value).subscribe(Response => {
       this.newCode = Response;
       var msg = 'Facture Client Code: '+Response;
@@ -287,9 +289,9 @@ export class FactureClientComponent implements OnInit {
         FactureClientComponent.selectedItems = [];
         this.invoiceForm.reset();
         this.myNgForm.resetForm();
+        // this.invoiceForm.get('clientID').setValue('');
         this.invoiceForm.get('invoiceDate').setValue(this.invoiceDate);
         this.invoiceForm.get('delDate').setValue(this.deliveryDate);
-      
         while (this.itemsForm.length !== 0) {
           this.itemsForm.removeAt(0)
         }
@@ -301,11 +303,11 @@ export class FactureClientComponent implements OnInit {
         text: error.message
       });
     });
-
-    this.invoiceForm.get('clientID').setValue('');
+    
   }
 
   printFactureClient(){
+    // console.log(this.invoiceForm.value)
       var printContents = document.getElementById('printFacture').innerHTML;
       var popupWin = window.open('', '_blank', 'width=800,height=600');
       popupWin.document.open();

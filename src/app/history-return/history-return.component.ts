@@ -44,7 +44,7 @@ export class HistoryReturnComponent implements OnInit {
     this.getHistoryReturnDT();
     this.rightClick2 = [
       {
-        label: 'Con/Rej',
+        label: 'Modifier',
         icon: 'pi pi-fw pi-pencil',
         command: (event) => {
           let element: HTMLElement = document.getElementById('editBtn') as HTMLElement;
@@ -180,36 +180,36 @@ export class HistoryReturnComponent implements OnInit {
       alert(error)
     });
   }
-  confirmOrder(i,ordID,invID,crt,piece,itemID,isDamaged,packingList){
-    this.dataComfirm['ordID']= ordID;
-    this.dataComfirm['invID']=invID;
-    this.dataComfirm['crt']=crt;
-    this.dataComfirm['piece']=piece;
-    this.dataComfirm['itemID']=itemID;
-    this.dataComfirm['isDamaged']=isDamaged;
-    this.dataComfirm['packingList']=packingList;
-    this.historyService.confirmOrder(this.dataComfirm).subscribe(Response => {      
-      this.factureDetails.splice(i, 1);
-      if(Response == 0) {
-        this.globalHistoryReturnDT.ajax.reload(null, false);
-        this.modalReference.close();
-        NavBarComponent.getCountFR();
-      } 
-      swal({
-        type: 'success',
-        title: 'Succès',
-        text: 'Article confirmer.',
-        showConfirmButton: false,
-        timer: 1000
-      });
-    }, error => {
-      swal({
-        type: 'error',
-        title: error.statusText,
-        text: error.message
-      });
-    });
-  }
+  // confirmOrder(i,ordID,invID,crt,piece,itemID,isDamaged,packingList){
+  //   this.dataComfirm['ordID']= ordID;
+  //   this.dataComfirm['invID']=invID;
+  //   this.dataComfirm['crt']=crt;
+  //   this.dataComfirm['piece']=piece;
+  //   this.dataComfirm['itemID']=itemID;
+  //   this.dataComfirm['isDamaged']=isDamaged;
+  //   this.dataComfirm['packingList']=packingList;
+  //   this.historyService.confirmOrder(this.dataComfirm).subscribe(Response => {      
+  //     this.factureDetails.splice(i, 1);
+  //     if(Response == 0) {
+  //       this.globalHistoryReturnDT.ajax.reload(null, false);
+  //       this.modalReference.close();
+  //       NavBarComponent.getCountFR();
+  //     } 
+  //     swal({
+  //       type: 'success',
+  //       title: 'Succès',
+  //       text: 'Article confirmer.',
+  //       showConfirmButton: false,
+  //       timer: 1000
+  //     });
+  //   }, error => {
+  //     swal({
+  //       type: 'error',
+  //       title: error.statusText,
+  //       text: error.message
+  //     });
+  //   });
+  // }
   rejectOrder(i,ordID,invID){
     this.historyService.rejectOrder(ordID,invID).subscribe(Response => {
       this.factureDetails.splice(i, 1);
