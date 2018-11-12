@@ -98,6 +98,10 @@ if ($getAllFactureQuerySQL) {
 }
 $jsonData = json_encode($rows);
 // $jsonData = '[' . $jsonData . ']';
+if($jsonData=="")
+{
+    $jsonData="[]";
+}
 $jsonData2 = '{"draw":' . intval($requestData['draw']) . ',"recordsTotal":' . $rowsCount . ', "recordsFiltered":' . $rowsCount . ', "data":' . $jsonData . '}';
 echo ($jsonData2);
 closeConn();

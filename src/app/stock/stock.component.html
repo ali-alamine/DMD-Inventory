@@ -2,7 +2,7 @@
   <button mat-raised-button color="primary" (click)="editFlag=false;openStockModal(stockModal)">
     <i class="material-icons">add</i> Ajouter Article
   </button>
-  <button mat-raised-button color="primary" (click)="openStockDelModal(showDetails)">
+  <button class="stockBtn" mat-raised-button color="primary" (click)="openStockDelModal(showDetails)">
     <i class="material-icons">delete_sweep</i> Article Désactivé
   </button>
 
@@ -23,7 +23,6 @@
   <button id="editStockBtn" (click)="editFlag=true;openStockModal(stockModal)"></button>
   <button id="transferBtn" (click)="openTransferModal(transferModal)"></button>
   <button id="deleteBtn" (click)="deleteItem()"></button>
-  <!-- <button id="addBtn" (click)="returnItem()"></button> -->
   <button id="chartBtn" (click)="openChartModal(chart)"></button>
 </div>
 

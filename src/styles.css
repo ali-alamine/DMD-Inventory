@@ -60,6 +60,10 @@
 #clientReportDataTable tbody tr.selected,
 #invoiceReportDT tbody tr.selected,
 #stockReportDT tbody tr.selected,
+#historyItemsDT tbody tr.selected,
+#historyFactureDT tbody tr.selected,
+#invoiceItemReportDT tbody tr.selected,
+#historyReturnDT tbody tr.selected,
 #clientsDT tbody tr.selected {
   color: white !important;
   background-color: #778899 !important;
@@ -102,10 +106,10 @@
   background-color: #ffffff !important;
 }
 
-.ui-multiselect{
+.ui-multiselect {
   width: 35% !important;
 }
-.dt-buttons  .btn-secondary{
+.dt-buttons .btn-secondary {
   margin-left: 5px !important;
   border-radius: 0 !important;
 }
