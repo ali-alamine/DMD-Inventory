@@ -21,7 +21,7 @@ export class ReportsInvoiceComponent implements OnInit,OnDestroy {
   private static toDate;
   options: any[];
   static clientID: any;
-  allClients: [];
+  allClients;
   static toCode: any;
   static fromCode: any;
   static selectedClients="";
