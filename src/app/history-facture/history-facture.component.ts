@@ -7,7 +7,6 @@ import { MenuItem } from 'primeng/api';
 declare var $: any;
 import swal from 'sweetalert2';
 import { HistoryComponent } from '../history/history.component';
-import { FactureComponent } from '../facture/facture.component';
 import { Router } from '@angular/router';
 
 @Component({
@@ -96,10 +95,9 @@ export class HistoryFactureComponent implements OnInit {
     });
   });
   
-    // if(HistoryFactureComponent.globalHistoryFactureDT==null){
-
-      var historyFactureDT = $('#historyFactureDT').DataTable({
-        responsive: false,
+   
+    var historyFactureDT = $('#historyFactureDT').DataTable({
+      responsive: false,
       orderCellsTop: true,
       paging: true,
       pagingType: "full_numbers",
@@ -127,11 +125,11 @@ export class HistoryFactureComponent implements OnInit {
           cache: true,
           async: true
         },
-        order: [[0, 'asc']],
+        order: [[1, 'desc']],
         columns: [
-          { data: "per_name", title: "CIENT" },
-          { data: "inv_date_req", title: "DATE"},
-          { data: "inv_code", title: "CODE"}
+          { data: "per_name", title: "Client" },
+          { data: "inv_date_req", title: "Date"},
+          { data: "inv_code", title: "Code"}
         ],
         "columnDefs": [ {
           "targets": 2,
@@ -222,9 +220,7 @@ export class HistoryFactureComponent implements OnInit {
         $(historyFactureDT.row(cell.index().row).node()).removeClass('selected');
       });      
 
-    // } else{
-    //   HistoryFactureComponent.globalHistoryFactureDT.ajax.reload(null, false);
-    // }
+   
   }
   ngOnDestroy() {
     HistoryFactureComponent.nameSearch="";
