@@ -95,6 +95,8 @@ export class FactureReturnComponent implements OnInit {
   }
 
   ngOnInit() {
+    // focus on the search input field
+    document.getElementById("searchClientNameFR").focus();
     if (localStorage.getItem("user") !== "1") {
       this.router.navigate(["login"]);
     }
@@ -457,6 +459,7 @@ export class FactureReturnComponent implements OnInit {
     });
 
     FactureReturnComponent.globalMultiSelectDT = multiSelectDT;
+    $('div.dataTables_filter input').focus();
   }
 
   get itemsEditForm() {

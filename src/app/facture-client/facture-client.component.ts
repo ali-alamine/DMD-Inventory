@@ -10,6 +10,7 @@ import { DatePipe } from '@angular/common';
 import { FactureComponent } from '../facture/facture.component';
 import { AppDateAdapter, APP_DATE_FORMATS } from '../date.adapter';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material';
+
 @Component({
   selector: 'app-facture',
   templateUrl: './facture-client.component.html',
@@ -76,7 +77,10 @@ export class FactureClientComponent implements OnInit {
   ngOnInit() {
     if (localStorage.getItem("user") !== '1') {
       this.router.navigate(["login"]);
+  
     }
+    // alert("h")
+    document.getElementById("searchClientNameFC").focus();
     const currentDate = new Date();
     this.deliveryDate = currentDate.toISOString().substring(0, 10);
     this.invoiceDate = this.datePipe.transform(currentDate,"dd-MM-yyyy");
@@ -408,6 +412,7 @@ export class FactureClientComponent implements OnInit {
     this.invoiceForm.controls['clientName'].enable();
   }
   openMultiSelect(mutliSelectModal) {
+    
     this.modalReference = this.modalService.open(mutliSelectModal, { centered: true, size: 'lg', ariaLabelledBy: 'modal-basic-title' });
     var multiSelectDT = $('#stockDT').DataTable({
       responsive: false,
@@ -515,6 +520,7 @@ export class FactureClientComponent implements OnInit {
 
 
     FactureClientComponent.globalMultiSelectDT = multiSelectDT;
+    $('div.dataTables_filter input').focus();
   }
   get itemsEditForm() {
     return this.invoiceForm.get('itemsEdit') as FormArray;
@@ -580,4 +586,3 @@ export interface fcItem {
   crt: number;
   piece: number;
 }
-

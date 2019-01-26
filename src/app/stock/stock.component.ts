@@ -201,6 +201,7 @@ export class StockComponent implements OnInit, OnDestroy {
         "selected"
       );
     });
+    $('div.dataTables_filter input').focus();
   }
 
   openStockModal(stockModal) {

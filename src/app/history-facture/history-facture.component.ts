@@ -74,6 +74,8 @@ export class HistoryFactureComponent implements OnInit {
         }
       }
     ];
+    // alert("facture")
+    $('.input0').focus(); 
     
   }
   getHistoryFactureDT(){
@@ -82,8 +84,9 @@ export class HistoryFactureComponent implements OnInit {
     .appendTo("#historyFactureDT thead");
   $("#historyFactureDT thead tr:eq(1) th").each(function(i) {
     var title = $(this).text();
+    var name_id="input" + i;
     $(this).html(
-      '<input class="test123" type="text" placeholder="Rechercher ' +
+      '<input class="test123 '+name_id+'" type="text" placeholder="Rechercher ' +
         title +
         '" />'
     );

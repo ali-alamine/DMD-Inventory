@@ -94,7 +94,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
         cache: true,
         async: true
       },
-      order: [[0, "asc"]],
+      order: [[1, "asc"]],
       columns: [
         { data: "per_name", title: "Nom" },
         { data: "per_phone", title: "Téléphone" },

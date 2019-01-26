@@ -11,7 +11,7 @@ import { NavBarService } from './nav-bar.service';
 })
 export class NavBarComponent implements OnInit {
   currentUrl: string;
-  private badgeCount: any;
+  public badgeCount: any;
   badgeCount2: any;
 
   constructor(private router: Router,private location: Location,private navBarService:NavBarService) {

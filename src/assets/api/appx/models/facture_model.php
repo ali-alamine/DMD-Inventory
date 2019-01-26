@@ -5,7 +5,6 @@ class facture_model extends CI_Model
     {
         $this->load->database();
     }
-
     public function addSupplyInvoice($data)
     {
         if ($this->db->insert('invoice', $data)) {
@@ -23,9 +22,7 @@ class facture_model extends CI_Model
             return false;
         }
     }
-
    
-
     public function addClientInvoice($data)
     {
         if ($this->db->insert('invoice', $data)) {
@@ -34,7 +31,6 @@ class facture_model extends CI_Model
             return false;
         }
     }
-
     public function addItemToInvoice($data)
     {
         if ($this->db->insert('order_inv', $data)) {
@@ -43,9 +39,7 @@ class facture_model extends CI_Model
             return false;
         }
     }
-
     public function updateStock($id, $quantity,$isDamaged) // update quantity of item 
-
     {
         $this->db->where('itemID', $id);
         $this->db->where('item_is_damaged', $isDamaged);
@@ -56,7 +50,6 @@ class facture_model extends CI_Model
             return false;
         }
     }
-
     public function searchForClient($name)
     {
         $this->db->select('*');
@@ -72,17 +65,13 @@ class facture_model extends CI_Model
             return 0;
         }
     }
-
     public function getRepeatedCodeCount($prefix)
     {
         $this->db->count_all_results('invoice');
         $this->db->like('inv_type', $prefix, 'after');
         $this->db->from('invoice');
         return $this->db->count_all_results();
-
     }
-
-
     public function getFactureDetails($factureID)
     {
         $this->db->select("*,DATE_FORMAT(inv_date_req,'%d-%m-%Y') AS inv_date_req");
@@ -96,14 +85,12 @@ class facture_model extends CI_Model
             return 0;
         }
     }
-
     public function getOrderInvoiceDetails($factureID)
     {
         $this->db->select('*,FLOOR(item_piece/item_packing_list) as item_crt');
         $this->db->from('order_inv');
         $this->db->join('item', 'item.itemID = order_inv.ord_itemID and item.item_is_damaged=ord_item_isDamaged', 'inner');
         $this->db->where('ord_invID', $factureID);
-
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();
@@ -111,7 +98,6 @@ class facture_model extends CI_Model
             return 0;
         }
     }
-
     public function deleteOldOrderInvoice($factureID)
     {
         $this->db->where('ord_invID', $factureID);       
@@ -121,7 +107,6 @@ class facture_model extends CI_Model
             return false;
         }
     }
-
     public function editReturnInvoice($invID,$data){
         $this->db->where('invID', $invID);
         if ($this->db->update('invoice',$data)) {
@@ -139,7 +124,6 @@ class facture_model extends CI_Model
             return false;
         }
     }
-
     public function deletedOrder($ordID){
         $this->db->where('ordID', $ordID);
         if ($this->db->delete('order_inv')) {

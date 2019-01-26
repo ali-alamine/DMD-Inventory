@@ -32,7 +32,14 @@ if (count($_GET['order'])) {
 if (isset($_GET["search"]["value"]) && !empty($_GET["search"]["value"])) {
     $search = $_GET["search"]["value"];
 
-    $getAllFactureQuery = " SELECT *, FLOOR(item_piece/item_packing_list) as crt FROM item left join (select item.itemID as itemIDD , item_is_damaged as isDamagedFlag, FLOOR(item_piece/item_packing_list) as crtD, item_piece as pieceD FROM item where item_is_damaged = 1 ) as d on item.itemID = d.itemIDD where item_isActivated = '".$item_isActivated."' AND item_is_damaged = 0 AND ( item_name like '%" . $search . "%' OR item_code like '%" . $search . "%' ) " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
+    $getAllFactureQuery = " SELECT *, FLOOR(item_piece/item_packing_list) as crt 
+    FROM item 
+    left join (select item.itemID as itemIDD , item_is_damaged as isDamagedFlag, FLOOR(item_piece/item_packing_list) as crtD, item_piece as pieceD 
+    FROM item 
+    where item_is_damaged = 1 ) as d 
+    on item.itemID = d.itemIDD where item_isActivated = '".$item_isActivated."' AND item_is_damaged = 0 
+    AND 
+    (item_name like '%" . $search . "%' OR item_code like '%" . $search . "%' ) " . $orderString . " LIMIT " . $rowsReq . " OFFSET " . $start;
 
 } else {
 

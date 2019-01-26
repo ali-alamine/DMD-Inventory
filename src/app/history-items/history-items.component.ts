@@ -83,6 +83,8 @@ export class HistoryItemsComponent implements OnInit {
         }
       }
     ];
+    // alert("article")
+    
   }
   getHistoryItemsDT(){
     $("#historyItemsDT thead tr")
@@ -90,8 +92,9 @@ export class HistoryItemsComponent implements OnInit {
     .appendTo("#historyItemsDT thead");
   $("#historyItemsDT thead tr:eq(1) th").each(function(i) {
     var title = $(this).text();
+    var name_id="input" + i;
     $(this).html(
-      '<input class="test123" type="text" placeholder="Rechercher ' +
+      '<input class="test123 '+name_id+'" type="text" placeholder="Rechercher ' +
         title +
         '" />'
     );
@@ -104,6 +107,7 @@ export class HistoryItemsComponent implements OnInit {
       else if (i == 4) HistoryItemsComponent.pieceSearch = this.value;
       else if (i == 5) HistoryItemsComponent.dateSearch = this.value;
       else if (i == 6) HistoryItemsComponent.clientSearch = this.value;
+      
       HistoryItemsComponent.globalHistoryItemsDT.ajax.reload();
     });
   });
@@ -139,7 +143,8 @@ export class HistoryItemsComponent implements OnInit {
             });
           },
           cache: true,
-          async: true
+          async: true,
+          Response: $('.input2').focus(),
         },
         order: [[0, 'asc']],
         columns: [
@@ -271,6 +276,7 @@ export class HistoryItemsComponent implements OnInit {
     //   HistoryItemsComponent.globalHistoryItemsDT.ajax.reload(null, false);
     // }
   }
+  
   ngOnDestroy() {
     HistoryItemsComponent.clientSearch="";
     HistoryItemsComponent.articleSearch="";

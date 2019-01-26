@@ -10,7 +10,7 @@
       <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
         <mat-form-field class="searchClient" fxFlex>
 
-          <input matInput placeholder="Client" formControlName="clientName" type="text" name="nameInput"
+          <input id="searchClientNameFC" matInput placeholder="Client" formControlName="clientName" type="text" name="nameInput"
             [matAutocomplete]="auto" autofocus>
             <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearClientName()">
               <mat-icon>close</mat-icon>

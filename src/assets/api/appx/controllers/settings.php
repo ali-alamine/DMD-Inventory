@@ -26,13 +26,12 @@ class settings extends REST_Controller
     //      $this->response($dataDB, 200);
     // }
 
-    public function backup_get()
-    {
+    public function backup_get(){
         $prefs = array(
-            'tables' => array('convt', 'invoice', 'item', 'order_inv', 'person', 'return_details'), // Array of tables to backup.
+            'tables' => array('convt', 'invoice', 'item', 'order_inv', 'person', 'return_details','user'), // Array of tables to backup.
             'ignore' => array(), // List of tables to omit from the backup
             'format' => 'zip', // gzip, zip, txt
-            'filename' => 'backup.sql', // File name - NEEDED ONLY WITH ZIP FILES
+            'filename' => 'backup_' . date("Y-m-d-H-i-s") . '.sql', // File name - NEEDED ONLY WITH ZIP FILES
             'add_drop' => true, // Whether to add DROP TABLE statements to backup file
             'add_insert' => true, // Whether to add INSERT data to backup file
             'newline' => "\n", // Newline character used in backup file

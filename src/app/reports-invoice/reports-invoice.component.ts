@@ -40,6 +40,7 @@ export class ReportsInvoiceComponent implements OnInit,OnDestroy {
   ngOnInit() {
     this.clientsService.getAllClient().subscribe(Response => {
       this.allClients = Response;
+      console.log(this.allClients)
     });
 
     if (localStorage.getItem("user") !== "1") {
