@@ -33,6 +33,9 @@ $getAllFactureQuerySQL = mysqli_query(openConn(), $getAllFactureQuery);
 $rowsCountFilter = mysqli_num_rows($getAllFactureQuerySQL);
 $jsonData = "";
 if ($getAllFactureQuerySQL) {
+    // while($r = mysqli_fetch_assoc($getAllFactureQuerySQL)) {
+    //     $rows[] = $r;
+    // }
     while ($row = mysqli_fetch_assoc($getAllFactureQuerySQL)) {
         if ($row != null) {
             if ($jsonData != "") {
@@ -48,6 +51,7 @@ if ($getAllFactureQuerySQL) {
     }
 }
 $jsonData = '[' . $jsonData . ']';
+// $jsonData = json_encode($rows);
 $jsonData2 = '{"draw":' . intval($requestData['draw']) . ',"recordsTotal":' . $rowsCount . ', "recordsFiltered":' . $rowsCount . ', "data":' . $jsonData . '}';
 echo ($jsonData2);
 closeConn();

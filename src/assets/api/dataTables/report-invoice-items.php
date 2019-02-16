@@ -76,6 +76,7 @@ if ($getAllFactureQuerySQL) {
     }
 }
 $jsonData = '[' . $jsonData . ']';
+file_put_contents("yawwx.txt",$jsonData);
 $jsonData2 = '{"draw":' . intval($requestData['draw']) . ',"recordsTotal":' . $rowsCount . ', "recordsFiltered":' . $rowsCount . ', "data":' . $jsonData . '}';
 echo ($jsonData2);
 closeConn();

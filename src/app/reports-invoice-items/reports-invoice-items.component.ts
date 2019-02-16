@@ -118,7 +118,7 @@ export class ReportsInvoiceItemsComponent implements OnInit, OnDestroy {
       stateSave: false,
       fixedHeader: true,
       select: true,
-      lengthMenu: [[100, 200, 400, 800, 1600], [100, 200, 400, 800, 1600]],
+      lengthMenu: [[10,20,100, 200, 400, 800, 1600], [10,20,100, 200, 400, 800, 1600]],
       ajax: {
         type: "get",
         url:
