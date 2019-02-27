@@ -161,7 +161,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
         ClientsComponent.selectedRowData = subscriberDataTable
           .row(indexes)
           .data();
-        var data = subscriberDataTable.row(indexes).data()["ID"];
+        var data = subscriberDataTable.row(indexes).data()["perID"];
         ClientsComponent.selectedClientID = data;
       } else if (type === "column") {
         ClientsComponent.selectedClientID = -1;
@@ -230,6 +230,7 @@ export class ClientsComponent implements OnInit, OnDestroy {
   }
 
   addEditClient() {
+
     if (this.editFlag == true) {
       this.editedClientData["per_name"] = this.name.value;
       this.editedClientData["per_address"] = this.address.value;

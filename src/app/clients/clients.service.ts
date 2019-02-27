@@ -14,6 +14,7 @@ export class ClientsService {
   }
 
   editClient(clientData): Observable<any> {
+    // console.log(clientData)
     return this.httpClient.put(this.url + "client", clientData);
   }
 

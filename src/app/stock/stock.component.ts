@@ -361,7 +361,6 @@ export class StockComponent implements OnInit, OnDestroy {
     });
     // this.modalReference.close();
   }
-
   deleteItem() {
     // if (StockComponent.selectedRowData["isDamagedFlag"]) {
     //   Swal({
@@ -408,7 +407,6 @@ export class StockComponent implements OnInit, OnDestroy {
       }
     });
   }
-
   openChartModal(chartModal) {
     this.labels = [];
     this.data1 = [];
@@ -463,7 +461,6 @@ export class StockComponent implements OnInit, OnDestroy {
 
     
   }
-
   get name() {
     return this.stockForm.get("name");
   }
@@ -473,11 +470,9 @@ export class StockComponent implements OnInit, OnDestroy {
   get maxPiece() {
     return StockComponent.selectedRowData["piece"];
   }
-
   get tCRT() {
     return this.transferForm.get("crt").value;
   }
-
   get tPiece() {
     return this.transferForm.get("piece").value;
   }

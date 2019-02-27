@@ -26,7 +26,7 @@ class login extends REST_Controller
         }
     }
     public function editUser_put(){
-        $userID = $this->put('userID');
+        $userID = $this->put('UID');
         $userName = $this->put('userName');
         $password = $this->put('password');
 

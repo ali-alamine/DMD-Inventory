@@ -1,13 +1,11 @@
 <?php
 class login_model extends CI_Model
 {
-    public function __construct()
-    {
+    public function __construct(){
         $this->load->database();
     }
 
-public function getConnection($userName,$password)
-    {
+    public function getConnection($userName,$password){
         $this->db->select('*');
         $this->db->from('user');
         $this->db->where('user_name', $userName);
@@ -18,8 +16,8 @@ public function getConnection($userName,$password)
         } else {
             return 0;
         }
-
     }
+
     public function getUser(){
         $this->db->select('*');
         $this->db->from('user');
@@ -30,9 +28,9 @@ public function getConnection($userName,$password)
             return 0;
         }
     }
-    public function update($id, $data)
-    {
-        $this->db->where('userID', $id);
+
+    public function update($id, $data){
+        $this->db->where('UID', $id);
         if ($this->db->update('user', $data)) {
             return true;
         } else {

@@ -28,10 +28,10 @@ class clients extends REST_Controller
 
     public function client_put()
     {
-        $client_name = $this->put('name');
-        $client_phone = $this->put('phone');
-        $client_address = $this->put('address');
-        $clientID = $this->put('ID');
+        $client_name = $this->put('per_name');
+        $client_phone = $this->put('per_phone');
+        $client_address = $this->put('per_address');
+        $clientID = $this->put('perID');
 
         $result = $this->clients_model->update($clientID, array("per_name" => $client_name, "per_phone" => $client_phone, "per_address" => $client_address));
         if ($result === 0) {
