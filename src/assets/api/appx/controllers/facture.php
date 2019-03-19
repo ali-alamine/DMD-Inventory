@@ -227,7 +227,7 @@ class facture extends REST_Controller
                 $ordID = $this->facture_model->addItemToInvoice($itemData);
                 
                 $quantityToAdd = ($row['colisage'] * $row['crt']) + $row['piece'];
-                $this->facture_model->updateStock($row['itemID'],$quantityToAdd,$row['isDamaged']);
+                $this->facture_model->updateStock($row['itemID'],-$quantityToAdd,$row['isDamaged']);
             }
         }
         if ($this->db->trans_status() === false) {
